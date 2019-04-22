@@ -1,0 +1,3 @@
+Krisenda Gate,G,1
+Atlantis Gate,G,4
+Danae Gate,G,3

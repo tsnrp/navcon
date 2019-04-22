@@ -1,0 +1,13 @@
+Promethean Gate,G,2
+DS-53,S,3
+DS-34,S,3
+DS-17,S,3
+Outpost 16,S,3
+Sierra Gate,G,4
+Volantis Command,S,6
+DS-93,S,6
+DS-71,S,6
+WP-15,O,6
+WP-34,O,6
+SY-08,O,6
+Waypoint 52 Gate,G,7

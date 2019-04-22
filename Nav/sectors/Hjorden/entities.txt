@@ -1,0 +1,27 @@
+H-20,S,1
+G-82,S,1
+L-94,S,1
+K-77,S,1
+Lagora,S,1
+Antara Gate,G,2
+X-53,S,2
+L-01,S,2
+Nanara,S,2
+S-54,S,2
+Z-12,S,2
+X-02,S,4
+Q-78,S,4
+Pantera,S,4
+T-75,S,4
+E-24,S,4
+S-12,S,5
+D-46,S,6
+F-01,S,6
+A-14,S,6
+L-33,S,6
+Alpha,S,6
+Cerberus Gate,G,6
+Arrin Gate,G,7
+C-72,S,8
+D-56,S,8
+Quill,S,8

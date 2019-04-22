@@ -1,0 +1,3 @@
+Eyukua Gate,G,1
+Kalixa Gate,G,3
+Krisenda Gate,G,4

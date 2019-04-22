@@ -1,0 +1,14 @@
+M-242,S,1
+M-351,S,1
+M-762,S,1
+DS-224,S,3
+WP-99,O,3
+WP-36,O,3
+WP-14,O,3
+WP-11,O,3
+WP-59,O,3
+Euphini Gate,G,3
+M-141,S,5
+DS-523,S,5
+M-119,S,5
+Waypoint 60 Gate,G,5

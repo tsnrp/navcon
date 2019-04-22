@@ -1,0 +1,4 @@
+Class 9 Planet,P,6
+Eyukua,G,4
+Hjorden,G,9
+Outpost-91,S,9

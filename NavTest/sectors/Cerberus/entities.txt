@@ -1,0 +1,40 @@
+DS-12,S,1
+DS-48,S,1
+Forward Command,S,1
+Krisenda Gate,G,1
+Shanari,S,2
+Gate Control,S,2
+RS-230,S,2
+Arden,S,2
+M-331,S,2
+Cordell,S,2
+M-572,S,2
+Dalton,S,2
+Atlantis Gate,G,2
+Cerberus Command,S,3
+RS-557,S,3
+RS-90,S,3
+RS-0223,S,4
+Promethean Gate,G,4
+DS-31,S,5
+DS-67,S,5
+Morbek,S,6
+Ltaris,S,6
+Quesenc,S,6
+M-218,S,6
+M-243,S,6
+Scolcha,S,6
+RS-45,S,6
+Arrin Gate,G,6
+Serena,S,7
+Dlana,S,7
+Jgoran,S,7
+Halima,S,7
+Typron,S,7
+Hjorden Gate,G,7
+Noreel,S,8
+Emora,S,8
+Kolaris,S,8
+RS-484,S,8
+Olnara,S,8
+Antara Gate,G,8

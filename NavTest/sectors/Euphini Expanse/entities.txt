@@ -1,0 +1,10 @@
+Planet A,P,1
+N'tani Homeworld,P,5
+EX-001,B,11
+EX-002,B,11
+Unstable Wormhole,B,12
+Danae Gate,G,13
+CP-27X,S,13
+Planet B,P,14
+Drake,S,18
+Planet C,P,18

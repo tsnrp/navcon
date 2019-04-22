@@ -1,0 +1,3 @@
+Promethean Gate,G,1
+Erebus Gate,G,8
+Kalixa Gate,G,10

@@ -1,0 +1,46 @@
+/* table with square cells */
+table.sectors {
+	width: 67%;
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+table.sectors td {
+	position: relative;
+}
+table.sectors td:after {
+	content: '';
+	display: block;
+	margin-top: 100%;
+}
+table.sectors td .content {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-size:100%;
+	padding:5px;
+	color: #c5c6fd;
+	font-size:14;
+}
+table.sectors td .content.border {
+	border: 1px solid blue;
+}
+
+
+/* td classes for different horizontal sector amounts */
+table.sectors td.width1 {
+	width:100%;
+}
+table.sectors td.width2 {
+	width:50%;
+}
+table.sectors td.width3 {
+	width:33.33%;
+}
+table.sectors td.width4 {
+	width:25%;
+}
+table.sectors td.width5 {
+	width:20%;
+}

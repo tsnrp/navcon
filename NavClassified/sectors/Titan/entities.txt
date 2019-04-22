@@ -1,0 +1,2 @@
+Atlantis Gate,G,1
+Gate Control,S,1

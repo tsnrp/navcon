@@ -1,0 +1,2 @@
+Antara Gate,G,5
+Cronus Gate,G,11

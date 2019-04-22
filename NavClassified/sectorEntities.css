@@ -1,0 +1,36 @@
+div.data {
+	position: absolute;
+	top: 50px;
+	right: 30px;
+	width: 28%;
+	height: 90%;
+	overflow-x: hidden;
+}
+table.data {
+	color: white;
+	font-family: Calibri,Helvetica,Arial;
+	font-weight: bold;
+	font-size: 18;
+	color: #c5c6fd;
+	background-color: #00274a;
+	padding:20px;
+	padding-top: 10px;
+	border-spacing: 0px;
+	width: 100%;
+	box-shadow: 0px 8px 16px 0px rgba(0,0.15,0.29,0.2);
+}
+table.data td.caption {
+	width: 150px;
+}
+table.data td.sub {
+	width: 40px;
+	text-align:right;
+}
+table.data td.desc {
+	padding-left:20px;
+}
+table.data tr.entity {
+}
+table.data tr.highlight {
+	background-color: #002240;
+}
