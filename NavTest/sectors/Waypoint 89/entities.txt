@@ -1,2 +1,0 @@
-Arietis Gate,G,3
-Triton Gate,G,2
