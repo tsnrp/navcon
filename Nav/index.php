@@ -105,6 +105,8 @@ window.onclick = function(event) {
 		if (!isEmpty($_GET['sector'])) {$sector = trim($_GET['sector']);}
 		if (!isEmpty($_GET['sub'])) {$sub = trim($_GET['sub']);}
 		if (!isEmpty($_GET['entType'])) {$entType = trim($_GET['entType']);}
+		$gateNetwork="Upper";
+		if (!isEmpty($_GET['gateNetwork'])) {$gateNetwork = trim($_GET['gateNetwork']);}
 		$sectorDir = "sectors/".$sector;
 		
 		include 'menu.php';
@@ -140,9 +142,16 @@ window.onclick = function(event) {
 							if (file_exists("sectors/".$name."/mainMapPos.txt")) {
 								$handle = fopen("sectors/".$name."/mainMapPos.txt", "r");
 								if ($handle) {
-									$xy=explode(",",fgets($handle));
-									if (count($xy)==2) {
-										printf("{x:%d, y:%d, url:\"?sector=%s\"},",$xy[0],$xy[1],$name);
+									$gateNetworkHandle = fopen("sectors/".$name."/gateNetwork.txt","r");
+									if ($gateNetworkHandle) {
+										//if we are in this gate network
+										if (trim(fgets($gateNetworkHandle))==$gateNetwork){
+											$xy=explode(",",fgets($handle));
+											if (count($xy)==2) {
+												printf("{x:%d, y:%d, url:\"?sector=%s\"},",$xy[0],$xy[1],$name);
+											}
+										}
+										fclose($gateNetworkHandle);
 									}
 									fclose($handle);
 								}
@@ -161,7 +170,11 @@ window.onclick = function(event) {
 			}
 			</script>
 			<div>
-				<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="img/gateNetwork.png"/>
+				<?php if ($gateNetwork=="Lower") {?>
+					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="img/gateNetworkLower.png"/>
+				<?php } else {?>
+					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="img/gateNetworkUpper.png"/>
+				<?php }?>
 			</div>
 			<div style="position:absolute;top:10px;right:20px;">
 				Stellar Cartography TSN 10.2
