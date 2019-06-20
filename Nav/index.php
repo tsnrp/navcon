@@ -116,8 +116,6 @@ window.onclick = function(event) {
 			$sectorSize = explode(',', file_get_contents($sectorDir."/sector.txt"));
 			$sectorWidth = $sectorSize[0];
 			$sectorHeight = $sectorSize[1];
-			// $invertVertical = $sector == "Atlantis" || $sector == "Euphini Expanse";
-			$invertVertical = $sector == "Euphini Expanse";
 			if (isEmpty($sub)) {
 				include 'sectorMap.php';
 			} else {
@@ -177,7 +175,7 @@ window.onclick = function(event) {
 				<?php }?>
 			</div>
 			<div style="position:absolute;top:10px;right:20px;">
-				Stellar Cartography TSN 10.2
+				Stellar Cartography TSN 11.0
 			</div><?php
 		}
 	?>

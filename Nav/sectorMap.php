@@ -15,7 +15,7 @@
 ?>
 <table class="sectors"><?php
 	$continue = true;
-	for ($row = $invertVertical ? $sectorHeight : 1; $continue; $invertVertical ? $row-- : $row++) {?>
+	for ($row = 1; $row <= $sectorHeight; $row++) {?>
 		<tr><?php
 			for ($col = 1; $col <= $sectorWidth; $col++) {
 				$sectorSubId = ($row - 1) * $sectorWidth + $col; 
@@ -43,7 +43,6 @@
 				}
 			}?>
 		</tr><?php
-		$continue = $invertVertical ? $row > 1 : $row < $sectorHeight;
 	}?>
 </table>
 
