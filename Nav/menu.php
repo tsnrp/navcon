@@ -1,18 +1,21 @@
 <?php
 	$gateButtonDest="Upper";
+	$gateNetText="VIEW UPPER ARC";
 	if (!isEmpty($sector)) {
 		$gateButtonDest=$gateNetwork;
 	} else {
 		if ($gateNetwork=="Upper") {
 			$gateButtonDest="Lower";
+			$gateNetText="VIEW LOWER ARC";
 		} else {
 			$gateButtonDest="Upper";
+			$gateNetText="VIEW UPPER ARC";
 		}
 	}
 ?>
 <div class="dropdown">
 	<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
-	<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">GATE NET ARC</button>
+	<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
   <button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button>
 	<div id="menuSectorsPart1" class="dropdown-content opaque"><?php
 		$files = scandir("sectors", 0);
