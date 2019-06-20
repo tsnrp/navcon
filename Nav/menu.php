@@ -1,8 +1,12 @@
 <?php
-	$gateButtonDest="Upper";
-	$gateNetText="VIEW UPPER ARC";
 	if (!isEmpty($sector)) {
-		$gateButtonDest=$gateNetwork;
+		if ($gateNetwork=="Upper") {
+			$gateButtonDest="Upper";
+			$gateNetText="VIEW UPPER ARC";
+		} else {
+			$gateButtonDest="Lower";
+			$gateNetText="VIEW LOWER ARC";
+		}
 	} else {
 		if ($gateNetwork=="Upper") {
 			$gateButtonDest="Lower";

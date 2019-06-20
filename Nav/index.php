@@ -102,12 +102,28 @@ window.onclick = function(event) {
 </head>
 <body style="overflow: hidden;">
 	<?php
+		function getGateNetworkFromSector ($sector) {
+			$ret="";
+			$handle=fopen("sectors/".$sector."/gateNetwork.txt","r");
+			if ($handle) {
+				$ret = trim(fgets($handle));
+				fclose($handle);
+			}
+			return $ret;
+		}
 		if (!isEmpty($_GET['sector'])) {$sector = trim($_GET['sector']);}
 		if (!isEmpty($_GET['sub'])) {$sub = trim($_GET['sub']);}
 		if (!isEmpty($_GET['entType'])) {$entType = trim($_GET['entType']);}
-		$gateNetwork="Upper";
-		if (!isEmpty($_GET['gateNetwork'])) {$gateNetwork = trim($_GET['gateNetwork']);}
 		$sectorDir = "sectors/".$sector;
+
+		$gateNetwork="Upper";
+		if (isEmpty($_GET['gateNetwork'])) {
+			if (!isEmpty($sector)) {
+				$gateNetwork=getGateNetworkFromSector($sector);
+			}
+		} else {
+			$gateNetwork = trim($_GET['gateNetwork']);
+		}
 		
 		include 'menu.php';
 		
@@ -140,16 +156,11 @@ window.onclick = function(event) {
 							if (file_exists("sectors/".$name."/mainMapPos.txt")) {
 								$handle = fopen("sectors/".$name."/mainMapPos.txt", "r");
 								if ($handle) {
-									$gateNetworkHandle = fopen("sectors/".$name."/gateNetwork.txt","r");
-									if ($gateNetworkHandle) {
-										//if we are in this gate network
-										if (trim(fgets($gateNetworkHandle))==$gateNetwork){
-											$xy=explode(",",fgets($handle));
-											if (count($xy)==2) {
-												printf("{x:%d, y:%d, url:\"?sector=%s\"},",$xy[0],$xy[1],$name);
-											}
+									if (getGateNetworkFromSector($name)==$gateNetwork){
+										$xy=explode(",",fgets($handle));
+										if (count($xy)==2) {
+											printf("{x:%d, y:%d, url:\"?sector=%s\"},",$xy[0],$xy[1],$name);
 										}
-										fclose($gateNetworkHandle);
 									}
 									fclose($handle);
 								}
