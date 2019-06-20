@@ -14,13 +14,8 @@
 					&nbsp;
 				</td>
 				<td class="middle"><?php
-					if ($invertVertical) {
-						$available = $subRow < $sectorHeight;
-					} else {
-						$available = $subRow > 1;
-					}
-					if ($available && $sectorHeight > 1) {
-						$target = $invertVertical ? ($sub + $sectorWidth) : ($sub - $sectorWidth);?>
+					if ($subRow > 1 && $sectorHeight > 1) {
+						$target = $sub - $sectorWidth;?>
 						<div class="up" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
@@ -45,11 +40,9 @@
 				<!-- mini map -->
 				<td class="minimap">
 					<table><?php
-						$continue = true;
-						for ($y = $invertVertical ? $sectorHeight : 1; $continue; $invertVertical ? $y-- : $y++) {?>
+						for ($y = 1; $y <= $sectorHeight; $y++) {?>
 							<tr>
 								<td>&nbsp;</td><?php
-								
 								for ($x = 1; $x <= $sectorWidth; $x++) {
 									if ($y == $subRow && ($x % $sectorWidth == $subCol)) {
 										$style = "background-color:blue;";
@@ -62,7 +55,6 @@
 								}?>
 								<td>&nbsp;</td>
 							</tr><?php
-							$continue = $invertVertical ? $y > 1 : $y < $sectorHeight;
 						}?>
 					</table>
 				</td>
@@ -81,13 +73,8 @@
 					&nbsp;
 				</td>
 				<td class="middle"><?php
-					if ($invertVertical) {
-						$available = $subRow > 1;
-					} else {
-						$available = $subRow < $sectorHeight;
-					}
-					if ($available && $sectorHeight > 1) {
-						$target = $invertVertical ? ($sub - $sectorWidth) : ($sub + $sectorWidth);?>
+					if ($subRow < $sectorHeight && $sectorHeight > 1) {
+						$target = $sub + $sectorWidth;?>
 						<div class="down" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
