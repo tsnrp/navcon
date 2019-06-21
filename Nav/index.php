@@ -79,6 +79,25 @@
 		$amountOfSystemMenus=2;
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
+
+	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
+	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
+
+	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
+
+	$sector ="";
+	if (isset($_GET['sector'])) {
+		$sector=$_GET['sector'];
+		$gateNetwork=getGateNetworkFromSector($sector);
+		$sectorDir = "sectors/".$sector;
+		$gateButtonDest=$gateNetwork;
+		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
+	} else {
+		$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
+		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
+	}
+
+	$menus=getSystemsMenus();
 ?>
 <html>
 <head>
@@ -127,28 +146,11 @@ window.onclick = function(event) {
 </head>
 <body style="overflow: hidden;">
 	<?php
-		$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
-		$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
-
-		$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
-
-		$sector ="";
-		if (isset($_GET['sector'])) {
-			$sector=$_GET['sector'];
-			$gateNetwork=getGateNetworkFromSector($sector);
-			$sectorDir = "sectors/".$sector;
-			$gateButtonDest=$gateNetwork;
-			$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
-		} else {
-			$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
-			$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
-		}
 		//menu?>
 		<div class="dropdown">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
-		$menus=getSystemsMenus();
 		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
