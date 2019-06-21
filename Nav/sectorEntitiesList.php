@@ -15,7 +15,8 @@
 			<td colspan="3" style="color:<?=$workingColor?>"><br/><?=strtoupper($workingEntType)?></td>
 		</tr><?php
 		$highlightRow = false;
-		foreach ($workingArray as $key => $value) {?>
+		foreach ($workingArray as $key => $value) {
+			$desc = isset($value[3]) ? $value[3] : ""?>
 			<tr class="entity<?=$highlightRow ? " highlight" : ""?>">
 				<td class="caption" >
 					<?=str_replace(" ", "&nbsp;", $key)?>
@@ -24,7 +25,7 @@
 					<?=isEmpty($sub) ? toRoman($value[2]) : "&nbsp;"?>
 				</td>
 				<td class="desc">
-					<?=$value[3]?>
+					<?=$desc?>
 					<?php if ($workingEntType == "gates") {
 						echo createGateButton($value[0], $sector);
 					}?>
