@@ -206,6 +206,8 @@
 			$classStations = " disabled";
 		} else if ($entType == "stations") {
 			$classStations = " active";
+		} else {
+			$classStations = "";
 		}
 		
 		if (empty($entGates)) {
@@ -213,6 +215,8 @@
 			$classGates = " disabled";
 		} else if ($entType == "gates") {
 			$classGates = " active";
+		} else {
+			$classGates = "";
 		}
 		
 		if (empty($entOther)) {
@@ -220,6 +224,8 @@
 			$classOther = " disabled";
 		} else if ($entType == "other") {
 			$classOther = " active";
+		} else {
+			$classOther = "";
 		}?>
 		
 		<div style="position:absolute;bottom:0px;right:0px;">
