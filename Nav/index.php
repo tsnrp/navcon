@@ -108,41 +108,24 @@ window.onclick = function(event) {
 			}
 			return $ret;
 		}
-		$sector ="";
-		if (isset($_GET['sector'])) {
-			$sector=$_GET['sector'];
-			$sectorDir = "sectors/".$sector;
-		}
 
 		$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 		$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
-		$gateNetwork="Upper";
-		if (isset($_GET['gateNetwork'])) {
-			$gateNetwork = trim($_GET['gateNetwork']);
+		$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
+
+		$sector ="";
+		if (isset($_GET['sector'])) {
+			$sector=$_GET['sector'];
+			$gateNetwork=getGateNetworkFromSector($sector);
+			$sectorDir = "sectors/".$sector;
+			$gateButtonDest=$gateNetwork;
+			$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
 		} else {
-			if (!isEmpty($sector)) {
-				$gateNetwork=getGateNetworkFromSector($sector);
-			}
+			$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
+			$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
 		}
-		//menu
-		if (!isEmpty($sector)) {
-			if ($gateNetwork=="Upper") {
-				$gateButtonDest="Upper";
-				$gateNetText="VIEW UPPER ARC";
-			} else {
-				$gateButtonDest="Lower";
-				$gateNetText="VIEW LOWER ARC";
-			}
-		} else {
-			if ($gateNetwork=="Upper") {
-				$gateButtonDest="Lower";
-				$gateNetText="VIEW LOWER ARC";
-			} else {
-				$gateButtonDest="Upper";
-				$gateNetText="VIEW UPPER ARC";
-			}
-		}?>
+		//menu?>
 		<div class="dropdown">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
