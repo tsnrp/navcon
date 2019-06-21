@@ -111,18 +111,22 @@ window.onclick = function(event) {
 			}
 			return $ret;
 		}
-		if (!isEmpty($_GET['sector'])) {$sector = trim($_GET['sector']);}
-		if (!isEmpty($_GET['sub'])) {$sub = trim($_GET['sub']);}
-		if (!isEmpty($_GET['entType'])) {$entType = trim($_GET['entType']);}
-		$sectorDir = "sectors/".$sector;
+		$sector ="";
+		if (isset($_GET['sector'])) {
+			$sector=$_GET['sector'];
+			$sectorDir = "sectors/".$sector;
+		}
+
+		$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
+		$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
 		$gateNetwork="Upper";
-		if (isEmpty($_GET['gateNetwork'])) {
+		if (isset($_GET['gateNetwork'])) {
+			$gateNetwork = trim($_GET['gateNetwork']);
+		} else {
 			if (!isEmpty($sector)) {
 				$gateNetwork=getGateNetworkFromSector($sector);
 			}
-		} else {
-			$gateNetwork = trim($_GET['gateNetwork']);
 		}
 		
 		include 'menu.php';
