@@ -51,6 +51,16 @@
 		}
 		return (substr($haystack, -$length) == $needle);
 	}
+
+	function getGateNetworkFromSector ($sector) {
+		$ret="";
+		$handle=fopen("sectors/".$sector."/gateNetwork.txt","r");
+		if ($handle) {
+			$ret = trim(fgets($handle));
+			fclose($handle);
+		}
+		return $ret;
+	}
 ?>
 <html>
 <head>
@@ -99,16 +109,6 @@ window.onclick = function(event) {
 </head>
 <body style="overflow: hidden;">
 	<?php
-		function getGateNetworkFromSector ($sector) {
-			$ret="";
-			$handle=fopen("sectors/".$sector."/gateNetwork.txt","r");
-			if ($handle) {
-				$ret = trim(fgets($handle));
-				fclose($handle);
-			}
-			return $ret;
-		}
-
 		$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 		$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
