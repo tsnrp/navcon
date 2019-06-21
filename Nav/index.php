@@ -61,6 +61,24 @@
 		}
 		return $ret;
 	}
+
+	//returns an array of arrays where each array is a menu to be shown
+	function getSystemsMenus() {
+		$files = scandir("sectors", 0);
+		$sectorList=array();
+		foreach ($files as $name) {
+			if ($name != "." && $name != ".." && $name != "desktop.ini") {
+				array_push($sectorList,$name);
+			}
+		}
+		asort($sectorList);
+		//note array_chunk may turn out to be the wrong call
+		//for instance if we decide 7 sectors need to be devided over 3 it will be
+		//3,3,1 rather than the more logical 3,2,2
+		//lets fix that when it becomes an issue
+		$amountOfSystemMenus=2;
+		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
+	}
 ?>
 <html>
 <head>
@@ -130,22 +148,8 @@ window.onclick = function(event) {
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
-		//split the menu so that it doesnt become too long
-		$files = scandir("sectors", 0);
-		$sectorList=array();
-		foreach ($files as $name) {
-			if ($name != "." && $name != ".." && $name != "desktop.ini") {
-				array_push($sectorList,$name);
-			}
-		}
-		asort($sectorList);
-		//note array_chunk may turn out to be the wrong call
-		//for instance if we decide 7 sectors need to be devided over 3 it will be
-		//3,3,1 rather than the more logical 3,2,2
-		//lets fix that when it becomes an issue
-		$amountOfSystemMenus=2;
-		$menus=array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
-		for ($i=0; $i!=$amountOfSystemMenus; $i++) {
+		$menus=getSystemsMenus();
+		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
 				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
