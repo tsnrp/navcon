@@ -21,7 +21,7 @@
 	<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 	<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
   <button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button>
-	<div id="menuSectorsPart1" class="dropdown-content opaque"><?php
+	<div id="menuSectorsPart2" class="dropdown-content opaque"><?php
 		$files = scandir("sectors", 0);
 		// we split the files into two lists so as to make it not too long
 		// if this needs in the future to be split into 3+ it may make sense to
@@ -39,7 +39,7 @@
 			</div><?php
 		}?>
 		</div>
-		<div id="menuSectorsPart2" class="dropdown-content opaque"><?php
+		<div id="menuSectorsPart1" class="dropdown-content opaque"><?php
 		foreach (array_slice($sectorList,0,count($sectorList)/2) as $name) {?>
 			<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
 				<a href="?sector=<?=$name?>"><?=strtoupper($name)?></a>

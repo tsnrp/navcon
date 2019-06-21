@@ -60,26 +60,23 @@
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
 	<script>
-/* When the user clicks on the SYSTEM button,
- * cycle which of the menu sectors are viewed
- * there probably is a cleverer way to do this
- * but it (probably) wont be as simple I advise
- * if this needs to go to toggling more elements
- * that a cleaner soultion is looked into*/
 function toggleSystemView() {
-    if (document.getElementById("menuSectorsPart1").classList.contains("show")) {
-      document.getElementById("menuSectorsPart1").classList.toggle("show");
-      document.getElementById("systemButton").innerHTML = "SYSTEMS";
-    } else {
-      if (document.getElementById("menuSectorsPart2").classList.contains("show")) {
-        document.getElementById("menuSectorsPart1").classList.toggle("show");
-        document.getElementById("menuSectorsPart2").classList.toggle("show");
-        document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
-      } else {
-        document.getElementById("menuSectorsPart2").classList.toggle("show");
-        document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
-      }
-    }
+	var toggled=false;
+	if (document.getElementById("menuSectorsPart2").classList.contains("show")) {
+		document.getElementById("menuSectorsPart2").classList.toggle("show");
+		document.getElementById("systemButton").innerHTML = "SYSTEMS";
+		toggled=true;
+	}
+	if (document.getElementById("menuSectorsPart1").classList.contains("show")) {
+		document.getElementById("menuSectorsPart1").classList.toggle("show");
+		document.getElementById("menuSectorsPart2").classList.toggle("show");
+		document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
+		toggled=true;
+	}
+	if (toggled==false) {
+		document.getElementById("menuSectorsPart1").classList.toggle("show");
+		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
+	}
 }
 
 // Close the dropdown if the user clicks outside of it
