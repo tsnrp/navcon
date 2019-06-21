@@ -76,7 +76,7 @@
 		//for instance if we decide 7 sectors need to be devided over 3 it will be
 		//3,3,1 rather than the more logical 3,2,2
 		//lets fix that when it becomes an issue
-		$amountOfSystemMenus=2;
+		$amountOfSystemMenus=3;
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
 
@@ -109,17 +109,23 @@
 	<script>
 function toggleSystemView() {
 	var toggled=false;
-	if (document.getElementById("menuSectorsPart2").classList.contains("show")) {
-		document.getElementById("menuSectorsPart2").classList.toggle("show");
-		document.getElementById("systemButton").innerHTML = "SYSTEMS";
-		toggled=true;
-	}
-	if (document.getElementById("menuSectorsPart1").classList.contains("show")) {
-		document.getElementById("menuSectorsPart1").classList.toggle("show");
-		document.getElementById("menuSectorsPart2").classList.toggle("show");
-		document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
-		toggled=true;
-	}
+		<?php	// the code here is ugly, and it generates ugly code
+			// if I knew more javascript there probably is a nice soultion
+			// however I dont and so you get ugly code
+		for ($i=count($menus);$i!=0;$i--) {?>
+			if (document.getElementById("menuSectorsPart<?php printf($i);?>").classList.contains("show")) {
+				document.getElementById("menuSectorsPart<?php printf($i);?>").classList.toggle("show");
+				<?php if ($i!=count($menus)) { ?>
+				document.getElementById("menuSectorsPart<?php printf($i+1);?>").classList.toggle("show");
+				<?php } ?>
+				<?php if (($i+1)==count($menus)) {?>
+					document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
+				<?php } else if ($i==count($menus)) {?>
+					document.getElementById("systemButton").innerHTML = "SYSTEMS";
+				<?php }?>
+				toggled=true;
+			}
+		<?php }?>
 	if (toggled==false) {
 		document.getElementById("menuSectorsPart1").classList.toggle("show");
 		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
