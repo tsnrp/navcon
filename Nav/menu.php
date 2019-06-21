@@ -20,30 +20,30 @@
 <div class="dropdown">
 	<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 	<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
-  <button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button>
-	<div id="menuSectorsPart2" class="dropdown-content opaque"><?php
+	<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
+		//split the menu so that it doesnt become too long
 		$files = scandir("sectors", 0);
-		// we split the files into two lists so as to make it not too long
-		// if this needs in the future to be split into 3+ it may make sense to
-		// make an array of lists and just loop over that
 		$sectorList=array();
 		foreach ($files as $name) {
 			if ($name != "." && $name != ".." && $name != "desktop.ini") {
 				array_push($sectorList,$name);
 			}
 		}
-		//if editing - ***NOTE*** - the js/html is duplicated on the second loop - edit both
-		foreach (array_slice($sectorList,count($sectorList)/2) as $name) {?>
-			<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-				<a href="?sector=<?=$name?>"><?=strtoupper($name)?></a>
+		asort($sectorList);
+		//note array_chunk may turn out to be the wrong call
+		//for instance if we decide 7 sectors need to be devided over 3 it will be
+		//3,3,1 rather than the more logical 3,2,2
+		//lets fix that when it becomes an issue
+		$amountOfSystemMenus=2;
+		$menus=array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
+		for ($i=0; $i!=$amountOfSystemMenus; $i++) {
+			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
+			<?php foreach ($menus[$i] as $name) {?>
+				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
+					<a href="?sector=<?=$name?>"><?=strtoupper($name)?></a>
+				</div>
+				<?php }?>
 			</div><?php
-		}?>
-		</div>
-		<div id="menuSectorsPart1" class="dropdown-content opaque"><?php
-		foreach (array_slice($sectorList,0,count($sectorList)/2) as $name) {?>
-			<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-				<a href="?sector=<?=$name?>"><?=strtoupper($name)?></a>
-			</div><?php
-		}?>
-	</div>
+		}
+		?>
 </div>
