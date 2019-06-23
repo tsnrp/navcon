@@ -30,6 +30,8 @@
 					$entity[3] = "Command Post";
 				} else if ($entity[1] == "D") {
 					$entity[3] = "Defence";
+				} else if (startsWith($line, "BH")) {
+					$entity[3] = "Gravitational Singularity";
 				} else if (startsWith($line, "WP")) {
 					$entity[3] = "Weapon Platform";
 				} else if (startsWith($line, "DS-")) {
