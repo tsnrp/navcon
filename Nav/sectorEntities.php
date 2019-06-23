@@ -113,7 +113,7 @@
 		}
 	}
 	
-	function createGateButton($target, $source) {
+	function createGateButton($target, $source, $classifedHref) {
 		// If target equals e.g. "Atlantis Gate", retrieve the "Atlantis" string
 		$target = trim(explode('Gate', $target)[0]);
 		
@@ -153,7 +153,7 @@
 					if ($entity[1] == "G" && startsWith($entity[0], $source)) {
 						$targetSub = trim($entity[2]);
 						
-						$onClick = "onclick=\"location.href='index.php?sector=".$target."&sub=".$targetSub."'\"";
+						$onClick = "onclick=\"location.href='index.php?".$classifedHref."sector=".$target."&sub=".$targetSub."'\"";
 						$title = strtoupper($target);
 						if ($size > 1) {
 							$title = $title." - ".toRoman($targetSub);
@@ -177,7 +177,7 @@
 			</td>
 			<td style="text-align:right;"><?php
 				if (!isEmpty($sub) && ($sectorWidth * $sectorHeight > 1)) {?>
-					<button onclick="location.href='index.php?sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button><?php
+					<button onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button><?php
 				} else {
 					echo " ";
 				}?>
@@ -196,7 +196,7 @@
 </div>
 <?php
 	if (isEmpty($sub)) {
-		$onclick = "onclick=\"location.href='index.php?sector=".$sector."&entType=";
+		$onclick = "onclick=\"location.href='index.php?".$classifedHref."sector=".$sector."&entType=";
 		$onclickStations = $onclick."stations'\"";
 		$onclickGates = $onclick."gates'\"";
 		$onclickOther = $onclick."other'\"";

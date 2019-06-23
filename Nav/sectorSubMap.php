@@ -16,7 +16,7 @@
 				<td class="middle"><?php
 					if ($subRow > 1 && $sectorHeight > 1) {
 						$target = $sub - $sectorWidth;?>
-						<div class="up" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
+						<div class="up" onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
 					} else {?>
@@ -30,7 +30,7 @@
 			<tr class="horizontal">
 				<td align="right"><?php
 					if ($subCol != 1 && $sectorWidth > 1) {?>
-						<div class="left" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$sub - 1?>'">
+						<div class="left" onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>&sub=<?=$sub - 1?>'">
 							<span><?=toRoman($sub - 1)?></span>
 						</div><?php
 					} else {?>
@@ -60,7 +60,7 @@
 				</td>
 				<td><?php
 					if ($subCol > 0 && $sectorWidth > 1) {?>
-						<div class="right" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$sub + 1?>'">
+						<div class="right" onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>&sub=<?=$sub + 1?>'">
 							<span><?=toRoman($sub + 1)?></span>
 						</div><?php
 					} else {?>
@@ -75,7 +75,7 @@
 				<td class="middle"><?php
 					if ($subRow < $sectorHeight && $sectorHeight > 1) {
 						$target = $sub + $sectorWidth;?>
-						<div class="down" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
+						<div class="down" onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
 					} else {?>

@@ -10,7 +10,7 @@
 	
 	// If a sector is only 1x1, automatically redirect to detail sub sector page
 	if ($sectorWidth * $sectorHeight == 1) {
-		echo "<script type='text/javascript'>location.href='index.php?sector=".$sector."&sub=1';</script>";
+		echo "<script type='text/javascript'>location.href='index.php?".$classifedHref."sector=".$sector."&sub=1';</script>";
 	}
 ?>
 <table class="sectors"><?php
@@ -22,7 +22,7 @@
 				$imgPath = lookupClassifedFile($classifed,$sectorDir."/".$sectorSubId.".png");?>
 				
 				<td class="<?=$tdClass?>">
-					<div class="content border" style="background-image:url('<?=$imgPath?>');" onClick="location.href='?sector=<?=$sector?>&sub=<?=$sectorSubId?>'"><?php
+					<div class="content border" style="background-image:url('<?=$imgPath?>');" onClick="location.href='?<?=$classifedHref?>sector=<?=$sector?>&sub=<?=$sectorSubId?>'"><?php
 						if ($sectorWidth * $sectorHeight == 1) {
 							echo " ";
 						} else {

@@ -98,7 +98,8 @@
 
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
 
-	$classifed=isset($_GET['Classifed']);
+	$classifed = isset($_GET['Classifed']);
+	$classifedHref = isset($_GET['Classifed'])? "Classifed&" : "" ;
 
 	$sector ="";
 	if (isset($_GET['sector'])) {
@@ -170,13 +171,13 @@ window.onclick = function(event) {
 		//menu?>
 		<div class="dropdown">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
-		<button onclick="location.href='index.php?gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
+		<button onclick="location.href='index.php?<?=$classifedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
 		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
 				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-					<a href="?sector=<?=$name?>"><?=strtoupper($name)?></a>
+					<a href="?<?=$classifedHref?>sector=<?=$name?>"><?=strtoupper($name)?></a>
 				</div>
 				<?php }?>
 			</div><?php
@@ -215,7 +216,7 @@ window.onclick = function(event) {
 									if (getGateNetworkFromSector($name)==$gateNetwork){
 										$xy=explode(",",fgets($handle));
 										if (count($xy)==2) {
-											printf("{x:%d, y:%d, url:\"?sector=%s\"},",$xy[0],$xy[1],$name);
+											printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifedHref,$name);
 										}
 									}
 									fclose($handle);
