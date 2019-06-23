@@ -80,6 +80,19 @@
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
 
+	function lookupClassifedFile($classifed,$file) {
+		if ($classifed) {
+			$classifedFile="classifed/".$file;
+			if (file_exists($classifedFile)) {
+				return $classifedFile;
+			} else {
+				return $file;
+			}
+		} else {
+			return $file;
+		}
+	}
+
 	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 

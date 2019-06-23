@@ -19,7 +19,7 @@
 		<tr><?php
 			for ($col = 1; $col <= $sectorWidth; $col++) {
 				$sectorSubId = ($row - 1) * $sectorWidth + $col; 
-				$imgPath = $sectorDir."/".$sectorSubId.".png";?>
+				$imgPath = lookupClassifedFile($classifed,$sectorDir."/".$sectorSubId.".png");?>
 				
 				<td class="<?=$tdClass?>">
 					<div class="content border" style="background-image:url('<?=$imgPath?>');" onClick="location.href='?sector=<?=$sector?>&sub=<?=$sectorSubId?>'"><?php
