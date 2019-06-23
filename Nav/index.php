@@ -236,11 +236,9 @@ window.onclick = function(event) {
 			}
 			</script>
 			<div>
-				<?php if ($gateNetwork=="Lower") {?>
-					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="img/gateNetworkLower.png"/>
-				<?php } else {?>
-					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="img/gateNetworkUpper.png"/>
-				<?php }?>
+				<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
+				$gateImg=lookupClassifedFile($classifed,$gateImg);?>
+				<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="<?=$gateImg?>"/>
 			</div>
 			<div style="position:absolute;top:10px;right:20px;">
 				Stellar Cartography <?php if ($classifed) {printf("ONI");} else {printf("TSN");}?> 11.0
