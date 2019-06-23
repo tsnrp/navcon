@@ -85,6 +85,8 @@
 
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
 
+	$classifed=isset($_GET['Classifed']);
+
 	$sector ="";
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
@@ -227,7 +229,7 @@ window.onclick = function(event) {
 				<?php }?>
 			</div>
 			<div style="position:absolute;top:10px;right:20px;">
-				Stellar Cartography TSN 11.0
+				Stellar Cartography <?php if ($classifed) {printf("ONI");} else {printf("TSN");}?> 11.0
 			</div><?php
 		}
 	?>
