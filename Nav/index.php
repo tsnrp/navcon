@@ -79,7 +79,15 @@
 		//for instance if we decide 7 sectors need to be devided over 3 it will be
 		//3,3,1 rather than the more logical 3,2,2
 		//lets fix that when it becomes an issue
-		$amountOfSystemMenus=3;
+
+		$maxMenuSize=12;
+		// 12 is roughly right for a 768 height screen
+		// however this was tested on a machine that had a signifcantly different display
+		// (27 inch) 2560x1440, resized
+		// its possible that if it was really on a machine with such a small display menus would of been resized
+		// and/or the display scaling would be on
+		// as such it may be worth trying to find someone with the worst display we want to support and check we cant raise it
+		$amountOfSystemMenus=ceil(count($sectorList)/$maxMenuSize);
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
 
