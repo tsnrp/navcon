@@ -52,9 +52,9 @@
 		return (substr($haystack, -$length) == $needle);
 	}
 
-	function getGateNetworkFromSector ($classifed, $sector) {
+	function getGateNetworkFromSector ($classified, $sector) {
 		$ret="";
-		$handle=fopen(lookupClassifedFile($classifed,"sectors/".$sector."/gateNetwork.txt"),"r");
+		$handle=fopen(lookupClassifiedFile($classified,"sectors/".$sector."/gateNetwork.txt"),"r");
 		if ($handle) {
 			$ret = trim(fgets($handle));
 			fclose($handle);
@@ -63,10 +63,10 @@
 	}
 
 	//returns an array of arrays where each array is a menu to be shown
-	function getSystemsMenus($classifed) {
+	function getSystemsMenus($classified) {
 		$files = scandir("sectors", 0);
-		if ($classifed) {
-			$files = array_unique(array_merge($files,scandir("classifed/sectors",0)));
+		if ($classified) {
+			$files = array_unique(array_merge($files,scandir("classified/sectors",0)));
 		}
 		$sectorList=array();
 		foreach ($files as $name) {
@@ -83,11 +83,11 @@
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
 
-	function lookupClassifedFile($classifed,$file) {
-		if ($classifed) {
-			$classifedFile="classifed/".$file;
-			if (file_exists($classifedFile)) {
-				return $classifedFile;
+	function lookupClassifiedFile($classified,$file) {
+		if ($classified) {
+			$classifiedFile="classified/".$file;
+			if (file_exists($classifiedFile)) {
+				return $classifiedFile;
 			} else {
 				return $file;
 			}
@@ -101,13 +101,13 @@
 
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
 
-	$classifed = isset($_GET['Classifed']);
-	$classifedHref = isset($_GET['Classifed'])? "Classifed&" : "" ;
+	$classified = isset($_GET['Classified']);
+	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
 
 	$sector ="";
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
-		$gateNetwork=getGateNetworkFromSector($classifed,$sector);
+		$gateNetwork=getGateNetworkFromSector($classified,$sector);
 		$sectorDir = "sectors/".$sector;
 		$gateButtonDest=$gateNetwork;
 		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
@@ -116,7 +116,7 @@
 		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
 	}
 
-	$menus=getSystemsMenus($classifed);
+	$menus=getSystemsMenus($classified);
 ?>
 <html>
 <head>
@@ -174,13 +174,13 @@ window.onclick = function(event) {
 		//menu?>
 		<div class="dropdown">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
-		<button onclick="location.href='index.php?<?=$classifedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
+		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
 		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
 				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-					<a href="?<?=$classifedHref?>sector=<?=$name?>"><?=strtoupper($name)?></a>
+					<a href="?<?=$classifiedHref?>sector=<?=$name?>"><?=strtoupper($name)?></a>
 				</div>
 				<?php }?>
 			</div><?php
@@ -189,7 +189,7 @@ window.onclick = function(event) {
 		
 		if (!isEmpty($sector)) {
 			// read sector size from sector directory
-			$sectorSize = explode(',', file_get_contents(lookupClassifedFile($classifed,$sectorDir."/sector.txt")));
+			$sectorSize = explode(',', file_get_contents(lookupClassifiedFile($classified,$sectorDir."/sector.txt")));
 			$sectorWidth = $sectorSize[0];
 			$sectorHeight = $sectorSize[1];
 			if (isEmpty($sub)) {
@@ -213,14 +213,14 @@ window.onclick = function(event) {
 					$files= scandir("sectors", 0);
 					foreach ($files as $name) {
 						if ($name != "." && $name != "..") {
-							$mapPos = lookupClassifedFile($classifed,"sectors/".$name."/mainMapPos.txt");
+							$mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
 							if (file_exists($mapPos)) {
 								$handle = fopen("sectors/".$name."/mainMapPos.txt", "r");
 								if ($handle) {
-									if (getGateNetworkFromSector($classifed,$name)==$gateNetwork){
+									if (getGateNetworkFromSector($classified,$name)==$gateNetwork){
 										$xy=explode(",",fgets($handle));
 										if (count($xy)==2) {
-											printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifedHref,$name);
+											printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
 										}
 									}
 									fclose($handle);
@@ -241,11 +241,11 @@ window.onclick = function(event) {
 			</script>
 			<div>
 				<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
-				$gateImg=lookupClassifedFile($classifed,$gateImg);?>
+				$gateImg=lookupClassifiedFile($classified,$gateImg);?>
 				<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="<?=$gateImg?>"/>
 			</div>
 			<div style="position:absolute;top:10px;right:20px;">
-				Stellar Cartography <?php if ($classifed) {printf("ONI");} else {printf("TSN");}?> 11.0
+				Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
 			</div><?php
 		}
 	?>

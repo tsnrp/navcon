@@ -6,7 +6,7 @@
 	$entCount = 0;
 	$activity = "-";
 
-	$entitiesFile=lookupClassifedFile($classifed,$sectorDir."/entities.txt");
+	$entitiesFile=lookupClassifiedFile($classified,$sectorDir."/entities.txt");
 
 	if (file_exists($entitiesFile)) {
 		$handle = fopen($entitiesFile,"r");
@@ -117,7 +117,7 @@
 		}
 	}
 	
-	function createGateButton($classifed, $target, $source, $classifedHref) {
+	function createGateButton($classified, $target, $source, $classifiedHref) {
 		// If target equals e.g. "Atlantis Gate", retrieve the "Atlantis" string
 		$target = trim(explode('Gate', $target)[0]);
 		
@@ -128,8 +128,8 @@
 		if ($source == "Euphini Expanse") $source = "Euphini";
 		
 		// Get files
-		$targetEntities = lookupClassifedFile($classifed,"sectors/".$target."/entities.txt");
-		$targetSize = lookupClassifedFile($classifed,"sectors/".$target."/sector.txt");
+		$targetEntities = lookupClassifiedFile($classified,"sectors/".$target."/entities.txt");
+		$targetSize = lookupClassifiedFile($classified,"sectors/".$target."/sector.txt");
 		
 		// Read Sector Size
 		if (file_exists($targetSize)) {
@@ -157,7 +157,7 @@
 					if ($entity[1] == "G" && startsWith($entity[0], $source)) {
 						$targetSub = trim($entity[2]);
 						
-						$onClick = "onclick=\"location.href='index.php?".$classifedHref."sector=".$target."&sub=".$targetSub."'\"";
+						$onClick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$target."&sub=".$targetSub."'\"";
 						$title = strtoupper($target);
 						if ($size > 1) {
 							$title = $title." - ".toRoman($targetSub);
@@ -181,7 +181,7 @@
 			</td>
 			<td style="text-align:right;"><?php
 				if (!isEmpty($sub) && ($sectorWidth * $sectorHeight > 1)) {?>
-					<button onclick="location.href='index.php?<?=$classifedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button><?php
+					<button onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button><?php
 				} else {
 					echo " ";
 				}?>
@@ -200,7 +200,7 @@
 </div>
 <?php
 	if (isEmpty($sub)) {
-		$onclick = "onclick=\"location.href='index.php?".$classifedHref."sector=".$sector."&entType=";
+		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
 		$onclickStations = $onclick."stations'\"";
 		$onclickGates = $onclick."gates'\"";
 		$onclickOther = $onclick."other'\"";

@@ -27,7 +27,7 @@
 				<td class="desc">
 					<?=$desc?>
 					<?php if ($workingEntType == "gates") {
-						echo createGateButton($classifed,$value[0], $sector, $classifedHref);
+						echo createGateButton($classified,$value[0], $sector, $classifiedHref);
 					}?>
 				</td>
 			</tr><?php
