@@ -52,9 +52,9 @@
 		return (substr($haystack, -$length) == $needle);
 	}
 
-	function getGateNetworkFromSector ($sector) {
+	function getGateNetworkFromSector ($classifed, $sector) {
 		$ret="";
-		$handle=fopen("sectors/".$sector."/gateNetwork.txt","r");
+		$handle=fopen(lookupClassifedFile($classifed,"sectors/".$sector."/gateNetwork.txt"),"r");
 		if ($handle) {
 			$ret = trim(fgets($handle));
 			fclose($handle);
@@ -63,8 +63,11 @@
 	}
 
 	//returns an array of arrays where each array is a menu to be shown
-	function getSystemsMenus() {
+	function getSystemsMenus($classifed) {
 		$files = scandir("sectors", 0);
+		if ($classifed) {
+			$files = array_unique(array_merge($files,scandir("classifed/sectors",0)));
+		}
 		$sectorList=array();
 		foreach ($files as $name) {
 			if ($name != "." && $name != ".." && $name != "desktop.ini") {
@@ -104,7 +107,7 @@
 	$sector ="";
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
-		$gateNetwork=getGateNetworkFromSector($sector);
+		$gateNetwork=getGateNetworkFromSector($classifed,$sector);
 		$sectorDir = "sectors/".$sector;
 		$gateButtonDest=$gateNetwork;
 		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
@@ -113,7 +116,7 @@
 		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
 	}
 
-	$menus=getSystemsMenus();
+	$menus=getSystemsMenus($classifed);
 ?>
 <html>
 <head>
@@ -186,7 +189,7 @@ window.onclick = function(event) {
 		
 		if (!isEmpty($sector)) {
 			// read sector size from sector directory
-			$sectorSize = explode(',', file_get_contents($sectorDir."/sector.txt"));
+			$sectorSize = explode(',', file_get_contents(lookupClassifedFile($classifed,$sectorDir."/sector.txt")));
 			$sectorWidth = $sectorSize[0];
 			$sectorHeight = $sectorSize[1];
 			if (isEmpty($sub)) {
@@ -210,10 +213,11 @@ window.onclick = function(event) {
 					$files= scandir("sectors", 0);
 					foreach ($files as $name) {
 						if ($name != "." && $name != "..") {
-							if (file_exists("sectors/".$name."/mainMapPos.txt")) {
+							$mapPos = lookupClassifedFile($classifed,"sectors/".$name."/mainMapPos.txt");
+							if (file_exists($mapPos)) {
 								$handle = fopen("sectors/".$name."/mainMapPos.txt", "r");
 								if ($handle) {
-									if (getGateNetworkFromSector($name)==$gateNetwork){
+									if (getGateNetworkFromSector($classifed,$name)==$gateNetwork){
 										$xy=explode(",",fgets($handle));
 										if (count($xy)==2) {
 											printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifedHref,$name);

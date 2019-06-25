@@ -6,8 +6,10 @@
 	$entCount = 0;
 	$activity = "-";
 
-	if (file_exists($sectorDir."/entities.txt")) {
-		$handle = fopen($sectorDir."/entities.txt", "r");
+	$entitiesFile=lookupClassifedFile($classifed,$sectorDir."/entities.txt");
+
+	if (file_exists($entitiesFile)) {
+		$handle = fopen($entitiesFile,"r");
 		if ($handle) {
 			while (($line = fgets($handle)) != false) {
 				$entCount++;
@@ -92,7 +94,7 @@
 			
 			fclose($handle);
 		} else {
-			echo "Error opening ".$sectorDir."/entities.txt";
+			echo "Error opening ".$entitiesFile;
 		}
 		
 		if (isEmpty($sub)) {
@@ -115,7 +117,7 @@
 		}
 	}
 	
-	function createGateButton($target, $source, $classifedHref) {
+	function createGateButton($classifed, $target, $source, $classifedHref) {
 		// If target equals e.g. "Atlantis Gate", retrieve the "Atlantis" string
 		$target = trim(explode('Gate', $target)[0]);
 		
@@ -126,8 +128,8 @@
 		if ($source == "Euphini Expanse") $source = "Euphini";
 		
 		// Get files
-		$targetEntities = "sectors/".$target."/entities.txt";
-		$targetSize = "sectors/".$target."/sector.txt";
+		$targetEntities = lookupClassifedFile($classifed,"sectors/".$target."/entities.txt");
+		$targetSize = lookupClassifedFile($classifed,"sectors/".$target."/sector.txt");
 		
 		// Read Sector Size
 		if (file_exists($targetSize)) {
