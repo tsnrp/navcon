@@ -4,9 +4,7 @@
 	$entStations = array();
 	$entOther = array();
 
-	foreach (readEntitesFile($classified,$sector) as $line) {
-		$entity = explode(',', $line);
-
+	foreach (readEntitesFile($classified,$sector) as $entity) {
 		/* add type to entity line, if available */
 		$checkExperimental = 0;
 		if ($entity[1] == "W") {
@@ -23,25 +21,25 @@
 			$entity['description'] = "Command Post";
 		} else if ($entity[1] == "D") {
 			$entity['description'] = "Defence";
-		} else if (startsWith($line, "BH")) {
+		} else if (startsWith($entity[0], "BH")) {
 			$entity['description'] = "Gravitational Singularity";
-		} else if (startsWith($line, "WP")) {
+		} else if (startsWith($entity[0], "WP")) {
 			$entity['description'] = "Weapon Platform";
-		} else if (startsWith($line, "DS-")) {
+		} else if (startsWith($entity[0], "DS-")) {
 			$entity['description'] = "Deep Space Station";
-		} else if (startsWith($line, "SY-")) {
+		} else if (startsWith($entity[0], "SY-")) {
 			$entity['description'] = "Ship Yard";
 			$checkExperimental = 1;
-		} else if (startsWith($line, "RS-")) {
+		} else if (startsWith($entity[0], "RS-")) {
 			$entity['description'] = "Research Station";
 			$checkExperimental = 1;
-		} else if (startsWith($line, "I-")) {
+		} else if (startsWith($entity[0], "I-")) {
 			$entity['description'] = "Industrial Station";
 			$checkExperimental = 1;
-		} else if (startsWith($line, "M-")) {
+		} else if (startsWith($entity[0], "M-")) {
 			$entity['description'] = "Mining Station";
 			$checkExperimental = 1;
-		} else if (startsWith($line, "CP-")) {
+		} else if (startsWith($entity[0], "CP-")) {
 			$entity['description'] = "Command Post";
 		} else if ($entity[1] == "O") {
 			$entity['description'] = "Independent Enterprise";
@@ -51,7 +49,7 @@
 		if ($checkExperimental == 1 && endsWith($entity[0], "X")) {
 			$entity['description'] = $entity['description'].", experimental";
 		}
-		if (startsWith($line, $sector." Command")) {
+		if (startsWith($entity[0], $sector." Command")) {
 			$entity['description'] = "Sector Command";
 		}
 
@@ -114,9 +112,7 @@
 		
 		// Read entities and create button
 		if (!isEmpty($source)) {
-			foreach (readEntitesFile($classified,$target) as $line) {
-				$entity = explode(',', $line);
-
+			foreach (readEntitesFile($classified,$target) as $entity) {
 				if ($entity[1] == "G" && startsWith($entity[0], $source)) {
 					$targetSub = trim($entity[2]);
 

@@ -107,7 +107,11 @@
 	function readEntitesFile($classified,$sector) {
 		$file=lookupClassifiedFile($classified,"sectors/".$sector."/entities.txt");
 		if (file_exists($file)) {
-			$ret=explode("\n",file_get_contents($file));
+			$entities=explode("\n",file_get_contents($file));
+			$ret=array();
+			foreach ($entities as $line) {
+				array_push($ret,explode(",",$line));
+			}
 			return $ret;
 		}
 		return $array();
