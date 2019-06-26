@@ -3,13 +3,8 @@
 	$entGates = array();
 	$entStations = array();
 	$entOther = array();
-	$entCount = 0;
-	$activity = "-";
 
 	foreach (readEntitesFile($classified,$sector) as $line) {
-
-		$entCount++;
-
 		$entity = explode(',', $line);
 
 		/* add type to entity line, if available */
@@ -87,13 +82,6 @@
 	ksort($entStations);
 	ksort($entGates);
 	ksort($entOther);
-
-	if (isEmpty($sub)) {
-		$activityValue = $entCount / ($sectorWidth * $sectorHeight);
-	} else {
-		$activityValue = $entCount;
-	}
-	$activity = $activityValue;
 
 	// default enttyp to first non-empty set
 	if (isEmpty($sub) && isEmpty($entType)) {
