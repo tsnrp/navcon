@@ -10,49 +10,49 @@
 		/* add type to entity line, if available */
 		$checkExperimental = 0;
 		if ($entity[1] == "W") {
-			$entity[3] = "Weapon Platform";
+			$entity['description'] = "Weapon Platform";
 		} else if ($entity[1] == "Y") {
-			$entity[3] = "Shipyard";
+			$entity['description'] = "Shipyard";
 		} else if ($entity[1] == "R") {
-			$entity[3] = "Research";
+			$entity['description'] = "Research";
 		} else if ($entity[1] == "I") {
-			$entity[3] = "Industry";
+			$entity['description'] = "Industry";
 		} else if ($entity[1] == "M") {
-			$entity[3] = "Mining";
+			$entity['description'] = "Mining";
 		} else if ($entity[1] == "C") {
-			$entity[3] = "Command Post";
+			$entity['description'] = "Command Post";
 		} else if ($entity[1] == "D") {
-			$entity[3] = "Defence";
+			$entity['description'] = "Defence";
 		} else if (startsWith($line, "BH")) {
-			$entity[3] = "Gravitational Singularity";
+			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($line, "WP")) {
-			$entity[3] = "Weapon Platform";
+			$entity['description'] = "Weapon Platform";
 		} else if (startsWith($line, "DS-")) {
-			$entity[3] = "Deep Space Station";
+			$entity['description'] = "Deep Space Station";
 		} else if (startsWith($line, "SY-")) {
-			$entity[3] = "Ship Yard";
+			$entity['description'] = "Ship Yard";
 			$checkExperimental = 1;
 		} else if (startsWith($line, "RS-")) {
-			$entity[3] = "Research Station";
+			$entity['description'] = "Research Station";
 			$checkExperimental = 1;
 		} else if (startsWith($line, "I-")) {
-			$entity[3] = "Industrial Station";
+			$entity['description'] = "Industrial Station";
 			$checkExperimental = 1;
 		} else if (startsWith($line, "M-")) {
-			$entity[3] = "Mining Station";
+			$entity['description'] = "Mining Station";
 			$checkExperimental = 1;
 		} else if (startsWith($line, "CP-")) {
-			$entity[3] = "Command Post";
+			$entity['description'] = "Command Post";
 		} else if ($entity[1] == "O") {
-			$entity[3] = "Independent Enterprise";
+			$entity['description'] = "Independent Enterprise";
 		} else if ($entity[1] == "P") {
-			$entity[3] = "Planet";
+			$entity['description'] = "Planet";
 		}
 		if ($checkExperimental == 1 && endsWith($entity[0], "X")) {
-			$entity[3] = $entity[3].", experimental";
+			$entity['description'] = $entity['description'].", experimental";
 		}
 		if (startsWith($line, $sector." Command")) {
-			$entity[3] = "Sector Command";
+			$entity['description'] = "Sector Command";
 		}
 
 

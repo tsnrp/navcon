@@ -16,7 +16,7 @@
 		</tr><?php
 		$highlightRow = false;
 		foreach ($workingArray as $key => $value) {
-			$desc = isset($value[3]) ? $value[3] : ""?>
+			$desc = isset($value['description']) ? $value['description'] : ""?>
 			<tr class="entity<?=$highlightRow ? " highlight" : ""?>">
 				<td class="caption" >
 					<?=str_replace(" ", "&nbsp;", $key)?>
