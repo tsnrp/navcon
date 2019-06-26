@@ -58,17 +58,7 @@
 
 		$entity[2] = trim($entity[2]);
 		if (isEmpty($sub) || $entity[2] == $sub) {
-			if ($entity[1] == "S") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "R") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "I") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "M") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "D") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "C") {
+			if ($entity[1] == "S" || $entity[1] == "R" || $entity[1] == "I" || $entity[1] == "M" || $entity[1] == "D" || $entity[1] == "C") {
 				$entStations[$entity[0]] = $entity;
 			} else if ($entity[1] == "G") {
 				$entGates[$entity[0]] = $entity;
