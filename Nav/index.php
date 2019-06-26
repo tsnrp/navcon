@@ -115,7 +115,10 @@
 				$entity['name']=$line[0];
 				$entity['type']=$line[1];
 				$entity['loc']=$line[2];
-				array_push($ret,$entity);
+				$isClassified=(isset($line[3]) && $line[3]=="Classified");
+				if (!$isClassified || $classified) {
+					array_push($ret,$entity);
+				}
 			}
 			return $ret;
 		}
