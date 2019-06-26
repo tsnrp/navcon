@@ -22,12 +22,12 @@
 					<?=str_replace(" ", "&nbsp;", $key)?>
 				</td>
 				<td class="sub">
-					<?=isEmpty($sub) ? toRoman($value[2]) : "&nbsp;"?>
+					<?=isEmpty($sub) ? toRoman($value['loc']) : "&nbsp;"?>
 				</td>
 				<td class="desc">
 					<?=$desc?>
 					<?php if ($workingEntType == "gates") {
-						echo createGateButton($classified,$value[0], $sector, $classifiedHref);
+						echo createGateButton($classified,$value['name'], $sector, $classifiedHref);
 					}?>
 				</td>
 			</tr><?php

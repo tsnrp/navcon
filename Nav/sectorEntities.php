@@ -7,61 +7,61 @@
 	foreach (readEntitesFile($classified,$sector) as $entity) {
 		/* add type to entity line, if available */
 		$checkExperimental = 0;
-		if ($entity[1] == "W") {
+		if ($entity['type'] == "W") {
 			$entity['description'] = "Weapon Platform";
-		} else if ($entity[1] == "Y") {
+		} else if ($entity['type'] == "Y") {
 			$entity['description'] = "Shipyard";
-		} else if ($entity[1] == "R") {
+		} else if ($entity['type'] == "R") {
 			$entity['description'] = "Research";
-		} else if ($entity[1] == "I") {
+		} else if ($entity['type'] == "I") {
 			$entity['description'] = "Industry";
-		} else if ($entity[1] == "M") {
+		} else if ($entity['type'] == "M") {
 			$entity['description'] = "Mining";
-		} else if ($entity[1] == "C") {
+		} else if ($entity['type'] == "C") {
 			$entity['description'] = "Command Post";
-		} else if ($entity[1] == "D") {
+		} else if ($entity['type'] == "D") {
 			$entity['description'] = "Defence";
-		} else if (startsWith($entity[0], "BH")) {
+		} else if (startsWith($entity['name'], "BH")) {
 			$entity['description'] = "Gravitational Singularity";
-		} else if (startsWith($entity[0], "WP")) {
+		} else if (startsWith($entity['name'], "WP")) {
 			$entity['description'] = "Weapon Platform";
-		} else if (startsWith($entity[0], "DS-")) {
+		} else if (startsWith($entity['name'], "DS-")) {
 			$entity['description'] = "Deep Space Station";
-		} else if (startsWith($entity[0], "SY-")) {
+		} else if (startsWith($entity['name'], "SY-")) {
 			$entity['description'] = "Ship Yard";
 			$checkExperimental = 1;
-		} else if (startsWith($entity[0], "RS-")) {
+		} else if (startsWith($entity['name'], "RS-")) {
 			$entity['description'] = "Research Station";
 			$checkExperimental = 1;
-		} else if (startsWith($entity[0], "I-")) {
+		} else if (startsWith($entity['name'], "I-")) {
 			$entity['description'] = "Industrial Station";
 			$checkExperimental = 1;
-		} else if (startsWith($entity[0], "M-")) {
+		} else if (startsWith($entity['name'], "M-")) {
 			$entity['description'] = "Mining Station";
 			$checkExperimental = 1;
-		} else if (startsWith($entity[0], "CP-")) {
+		} else if (startsWith($entity['name'], "CP-")) {
 			$entity['description'] = "Command Post";
-		} else if ($entity[1] == "O") {
+		} else if ($entity['type'] == "O") {
 			$entity['description'] = "Independent Enterprise";
-		} else if ($entity[1] == "P") {
+		} else if ($entity['type'] == "P") {
 			$entity['description'] = "Planet";
 		}
-		if ($checkExperimental == 1 && endsWith($entity[0], "X")) {
+		if ($checkExperimental == 1 && endsWith($entity['name'], "X")) {
 			$entity['description'] = $entity['description'].", experimental";
 		}
-		if (startsWith($entity[0], $sector." Command")) {
+		if (startsWith($entity['name'], $sector." Command")) {
 			$entity['description'] = "Sector Command";
 		}
 
 
-		$entity[2] = trim($entity[2]);
-		if (isEmpty($sub) || $entity[2] == $sub) {
-			if ($entity[1] == "S" || $entity[1] == "R" || $entity[1] == "I" || $entity[1] == "M" || $entity[1] == "D" || $entity[1] == "C") {
-				$entStations[$entity[0]] = $entity;
-			} else if ($entity[1] == "G") {
-				$entGates[$entity[0]] = $entity;
+		$entity['loc'] = trim($entity['loc']);
+		if (isEmpty($sub) || $entity['loc'] == $sub) {
+			if ($entity['type'] == "S" || $entity['type'] == "R" || $entity['type'] == "I" || $entity['type'] == "M" || $entity['type'] == "D" || $entity['type'] == "C") {
+				$entStations[$entity['name']] = $entity;
+			} else if ($entity['type'] == "G") {
+				$entGates[$entity['name']] = $entity;
 			} else {
-				$entOther[$entity[0]] = $entity;
+				$entOther[$entity['name']] = $entity;
 			}
 		}
 	}
@@ -113,8 +113,8 @@
 		// Read entities and create button
 		if (!isEmpty($source)) {
 			foreach (readEntitesFile($classified,$target) as $entity) {
-				if ($entity[1] == "G" && startsWith($entity[0], $source)) {
-					$targetSub = trim($entity[2]);
+				if ($entity['type'] == "G" && startsWith($entity['name'], $source)) {
+					$targetSub = trim($entity['loc']);
 
 					$onClick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$target."&sub=".$targetSub."'\"";
 					$title = strtoupper($target);

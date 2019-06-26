@@ -110,11 +110,16 @@
 			$entities=explode("\n",file_get_contents($file));
 			$ret=array();
 			foreach ($entities as $line) {
-				array_push($ret,explode(",",$line));
+				$line=explode(",",$line);
+				$entity=array();
+				$entity['name']=$line[0];
+				$entity['type']=$line[1];
+				$entity['loc']=$line[2];
+				array_push($ret,$entity);
 			}
 			return $ret;
 		}
-		return $array();
+		return array();
 	}
 
 	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
