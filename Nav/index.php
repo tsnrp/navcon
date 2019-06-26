@@ -104,6 +104,15 @@
 		}
 	}
 
+	function readEntitesFile($classified,$sector) {
+		$file=lookupClassifiedFile($classified,"sectors/".$sector."/entities.txt");
+		if (file_exists($file)) {
+			$ret=explode("\n",file_get_contents($file));
+			return $ret;
+		}
+		return $array();
+	}
+
 	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
