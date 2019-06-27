@@ -62,8 +62,7 @@
 		return $ret;
 	}
 
-	//returns an array of arrays where each array is a menu to be shown
-	function getSystemsMenus($classified) {
+	function getAllSystems($classified) {
 		$files = scandir("sectors", 0);
 		if ($classified) {
 			$files = array_unique(array_merge($files,scandir("classified/sectors",0)));
@@ -75,19 +74,25 @@
 			}
 		}
 		asort($sectorList);
-		//note array_chunk may turn out to be the wrong call
-		//for instance if we decide 7 sectors need to be devided over 3 it will be
-		//3,3,1 rather than the more logical 3,2,2
-		//lets fix that when it becomes an issue
+		return $sectorList;
+	}
 
-		$maxMenuSize=12;
+	//returns an array of arrays where each array is a menu to be shown
+	function getSystemsMenus($classified) {
+		$sectorList=getAllSystems($classified);
 		// 12 is roughly right for a 768 height screen
 		// however this was tested on a machine that had a signifcantly different display
 		// (27 inch) 2560x1440, resized
 		// its possible that if it was really on a machine with such a small display menus would of been resized
 		// and/or the display scaling would be on
 		// as such it may be worth trying to find someone with the worst display we want to support and check we cant raise it
+		$maxMenuSize=12;
 		$amountOfSystemMenus=ceil(count($sectorList)/$maxMenuSize);
+
+		//note array_chunk may turn out to be the wrong call
+		//for instance if we decide 7 sectors need to be devided over 3 it will be
+		//3,3,1 rather than the more logical 3,2,2
+		//lets fix that when it becomes an issue
 		return array_chunk($sectorList,ceil(count($sectorList)/$amountOfSystemMenus));
 	}
 
@@ -239,12 +244,12 @@ window.onclick = function(event) {
 					//however I do not know it
 					//logic is simliar to menu.php - if that needs duplication again
 					//it probably should be moved into a function
-					$files= scandir("sectors", 0);
+					$files=getAllSystems($classified);
 					foreach ($files as $name) {
 						if ($name != "." && $name != "..") {
 							$mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
 							if (file_exists($mapPos)) {
-								$handle = fopen("sectors/".$name."/mainMapPos.txt", "r");
+								$handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
 								if ($handle) {
 									if (getGateNetworkFromSector($classified,$name)==$gateNetwork){
 										$xy=explode(",",fgets($handle));
