@@ -228,7 +228,16 @@ window.onclick = function(event) {
 		<div class="dropdown">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
-		<button onclick="location.href='http://www.1sws.com\\Intel\\NavClassified\\index.php'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>">INTEL</button><?php
+		<?php
+		//it would be kind of nice if this tracked what sub page you where on
+		//but that seems like effort
+		//effort that I suspect no one is too fussed by
+		if ($classified) {?>
+			<button onclick="location.href='index.php'" class="dropbtn">INTEL</button>
+		<?php } else { ?>
+			<button onclick="location.href='index.php?Classified'" class="dropbtn active">INTEL</button>
+		<?php
+		}
 		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
