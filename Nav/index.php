@@ -138,6 +138,25 @@
 	$classified = isset($_GET['Classified']);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
 
+	//if passwords are stored on disc it can be tricky (as an understatement) to do them securely
+	//even if the password is unimportant (as it is in this case)
+	//the ever present reuse of passwords means it probably needs to be done properly
+	//to prevent people putting a important password in here then complaining when it gets leaked
+	//we are only going to have a fixed password
+	$requestPassword=false;
+	if ($classified) {
+		$requestPassword=true;
+		if (isset($_COOKIE['passwordOK'])) {
+			$requestPassword=false;
+		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
+			setcookie('passwordOK',"true");
+			$requestPassword=false;
+		} else {
+			$classified=false;
+			$classifiedHref="";
+		}
+	}
+
 	$sector ="";
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
@@ -220,67 +239,76 @@ window.onclick = function(event) {
 			</div><?php
 			}?>
 		</div><?php
-		
-		if (!isEmpty($sector)) {
-			// read sector size from sector directory
-			$sectorSize = explode(',', file_get_contents(lookupClassifiedFile($classified,$sectorDir."/sector.txt")));
-			$sectorWidth = $sectorSize[0];
-			$sectorHeight = $sectorSize[1];
-			if (isEmpty($sub)) {
-				include 'sectorMap.php';
-			} else {
-				include 'sectorSubMap.php';
-			}
-		} else {?>
-			<script>
-			function systemClick(event) {
-				width=event.currentTarget.clientWidth;
-				origX=1654/width*event.offsetX;
-				width=event.currentTarget.clientHeight;
-				origY=1080/width*event.offsetY;
-				clickables=[<?php
-					//build the clickables array
-					//there probably is a nice way to do this with JSON
-					//however I do not know it
-					//logic is simliar to menu.php - if that needs duplication again
-					//it probably should be moved into a function
-					$files=getAllSystems($classified);
-					foreach ($files as $name) {
-						if ($name != "." && $name != "..") {
-							$mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
-							if (file_exists($mapPos)) {
-								$handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
-								if ($handle) {
-									if (getGateNetworkFromSector($classified,$name)==$gateNetwork){
-										$xy=explode(",",fgets($handle));
-										if (count($xy)==2) {
-											printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
+
+		if ($requestPassword) {?>
+			<br>Please enter ONI security clearance
+			<form action="index.php?Classified" method="post">
+			<input type="text" name="pass"><br>
+			<input type="submit" value="authenticate me">
+			</form>
+			<br><?php
+		} else {
+			if (!isEmpty($sector)) {
+				// read sector size from sector directory
+				$sectorSize = explode(',', file_get_contents(lookupClassifiedFile($classified,$sectorDir."/sector.txt")));
+				$sectorWidth = $sectorSize[0];
+				$sectorHeight = $sectorSize[1];
+				if (isEmpty($sub)) {
+					include 'sectorMap.php';
+				} else {
+					include 'sectorSubMap.php';
+				}
+			} else {?>
+				<script>
+				function systemClick(event) {
+					width=event.currentTarget.clientWidth;
+					origX=1654/width*event.offsetX;
+					width=event.currentTarget.clientHeight;
+					origY=1080/width*event.offsetY;
+					clickables=[<?php
+						//build the clickables array
+						//there probably is a nice way to do this with JSON
+						//however I do not know it
+						//logic is simliar to menu.php - if that needs duplication again
+						//it probably should be moved into a function
+						$files=getAllSystems($classified);
+						foreach ($files as $name) {
+							if ($name != "." && $name != "..") {
+								$mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
+								if (file_exists($mapPos)) {
+									$handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
+									if ($handle) {
+										if (getGateNetworkFromSector($classified,$name)==$gateNetwork){
+											$xy=explode(",",fgets($handle));
+											if (count($xy)==2) {
+												printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
+											}
 										}
+										fclose($handle);
 									}
-									fclose($handle);
 								}
 							}
 						}
-					}
-					?>];
-					for (i=0; i<clickables.length; i++) {
-					deltaX=origX-clickables[i].x;
-					deltaY=origY-clickables[i].y;
-					delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-					if (delta<50) {
-						window.open(clickables[i].url,"_self");
+						?>];
+						for (i=0; i<clickables.length; i++) {
+						deltaX=origX-clickables[i].x;
+						deltaY=origY-clickables[i].y;
+						delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+						if (delta<50) {
+							window.open(clickables[i].url,"_self");
+						}
 					}
 				}
+				</script>
+				<div>
+					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
+					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
+					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="<?=$gateImg?>"/>
+				</div>
+				<div style="position:absolute;top:10px;right:20px;">
+					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
+				</div><?php
 			}
-			</script>
-			<div>
-				<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
-				$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-				<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="<?=$gateImg?>"/>
-			</div>
-			<div style="position:absolute;top:10px;right:20px;">
-				Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
-			</div><?php
 		}
 	?>
 </body>
