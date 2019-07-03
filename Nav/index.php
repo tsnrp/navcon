@@ -271,11 +271,41 @@ window.onclick = function(event) {
 			} else {?>
 				<script>
 				function systemClick(event) {
-					width=event.currentTarget.clientWidth;
-					origX=1654/width*event.offsetX;
-					width=event.currentTarget.clientHeight;
-					origY=1080/width*event.offsetY;
-					clickables=[<?php
+					var el=document.getElementById("gateNet");
+					//we need to convert the information that we get in the event info how far into the image has been clicked
+					//first up we are going to figure out how much the image has been scaled
+					var imgOrigX=1654;
+					var imgOrigY=1080;
+
+					var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
+					var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
+					var imageScale=Math.min(scaleImgX,scaleImgY);
+
+					//then we are going to calculate how far inside the window the image is
+					//see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
+					var x=0;
+					var y=0;
+
+					while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+						x += el.offsetLeft - el.scrollLeft;
+						y += el.offsetTop - el.scrollTop;
+						el = el.offsetParent;
+					}
+
+					x = event.clientX - x;
+					y = event.clientY - y;
+
+					//we compare the offset from the mid point of the image
+					//and scale it back to original units used to make the clickables array
+					var width=event.currentTarget.clientWidth;
+					var clickFromMidX=x-(width/2);
+					var clickX=(clickFromMidX*(1/imageScale))+(imgOrigX/2);
+
+					var height=event.currentTarget.clientHeight;
+					var clickFromMidY=y-(height/2);
+					var clickY=(clickFromMidY*(1/imageScale))+(imgOrigY/2);
+
+					var clickables=[<?php
 						//build the clickables array
 						//there probably is a nice way to do this with JSON
 						//however I do not know it
@@ -301,9 +331,9 @@ window.onclick = function(event) {
 						}
 						?>];
 						for (i=0; i<clickables.length; i++) {
-						deltaX=origX-clickables[i].x;
-						deltaY=origY-clickables[i].y;
-						delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+						var deltaX=clickX-clickables[i].x;
+						var deltaY=clickY-clickables[i].y;
+						var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 						if (delta<50) {
 							window.open(clickables[i].url,"_self");
 						}
@@ -313,7 +343,7 @@ window.onclick = function(event) {
 				<div>
 					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
 					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-					<img onClick="systemClick(event)" max-height="100%" max-width="100%" z-index="-1" position="absolute" bottom="0px" right="0px" src="<?=$gateImg?>"/>
+					<img id="gateNet" onClick="systemClick(event)" style="height: 100%; width: 100%; object-fit: contain; z-index: -1; position: absolute; bottom: 0px; right: 0px;" src="<?=$gateImg?>"/>
 				</div>
 				<div style="position:absolute;top:10px;right:20px;">
 					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
