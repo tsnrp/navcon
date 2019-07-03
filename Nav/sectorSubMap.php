@@ -1,5 +1,5 @@
 <div style="height:95%;">
-	<img src="<?=lookupClassifiedFile($classified,"$sectorDir/$sub.png");?>" style="height:100%;"/>
+	<img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="height:100%;"/>
 </div>
 <?php 
 	include 'sectorEntities.php'; 

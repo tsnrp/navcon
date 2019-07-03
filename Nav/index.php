@@ -164,7 +164,6 @@
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
 		$gateNetwork=getSectorInfo($classified,$sector)['network'];
-		$sectorDir = "sectors/".$sector;
 		$gateButtonDest=$gateNetwork;
 		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
 	} else {
