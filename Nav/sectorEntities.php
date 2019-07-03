@@ -91,25 +91,7 @@
 		if ($source == "Poseidon Rift") $source = "Poseidon";
 		if ($target == "Euphini") $target = "Euphini Expanse";
 		if ($source == "Euphini Expanse") $source = "Euphini";
-		
-		// Get files
-		$targetSize = lookupClassifiedFile($classified,"sectors/".$target."/sector.txt");
-		
-		// Read Sector Size
-		if (file_exists($targetSize)) {
-			$handle = fopen($targetSize, "r");
-			if ($handle) {
-				$line = fgets($handle);
-				$sizeArray = explode(',', $line);
-				
-				$size = $sizeArray[0] * $sizeArray[1];
-			} else {
-				$size = 0;
-			}
-		} else {
-			$size = 0;
-		}
-		
+
 		// Read entities and create button
 		if (!isEmpty($source)) {
 			foreach (readEntitesFile($classified,$target) as $entity) {
@@ -118,7 +100,7 @@
 
 					$onClick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$target."&sub=".$targetSub."'\"";
 					$title = strtoupper($target);
-					if ($size > 1) {
+					if (file_exists(lookupClassifiedFile($classified,"sectors/".$target."/sector.txt"))) {
 						$title = $title." - ".toRoman($targetSub);
 					}
 					return "<button ".$onClick." class=\"dropbtn\">".$title."</button>";
