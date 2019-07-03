@@ -15,14 +15,13 @@ Documentation: How It Works / How To Make Changes
 
 The Nav Console displays a Systems menu item for every subfolder under the Nav/sectors folder and displays 
 Each sector folder contains 
-1) sector.txt defining the number of sectors across and down in the defined system (The sectors folder should really be named systems.)
+1) sector.txt defining which gate network, the number of sectors across and down in the defined system (The sectors folder should really be named systems.)
 2) a png image file of each sector in the system. Each is named with the the sequential number defining its position in the sector starting top left and proceeding across and down.
 3) entities.txt listing all stations and other objects on the map.
 - Each line lists the name, type, sector-map-number and an optional classified tag defining the object
 - Each line is parsed and displayed by Nav/sectorEntities.php. This should be updated for new entity types e.g. Planet
 4) mainMapPos.txt defining the number of pixels in from the left and down from the top of the graphic in the img/gateNetwork.png overview map
    index.php uses it to locate the clickzones to navigate from the network map to a sector
-5) gateNetwork.txt which says which gate network the sector is in (currently it should always be "Upper" or "Lower"), this is used to aid navigation and for the mainMapPos.txt above
 
 How to have Classified only versions of files
 

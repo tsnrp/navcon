@@ -52,16 +52,6 @@
 		return (substr($haystack, -$length) == $needle);
 	}
 
-	function getGateNetworkFromSector ($classified, $sector) {
-		$ret="";
-		$handle=fopen(lookupClassifiedFile($classified,"sectors/".$sector."/gateNetwork.txt"),"r");
-		if ($handle) {
-			$ret = trim(fgets($handle));
-			fclose($handle);
-		}
-		return $ret;
-	}
-
 	function getAllSystems($classified) {
 		$files = scandir("sectors", 0);
 		if ($classified) {
@@ -135,8 +125,9 @@
 		if (file_exists($file)) {
 			$ret=array();
 			$file_contents=explode(',',file_get_contents($file));
-			$ret['x']=$file_contents[0];
-			$ret['y']=$file_contents[1];
+			$ret['network']=$file_contents[0];
+			$ret['x']=$file_contents[1];
+			$ret['y']=$file_contents[2];
 			return $ret;
 		}
 		return array();
@@ -172,7 +163,7 @@
 	$sector ="";
 	if (isset($_GET['sector'])) {
 		$sector=$_GET['sector'];
-		$gateNetwork=getGateNetworkFromSector($classified,$sector);
+		$gateNetwork=getSectorInfo($classified,$sector)['network'];
 		$sectorDir = "sectors/".$sector;
 		$gateButtonDest=$gateNetwork;
 		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
@@ -298,7 +289,7 @@ window.onclick = function(event) {
 								if (file_exists($mapPos)) {
 									$handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
 									if ($handle) {
-										if (getGateNetworkFromSector($classified,$name)==$gateNetwork){
+										if (getSectorInfo($classified,$name)['network']==$gateNetwork){
 											$xy=explode(",",fgets($handle));
 											if (count($xy)==2) {
 												printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
