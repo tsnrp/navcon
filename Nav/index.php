@@ -236,9 +236,9 @@ window.onclick = function(event) {
 		//but that seems like effort
 		//effort that I suspect no one is too fussed by
 		if ($classified) {?>
-			<button onclick="location.href='index.php'" class="dropbtn">INTEL</button>
+			<button onclick="location.href='index.php'" class="dropbtn active">INTEL</button>
 		<?php } else { ?>
-			<button onclick="location.href='index.php?Classified'" class="dropbtn active">INTEL</button>
+			<button onclick="location.href='index.php?Classified'" class="dropbtn">INTEL</button>
 		<?php
 		}
 		for ($i=0; $i!=count($menus); $i++) {
