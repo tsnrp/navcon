@@ -152,7 +152,7 @@
 		if (isset($_COOKIE['passwordOK'])) {
 			$requestPassword=false;
 		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
-			setcookie('passwordOK',"true");
+			setcookie('passwordOK',"true",time()+60*60*24*365*10);//expires 10 years into the future
 			$requestPassword=false;
 		} else {
 			$classified=false;
