@@ -130,6 +130,18 @@
 		return array();
 	}
 
+	function getSectorInfo($classified,$sector) {
+		$file=lookupClassifiedFile($classified,"sectors/".$sector."/sector.txt");
+		if (file_exists($file)) {
+			$ret=array();
+			$file_contents=explode(',',file_get_contents($file));
+			$ret['x']=$file_contents[0];
+			$ret['y']=$file_contents[1];
+			return $ret;
+		}
+		return array();
+	}
+
 	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
@@ -258,10 +270,9 @@ window.onclick = function(event) {
 			<br><?php
 		} else {
 			if (!isEmpty($sector)) {
-				// read sector size from sector directory
-				$sectorSize = explode(',', file_get_contents(lookupClassifiedFile($classified,$sectorDir."/sector.txt")));
-				$sectorWidth = $sectorSize[0];
-				$sectorHeight = $sectorSize[1];
+				$sectorSize = getSectorInfo($classified,$sector);
+				$sectorWidth = $sectorSize['x'];
+				$sectorHeight = $sectorSize['y'];
 				if (isEmpty($sub)) {
 					include 'sectorMap.php';
 				} else {
