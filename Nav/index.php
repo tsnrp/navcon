@@ -231,15 +231,19 @@ window.onclick = function(event) {
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<?php
-		//it would be kind of nice if this tracked what sub page you where on
-		//but that seems like effort
-		//effort that I suspect no one is too fussed by
-		if ($classified) {?>
-			<button onclick="location.href='index.php'" class="dropbtn active">INTEL</button>
-		<?php } else { ?>
-			<button onclick="location.href='index.php?Classified'" class="dropbtn">INTEL</button>
-		<?php
+		$intelButtonActiveText=$classified ? " active" : "" ;
+		$getString= $classified ? "?" : "?Classified&";
+		$getString.=isset($_GET['gateNetwork']) ? "gateNetwork=".$_GET['gateNetwork']."&" : "";
+		$getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
+		$getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
+		$getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
+		if ($getString=="?") {
+			$getString="";
+		} else {
+			$getString=substr($getString,0,-1);
 		}
+		echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
+
 		for ($i=0; $i!=count($menus); $i++) {
 			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
 			<?php foreach ($menus[$i] as $name) {?>
