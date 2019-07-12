@@ -227,7 +227,7 @@ window.onclick = function(event) {
 <body style="overflow: hidden;">
 	<?php
 		//menu?>
-		<div class="dropdown">
+		<div class="dropdown" style="z-index:1;">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
 		<?php
@@ -347,7 +347,7 @@ window.onclick = function(event) {
 				<div>
 					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
 					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-					<img id="gateNet" onClick="systemClick(event)" style="height: 100%; width: 100%; object-fit: contain; z-index: -1; position: absolute; bottom: 0px; right: 0px;" src="<?=$gateImg?>"/>
+					<img id="gateNet" onClick="systemClick(event)" style="height: 100%; width: 100%; object-fit: contain;  position: absolute; bottom: 0px; right: 0px;" src="<?=$gateImg?>"/>
 				</div>
 				<div style="position:absolute;top:10px;right:20px;">
 					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
