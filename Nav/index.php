@@ -126,8 +126,8 @@
 			$ret=array();
 			$file_contents=explode(',',file_get_contents($file));
 			$ret['network']=$file_contents[0];
-			$ret['x']=$file_contents[1];
-			$ret['y']=$file_contents[2];
+			$ret['x']=(int)$file_contents[1];
+			$ret['y']=(int)$file_contents[2];
 			return $ret;
 		}
 		return array();
