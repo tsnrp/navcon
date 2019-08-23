@@ -1,4 +1,95 @@
 <?php
+	session_start();	
+	//---- RELEASE VERSION ----//
+
+	// Redirects with the fancy extra stuff on the end of the url
+	function redirectWithQuery() {
+	    //echo "trying";
+	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
+	    $t = parse_url($uri, PHP_URL_QUERY);
+	    //$dir1 = dirname(__DIR__,2);
+	    if (strlen($t)>0) {
+		$r = "./../../NavUpdate.php?".$t; // This may need changed someday
+	    } else {
+		$r = "./../../NavUpdate.php";
+	    }
+	//    echo "Redirecting to...".$r;
+	//    exit();
+	    header("Location: ".$r, TRUE, 303);
+	    exit();
+	}
+
+	// Actually starts things
+	if (sessionUpdate()) {
+	    if (checkForUpdate()) {
+	    //    echo "True";
+		//echo "update needed";
+		redirectWithQuery();
+		exit();
+	    } //else Continue with your book report
+
+	}
+
+
+	function checkForUpdate() {
+	    $dir1 = dirname(__DIR__, 2);
+	//    echo $dir1;
+	//    exit();
+	    if (!file_exists($dir1."./saved.txt")) {
+		echo "There is a problem with the server's configuration. Notify the server admin that a necessary file is missing for NavUpdate.php.";
+		exit();
+	    }
+	    // else, continue
+	    $saved = fopen($dir1."./saved.txt", "r") or die("Unable to open file");
+	    fgets($saved);// Passoword Unused here, function called so update date can be read
+	    $last_update = fgets($saved);
+	    fclose($saved);
+
+	    $commitDate = getLatestCommit();
+	    return $commitDate != $last_update;
+	}
+	// Get saved file
+
+	$redirect = false;
+
+
+	// returns true if an update check is needed.
+	function sessionUpdate() {
+	    $d = date("U");
+	    $luc = $_SESSION["lastUpdateCheck"];
+	//    echo "luc = ";
+	//    echo $luc;
+	    if ($luc == false) {
+		$_SESSION["lastUpdateCheck"] = $d;
+		return true; // Cause updateCheck to happen
+	    } else {
+		$hour = 60*60;//seconds*minutes
+		$luc += $hour;
+		if ($luc < $d) {
+		    $_SESSION["lastUpdateCheck"] = $d;
+		    return true;
+		} else {
+		    return false;
+		}
+	    }
+	}
+
+	// Gets time of last commit to whichever branch
+	// Default is master of course
+	function getLatestCommit() {
+	    $context = stream_context_create(
+		array(
+		    "http" => array(
+			"header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+		    )
+		)
+	    );
+	    $url = "https://api.github.com/repos/tsnrp/navcon/commits/NavTest";
+	    $json = file_get_contents($url, false, $context);
+	    $arr = json_decode($json, true);
+	    $date = $arr["commit"]["committer"]["date"];
+	    return $date;
+	}
 	function isEmpty($var) {
 		return (!isset($var) || empty($var) || trim($var)==='');
 	}
