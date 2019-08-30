@@ -21,6 +21,12 @@
 			$entity['description'] = "Command Post";
 		} else if ($entity['type'] == "D") {
 			$entity['description'] = "Defence";
+		} else if ($entity['type'] == "V") {
+			$entity['description'] = "Civilan Station";
+		} else if ($entity['type'] == "X") {
+			$entity['description'] = "Science Station Post";
+		} else if ($entity['type'] == "F") {
+			$entity['description'] = "Refinery";
 		} else if (startsWith($entity['name'], "BH")) {
 			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($entity['name'], "WP")) {
@@ -30,6 +36,10 @@
 		} else if (startsWith($entity['name'], "SY-")) {
 			$entity['description'] = "Ship Yard";
 			$checkExperimental = 1;
+		} else if (startsWith($entity['name'], "BY-")) {
+			$entity['description'] = "Sensor Buoy";
+		} else if (startsWith($entity['name'], "CR-")) {
+			$entity['description'] = "Comms Relay";
 		} else if (startsWith($entity['name'], "RS-")) {
 			$entity['description'] = "Research Station";
 			$checkExperimental = 1;

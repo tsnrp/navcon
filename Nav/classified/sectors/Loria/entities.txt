@@ -1,78 +1,100 @@
 DS-101,S,1
 DS-105,S,1
 DS-107,S,1
-Deserati,S,1
-Conduti,S,1
+Deserati,I,1
+Conduti,I,1
 Mria,G,2
 DS-118,S,2
 DS-119,S,2
 DS-120,S,2
 WP,W,2
-Ayana,S,2
+Ayana,I,2
 WP,W,2
-Customs House,S,2
+Customs House,V,2
 Civilian SY,Y,2
 DS-19,S,3
 DS-39,S,3
-Melnibo,S,3
-Santiago,S,3
+Melnibo,I,3
+Santiago,I,3
 DS-148,S,3
-Sensor Buoy    ******************,4
-Comms Relay    ******************,4
+BY-100,S,4
+CR-818,S,4
 DS-59,S,4
 DS-71,S,4
 Okogonik,S,4
-Chel-don,S,5
+Chel-don,I,5
 DS-53,S,5
 DS-87,S,5
 DS-166,S,5
-Chel-rea,S,5
+Chel-rea,I,5
 DS-21,S,6
 DS-57,S,6
 DS-33,S,6
 DS-165,S,6
-Staunton,S,6
-Penton,S,6
-Anton,S,6
-Oralo,S,6
+Staunton,X,6
+Penton,X,6
+Anton,X,6
+Oralo,X,6
 Charybdis,BH,7
 Scylla,BH,7
-Comms Relay 1, **************,7
-Somms Relay 2, **************,7
+CR-007,S,7
+CR-640,S,7
 Enyalius,G,8
 DS-88,G,8
 DS-92,S,8
-Phineas,S,8
+Phineas,I,8
 DS-44,S,8
 Civilian SY,Y,8
 SY-199,S,8
 Rockaway Metallurgy,I,8
 Taylor Denabite,I,8
-Immigration,S,8
+Immigration,V,8
 DS-144,S,9
-Puerto Piedra,S,9
-Magellan,S,9
+Puerto Piedra,I,9
+Magellan,X,9
 DS-160,S,9
 Vanir,G,10
 DS-68,S,10
-Singh,S,10
-Rio,S,10
+Singh,I,10
+Rio,I,10
 DS-28,S,10
 DS-10,S,10
 DS-125,S,10
 SY-992,S,10
-Akira Metal Works,O,10
-Joshua Tree Denebite,I,10
+Akira Metal Works,I,10
+Joshua Tree Denebite,F,10
 SY-99,S,10
 Loria Command,S,11
-Ries,S,11
+Ries,I,11
 DS-44,S,11
 WP,W,11
 WP,W,11
-Diana,S,11
+Diana,I,11
 SY-169,S,11
 SY-172,S,11
 SY-144,S,11
 DS-166,S,12
 DS-181,S,12
 DS-190,S,12
+Customs House,V,13
+DS-109,S,13
+DS-114,S,13
+DS-143,S,13
+Sanda,I,13
+Loria,P,13
+Civilan SY,Y,13
+Isotopia,I,13
+Arylin,I,14
+Diatha,I,14
+DS-180,S,14
+DS-199,S,14
+Terranic Mining,F,14
+DS-123,S,15
+DS-138,S,15
+DS-159,S,15
+DS-170,S,15
+Lorian Council,V,15
+Umber,I,15
+Vilnara,G,15
+SY-881,Y,15
+Tiffan Denebite,F,15
