@@ -197,6 +197,7 @@
 			$entities=explode("\n",file_get_contents($file));
 			$ret=array();
 			foreach ($entities as $line) {
+				$line=str_replace("\r","",$line);
 				$line=explode(",",$line);
 				$entity=array();
 				$entity['name']=$line[0];
