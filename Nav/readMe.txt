@@ -1,16 +1,5 @@
 This is the root folder for the TSN Stellar Navigation Console
 
-Change Log
-2018.10.18 Matsiyan
-- Updated the gateNetwork.png for the S10 Sandbox expansion
-- Added what is known of Arcturus separately for Public and Intel
-- Applied Starry's updates
-  - Drop down menu now has two pages
-  - Navigate to systems by clicking on them in the overview
-2018.09.12 Matsiyan
-- Copy of the files currently deployed to http://www.1sws.com/Intel/Nav
-- Recently updated Waypoints 52, 60, 89, Arietis, Atlantis and Euphini Expanse
-
 Documentation: How It Works / How To Make Changes 
 
 The Nav Console displays a Systems menu item for every subfolder under the Nav/sectors folder and displays 
@@ -30,3 +19,15 @@ For example the file sectors/Atlantis/1.png would first try to load classified/s
 This can be used to have different versions for the classified and unclassified versions of file.
 entities.txt has a special inline version of classification to make it easier to manage
 If all the files are classified the system wont appear on the main system menu for the unclassified systems, thus making it hidden from those users.
+
+Change Log
+- Now maintained in GitHub
+2018.10.18 Matsiyan
+- Updated the gateNetwork.png for the S10 Sandbox expansion
+- Added what is known of Arcturus separately for Public and Intel
+- Applied Starry's updates
+  - Drop down menu now has two pages
+  - Navigate to systems by clicking on them in the overview
+2018.09.12 Matsiyan
+- Copy of the files currently deployed to http://www.1sws.com/Intel/Nav
+- Recently updated Waypoints 52, 60, 89, Arietis, Atlantis and Euphini Expanse
