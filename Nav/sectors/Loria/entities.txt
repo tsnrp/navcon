@@ -47,7 +47,7 @@ DS-44,S,8
 Civilian SY,Y,8
 SY-199,S,8
 Rockaway Metallurgy,I,8
-Taylor Denabite,I,8
+Taylor Denabite,I,8,Classified
 Immigration,V,8
 DS-144,S,9
 Puerto Piedra,I,9
@@ -62,7 +62,7 @@ DS-10,S,10
 DS-125,S,10
 SY-992,S,10
 Akira Metal Works,I,10
-Joshua Tree Denebite,F,10
+Joshua Tree Denabite,F,10,Classified
 SY-99,S,10
 Loria Command,S,11
 Ries,I,11
@@ -97,4 +97,4 @@ Lorian Council,V,15
 Umber,I,15
 Vilnara,G,15
 SY-881,Y,15
-Tiffan Denebite,F,15
+Tiffan Denabite,F,15,Classified
