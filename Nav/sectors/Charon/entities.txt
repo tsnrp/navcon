@@ -1,0 +1,7 @@
+Norayne Gate,G,2
+DS-76,S,4
+DS-01,S,4
+Serrin,O,4
+Soulin,S,4
+Harrling,S,4
+RS-9992,S,4

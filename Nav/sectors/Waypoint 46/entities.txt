@@ -1,0 +1,5 @@
+Tethys Gate,G,1
+DS-19,S,1
+Charon Gate,G,2
+Phinmor Gate,G,3
+Oberon Gate,G,4
