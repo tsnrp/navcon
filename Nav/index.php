@@ -37,8 +37,7 @@
 	//    echo $dir1;
 	//    exit();
 	    if (!file_exists($dir1."./saved.txt")) {
-		echo "There is a problem with the server's configuration. Notify the server admin that a necessary file is missing for NavUpdate.php.";
-		exit();
+		return true;
 	    }
 	    // else, continue
 	    $saved = fopen($dir1."./saved.txt", "r") or die("Unable to open file");
