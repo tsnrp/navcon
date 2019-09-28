@@ -32,8 +32,8 @@
 
 
 	function checkForUpdate() {
-	    $dir1 = dirname(__DIR__);
-	//    $dir1 = dirname(__DIR__, 2);
+	//    $dir1 = dirname(__DIR__);
+	      $dir1 = dirname(__DIR__, 2);
 	//    echo $dir1;
 	//    exit();
 	    if (!file_exists($dir1."./saved.txt")) {
