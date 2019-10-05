@@ -2,23 +2,8 @@
 	session_start();	
 	//---- RELEASE VERSION ----//
 
-	// Redirects with the fancy extra stuff on the end of the url
-	function redirectWithQuery() {
-	    //echo "trying";
-	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
-	    $t = parse_url($uri, PHP_URL_QUERY);
-	    //$dir1 = dirname(__DIR__,2);
-	    if (strlen($t)>0) {
-		$r = "./../../NavUpdate.php?".$t; // This may need changed someday
-	    } else {
-		$r = "./../../NavUpdate.php";
-	    }
-	//    echo "Redirecting to...".$r;
-	//    exit();
-	    header("Location: ".$r, TRUE, 303);
-	    exit();
-	}
-
+	
+        $redirect = false;
 	// Actually starts things
 	if (sessionUpdate()) {
 	    if (checkForUpdate()) {
@@ -30,14 +15,21 @@
 
 	}
 
+	function dirname_r($path, $count=1){
+	    if ($count > 1){
+	       return dirname(dirname_r($path, --$count));
+	    }else{
+	       return dirname($path);
+	    }
+	}
+
 
 	function checkForUpdate() {
-	//    $dir1 = dirname(__DIR__);
-	      $dir1 = dirname(__DIR__, 2);
-	//    echo $dir1;
-	//    exit();
+
+	    $dir1 = dirname_r(__DIR__, 2);
+	   
 	    if (!file_exists($dir1."./saved.txt")) {
-		return true;
+		    return true;
 	    }
 	    // else, continue
 	    $saved = fopen($dir1."./saved.txt", "r") or die("Unable to open file");
@@ -48,18 +40,19 @@
 	    $commitDate = getLatestCommit();
 	    return $commitDate != $last_update;
 	}
-	// Get saved file
 
-	$redirect = false;
+	
 
 
 	// returns true if an update check is needed.
 	function sessionUpdate() {
 	    $d = date("U");
 	    $luc = $_SESSION["lastUpdateCheck"];
-	//    echo "luc = ";
-	//    echo $luc;
-	    if ($luc == false) {
+            
+//	    echo "<br>luc = ";
+//	    echo $luc;
+//            echo "<br>";
+	    if ($luc === false || $luc === null) {
 		$_SESSION["lastUpdateCheck"] = $d;
 		return true; // Cause updateCheck to happen
 	    } else {
@@ -90,6 +83,26 @@
 	    $date = $arr["commit"]["committer"]["date"];
 	    return $date;
 	}
+        
+        // Redirects with the fancy extra stuff on the end of the url
+	function redirectWithQuery() {
+	    //echo "trying";
+	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
+	    $t = parse_url($uri, PHP_URL_QUERY);
+	    //$dir1 = dirname(__DIR__,2);
+	    if (strlen($t)>0) {
+		$r = "./../../NavUpdate.php?".$t; // This may need changed someday
+	    } else {
+		$r = "./../../NavUpdate.php";
+	    }
+	//    echo "Redirecting to...".$r;
+	//    exit();
+	    header("Location: ".$r, TRUE, 303);
+	    exit();
+	}
+
+
+
 	function isEmpty($var) {
 		return (!isset($var) || empty($var) || trim($var)==='');
 	}
