@@ -1,1 +1,4 @@
 Eulis Gate,G,2
+Loria Gate,G,7
+Tibur Gate,G,15
+Khoros Gate,G,18
