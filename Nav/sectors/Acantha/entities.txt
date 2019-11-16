@@ -1,0 +1,30 @@
+Nautri Ores,O,1
+Tilminra Gate,G,1
+Raschad,V,1
+Multada Denabite,O,1
+Potzhu Construction,I,1
+Potzhu Shipyards,Y,1
+CR-982,O,2
+SB-112,O,2
+Intaka,V,2
+Zorazi Mining,M,4
+Sistera Processors,I,4
+Kinth Refinery,F,4
+A'ania Denabite,O,4,Classified
+Meltorda,V,4
+Le-Ray Refinery,F,4
+Truda Mining,M,4
+King Manufacturing,I,4
+Ni'yata,V,5
+Ozkal,V,5
+Ashia Gate,G,5
+Utimni,V,5
+Ladna Labs,R,6
+Nessin,V,6
+Onzi Oasis,V,7
+Betos Bazaar,V,7
+Quee,V,8
+Gi'Yanu Mall,V,8
+Yimsu,V,9
+Nuzeli,V,9
+Krellis Gate,G,9

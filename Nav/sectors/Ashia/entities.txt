@@ -1,0 +1,55 @@
+DS-552,S,1
+Tyr Gate,G,1
+DS-165,S,1
+Goshen Hitchpost,V,1
+DS-250,S,1
+DS-277,S,2
+Casey,V,2
+DS-311,S,2
+Franklin,V,2
+DS-189,S,2
+Indigo Mining,M,3
+DS-201,S,3
+DS-505,S,3
+Planet Venga,P,4
+DS-303,S,4
+Valti,V,4
+DS-229,S,4
+DS-661,S,4
+DS-42A,S,5
+WP-247,O,5
+DS-31R,S,5
+WP-221,O,5
+DS-67E,S,5
+DS-03T,S,5
+Acantha Gate,G,5
+WP-285,O,5
+DS-29X,S,5
+WP-262,O,5
+Ashia Transit,S,5
+DS-88P,S,5
+SY-716,O,6
+WP-40,O,6
+DS-76,S,6
+Ashia Command,S,6
+SY-737,O,6
+Ironmast,V,6
+WP-10,O,6
+Customs and Immigration,S,7
+DS-512,S,7
+DS-256,S,7
+Reema Gate,G,7
+Cenotes Market,V,7
+DS-128,S,7
+DS-476,S,8
+DS-388,S,8
+Altun Ha Denabite,O,8,Classified
+DS-541,S,8
+DS-269,S,8
+DS-781,S,9
+DS-819,S,9
+Planet Ashia,P,9
+Ashia Authority,S,9
+Tazumal Exchange,V,9
+Phinmor Gate,G,9
+DS-567,S,9

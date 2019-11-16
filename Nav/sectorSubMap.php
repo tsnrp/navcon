@@ -1,5 +1,5 @@
 <div style="height:95%;">
-	<img src="<?=$sectorDir?>/<?=$sub?>.png" style="height:100%;"/>
+	<img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="height:100%;"/>
 </div>
 <?php 
 	include 'sectorEntities.php'; 
@@ -14,14 +14,9 @@
 					&nbsp;
 				</td>
 				<td class="middle"><?php
-					if ($invertVertical) {
-						$available = $subRow < $sectorHeight;
-					} else {
-						$available = $subRow > 1;
-					}
-					if ($available && $sectorHeight > 1) {
-						$target = $invertVertical ? ($sub + $sectorWidth) : ($sub - $sectorWidth);?>
-						<div class="up" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
+					if ($subRow > 1 && $sectorHeight > 1) {
+						$target = $sub - $sectorWidth;?>
+						<div class="up" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
 					} else {?>
@@ -35,7 +30,7 @@
 			<tr class="horizontal">
 				<td align="right"><?php
 					if ($subCol != 1 && $sectorWidth > 1) {?>
-						<div class="left" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$sub - 1?>'">
+						<div class="left" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$sub - 1?>'">
 							<span><?=toRoman($sub - 1)?></span>
 						</div><?php
 					} else {?>
@@ -45,11 +40,9 @@
 				<!-- mini map -->
 				<td class="minimap">
 					<table><?php
-						$continue = true;
-						for ($y = $invertVertical ? $sectorHeight : 1; $continue; $invertVertical ? $y-- : $y++) {?>
+						for ($y = 1; $y <= $sectorHeight; $y++) {?>
 							<tr>
 								<td>&nbsp;</td><?php
-								
 								for ($x = 1; $x <= $sectorWidth; $x++) {
 									if ($y == $subRow && ($x % $sectorWidth == $subCol)) {
 										$style = "background-color:blue;";
@@ -62,13 +55,12 @@
 								}?>
 								<td>&nbsp;</td>
 							</tr><?php
-							$continue = $invertVertical ? $y > 1 : $y < $sectorHeight;
 						}?>
 					</table>
 				</td>
 				<td><?php
 					if ($subCol > 0 && $sectorWidth > 1) {?>
-						<div class="right" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$sub + 1?>'">
+						<div class="right" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$sub + 1?>'">
 							<span><?=toRoman($sub + 1)?></span>
 						</div><?php
 					} else {?>
@@ -81,14 +73,9 @@
 					&nbsp;
 				</td>
 				<td class="middle"><?php
-					if ($invertVertical) {
-						$available = $subRow > 1;
-					} else {
-						$available = $subRow < $sectorHeight;
-					}
-					if ($available && $sectorHeight > 1) {
-						$target = $invertVertical ? ($sub - $sectorWidth) : ($sub + $sectorWidth);?>
-						<div class="down" onclick="location.href='index.php?sector=<?=$sector?>&sub=<?=$target?>'">
+					if ($subRow < $sectorHeight && $sectorHeight > 1) {
+						$target = $sub + $sectorWidth;?>
+						<div class="down" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$target?>'">
 							<span><?=toRoman($target)?></span>
 						</div><?php
 					} else {?>

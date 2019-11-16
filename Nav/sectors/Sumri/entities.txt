@@ -1,0 +1,58 @@
+Rei,V,1
+Yonk Mining,M,1
+Lyn Markets,V,1
+G'Torin Gate,G,1
+Chelle Denabite,O,1,Classified
+Scarsald Ores,M,1
+Fiyah Ores,M,2
+Czarina Denabite,O,1,Classified
+Nyama Mining,M,2
+Paragon Mills,F,2
+Tilminra Gate,G,2
+Usi Ax,V,2
+Kadumi Mining,M,2
+Ushu Denabite,O,2,Classified
+Holyard,V,3
+Maseru Metals,M,4
+Purity Denabite,O,4,Classified
+Conakry Foundry,I,4
+Maury Institute,V,4
+Okalpa Minerals,M,4
+Niyamo Ores,M,4
+Juba,V,4
+Defense Grid 2,W,5
+Tubilt Works,O,5
+Defense Grid 5,W,5
+Sumri Administration,S,5
+Defense Grid 1,W,5
+Sumri,P,5
+Ingarda Market,V,5
+Defense Grid 3,W,5
+Acmen Mining,M,5
+Defense Grid 4,W,5
+Dujum Denabite,M,6,Classified
+Quan Excavations,M,6
+Yiari Mining,M,6
+Priah Hek,V,6
+Banjul Works,I,6
+Fluzor Denabite,F,6,Classified
+Grepna Ores,M,6
+Cliowa Smithy,I,6
+Cuvia Ores,M,7
+Barr-Toc Mines,M,7
+Eulis Gate,G,7
+Deleno Ores,M,7
+Molono Industries,I,7
+Mishivi Denabite,M,7,Classified
+Lon-Na,V,8
+Sandur Denabite,M,8,Classified
+Mikos Denabite,M,8,Classified
+Jedna Denabite,M,8,Classified
+Orvag Mining,O,9
+Defence Grid 3,W,9
+Xar Production,I,9
+Ibroan Gate,G,9
+Defence Grid 2,W,9
+Pakku-Est,S,9
+Defence Grid 1,W,9
+Kaolus Mining,M,9

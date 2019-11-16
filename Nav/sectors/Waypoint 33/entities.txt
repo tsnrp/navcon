@@ -1,0 +1,3 @@
+Hypherion Gate,G,1
+DS-18,S,2
+Rhea Gate,G,2

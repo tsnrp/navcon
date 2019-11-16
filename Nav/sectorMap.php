@@ -10,19 +10,19 @@
 	
 	// If a sector is only 1x1, automatically redirect to detail sub sector page
 	if ($sectorWidth * $sectorHeight == 1) {
-		echo "<script type='text/javascript'>location.href='index.php?sector=".$sector."&sub=1';</script>";
+		echo "<script type='text/javascript'>location.href='index.php?".$classifiedHref."sector=".$sector."&sub=1';</script>";
 	}
 ?>
 <table class="sectors"><?php
 	$continue = true;
-	for ($row = $invertVertical ? $sectorHeight : 1; $continue; $invertVertical ? $row-- : $row++) {?>
+	for ($row = 1; $row <= $sectorHeight; $row++) {?>
 		<tr><?php
 			for ($col = 1; $col <= $sectorWidth; $col++) {
 				$sectorSubId = ($row - 1) * $sectorWidth + $col; 
-				$imgPath = $sectorDir."/".$sectorSubId.".png";?>
+				$imgPath = lookupClassifiedFile($classified,"sectors/$sector/".$sectorSubId.".png");?>
 				
 				<td class="<?=$tdClass?>">
-					<div class="content border" style="background-image:url('<?=$imgPath?>');" onClick="location.href='?sector=<?=$sector?>&sub=<?=$sectorSubId?>'"><?php
+					<div class="content border" style="background-image:url('<?=$imgPath?>');" onClick="location.href='?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$sectorSubId?>'"><?php
 						if ($sectorWidth * $sectorHeight == 1) {
 							echo " ";
 						} else {
@@ -43,7 +43,6 @@
 				}
 			}?>
 		</tr><?php
-		$continue = $invertVertical ? $row > 1 : $row < $sectorHeight;
 	}?>
 </table>
 

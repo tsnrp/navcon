@@ -1,2 +1,0 @@
-Erebus Gate,G,2
-Volantis Gate,G,8

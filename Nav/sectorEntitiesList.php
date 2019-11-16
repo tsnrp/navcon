@@ -15,18 +15,19 @@
 			<td colspan="3" style="color:<?=$workingColor?>"><br/><?=strtoupper($workingEntType)?></td>
 		</tr><?php
 		$highlightRow = false;
-		foreach ($workingArray as $key => $value) {?>
+		foreach ($workingArray as $key => $value) {
+			$desc = isset($value['description']) ? $value['description'] : ""?>
 			<tr class="entity<?=$highlightRow ? " highlight" : ""?>">
 				<td class="caption" >
 					<?=str_replace(" ", "&nbsp;", $key)?>
 				</td>
 				<td class="sub">
-					<?=isEmpty($sub) ? toRoman($value[2]) : "&nbsp;"?>
+					<?=isEmpty($sub) ? toRoman($value['loc']) : "&nbsp;"?>
 				</td>
 				<td class="desc">
-					<?=$value[3]?>
+					<?=$desc?>
 					<?php if ($workingEntType == "gates") {
-						echo createGateButton($value[0], $sector);
+						echo createGateButton($classified,$value['name'], $sector, $classifiedHref);
 					}?>
 				</td>
 			</tr><?php

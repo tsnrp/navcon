@@ -1,2 +1,0 @@
-Volantis Gate,G,2
-Atlantis Gate,G,1
