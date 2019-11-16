@@ -1,0 +1,48 @@
+Skoth,P,1
+Porisiana,V,1
+BY-27,O,3
+CR-04,O,3
+Tesla,V,5
+Ryl,P,5
+Sylvan Oasis,V,5
+Ashia Gate,G,7
+Nevega,V,7
+Tycho Institute,R,8
+Reema Tradehouse,V,8
+Elysium Spa,V,8
+Goldleaf Commissariat,O,8
+Planet Reema,P,8
+Reema Confederacy,S,8
+Sluvian,V,11
+Erisian,P,11
+SY-219,O,12
+WP-14,W,12
+Reema Command,S,12
+WP-02,W,12
+Laestrygonia,H,13
+Aspen Art Colony,O,15
+Adden,P,15
+Zabnel,V,15
+Irasmix Mining,M,19
+Kaltoa Ores,M,19
+Cyrnoth Emporium,V,19
+Bremmer,V,19
+DS-212,S,19
+Freedom Station,V,19
+Huygens,V,20
+Mergatz Denabite,O,22,Classified
+Kikiti,V,22
+SY-248,Y,22
+Citara,P,22
+Mahagma,V,24
+Misisha,P,24
+Everest Groceries,F,24
+WP-85,W,25
+DS-183,S,25
+Customs and Immigration,S,25
+Samson SY,Y,25
+WP-63,W,25
+WP-21,W,25
+DS-192,S,25
+Eulis Gate,G,25
+WP-74,W,25

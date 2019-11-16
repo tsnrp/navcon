@@ -455,7 +455,7 @@ window.onclick = function(event) {
 					<img id="gateNet" onClick="systemClick(event)" style="height: 100%; width: 100%; object-fit: contain;  position: absolute; bottom: 0px; right: 0px;" src="<?=$gateImg?>"/>
 				</div>
 				<div style="position:absolute;top:10px;right:20px;">
-					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.0
+					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.1
 				</div><?php
 			}
 		}

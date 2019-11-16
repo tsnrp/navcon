@@ -27,6 +27,10 @@
 			$entity['description'] = "Science Station Post";
 		} else if ($entity['type'] == "F") {
 			$entity['description'] = "Refinery";
+		} else if ($entity['type'] == "B") {
+			$entity['description'] = "Sensor Buoy";
+		} else if ($entity['type'] == "H") {
+			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($entity['name'], "BH")) {
 			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($entity['name'], "WP")) {
@@ -66,7 +70,7 @@
 
 		$entity['loc'] = trim($entity['loc']);
 		if (isEmpty($sub) || $entity['loc'] == $sub) {
-			if ($entity['type'] == "S" || $entity['type'] == "R" || $entity['type'] == "I" || $entity['type'] == "M" || $entity['type'] == "D" || $entity['type'] == "C") {
+			if ($entity['type'] == "S" || $entity['type'] == "R" || $entity['type'] == "I" || $entity['type'] == "M" || $entity['type'] == "D" || $entity['type'] == "V" || $entity['type'] == "C") {
 				$entStations[$entity['name']] = $entity;
 			} else if ($entity['type'] == "G") {
 				$entGates[$entity['name']] = $entity;
