@@ -1,0 +1,17 @@
+G'Torin Commerce,S,2
+G'Torin Shipyard,O,2
+Sumri Gate,G,2
+Caska Base,S,3
+G'Torin Manufacturing,S,3
+Shorin Refinery,O,3
+G'Torin Center,S,4
+Purrino Base,S,4
+Maansta,S,4
+Rishondi,S,4
+Alrin Factory,O,4
+Libeth Mining,O,4
+Kiquin Foundry,O,4
+Initi,S,5
+Magrath Mining,O,5
+Kalange Ores,O,5
+
