@@ -46,14 +46,19 @@
 	padding-right: 20px;
 	padding-top: 11px;
 }
-
-.dropdown-entry {
+.systemButton.dropdown-entry {
+    display: none;
+}
+.systemButton.dropdown-entry.show {
 	background-image: url('img/btnOffSmall.png');
     background-size: 187px 45px;
 	height: 45px;
 	width: 187px;
     background-repeat: no-repeat;
 	text-align: right;
+        padding-right: 20px;
+        border: none;
+        display: inline-block;
 }
 
 .dropdown-entry.selected {
@@ -64,6 +69,55 @@
 	background-image: url('img/btnOnSmall.png');
 }
 
-.show {
+/*.show {
 	display: block;
+}*/
+
+#search-bar {
+    background-image: url('img/search-bar.png'); /* Add a search icon to input */
+    background-position: -5px -0px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    background-color: transparent;
+    background-size: 200px 45px;
+    width: 200px; /* Full-width */
+    height: 45px;
+    font-size: 18px; /* Increase font-size */
+    padding: 12px 10px 10px 15px; /* Add some padding */
+    border: none;
+    margin-bottom: 6px; /* Add some space below the input */
+    z-index: 5;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-family: Calibri,Helvetica,Arial;
+    font-weight: bold;
+    font-size: 18;
+    font-style: italic;
+
+}
+
+.system-menu {
+    display: none;
+    width: 70%;
+}
+.system-menu.show {
+    display: block;
+}
+
+#gateNet {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    display: none;
+}
+#gateNet.show {
+    display: block;
+}
+
+#navcon-title {
+/*    position:absolute;
+    top:10px;
+    right:20px;*/
 }

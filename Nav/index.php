@@ -245,6 +245,8 @@
 
 	$classified = isset($_GET['Classified']);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        
+        $systems = getAllSystems($classified);
 
 	//if passwords are stored on disc it can be tricky (as an understatement) to do them securely
 	//even if the password is unimportant (as it is in this case)
@@ -287,28 +289,69 @@
 	<link rel="stylesheet" type="text/css" href="menu.css">
 	<script>
 function toggleSystemView() {
-	var toggled=false;
-		<?php	// the code here is ugly, and it generates ugly code
+    document.getElementById("search-bar").value = "";
+    document.getElementById("system-menu").classList.toggle("show");
+    try {
+        document.getElementById("gateNet").classList.toggle("show");
+    } catch (e) {
+        console.log(e.toString());
+    }
+    var buttons = document.getElementsByClassName("systemButton");
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.add("show");
+    }
+    
+    
+    
+    
+//	var toggled=false;
+//		<?php	// the code here is ugly, and it generates ugly code
 			// if I knew more javascript there probably is a nice soultion
 			// however I dont and so you get ugly code
-		for ($i=count($menus);$i!=0;$i--) {?>
-			if (document.getElementById("menuSectorsPart<?php printf($i);?>").classList.contains("show")) {
-				document.getElementById("menuSectorsPart<?php printf($i);?>").classList.toggle("show");
-				<?php if ($i!=count($menus)) { ?>
-				document.getElementById("menuSectorsPart<?php printf($i+1);?>").classList.toggle("show");
-				<?php } ?>
-				<?php if (($i+1)==count($menus)) {?>
-					document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
-				<?php } else if ($i==count($menus)) {?>
-					document.getElementById("systemButton").innerHTML = "SYSTEMS";
-				<?php }?>
-				toggled=true;
-			}
-		<?php }?>
-	if (toggled==false) {
-		document.getElementById("menuSectorsPart1").classList.toggle("show");
-		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
-	}
+		for ($i=count($menus);$i!=0;$i--) {?>//
+//			if (document.getElementById("menuSectorsPart<?php printf($i);?>").classList.contains("show")) {
+//				document.getElementById("menuSectorsPart<?php printf($i);?>").classList.toggle("show");
+//				<?php if ($i!=count($menus)) { ?>
+//				document.getElementById("menuSectorsPart<?php printf($i+1);?>").classList.toggle("show");
+//				<?php } ?>
+//				<?php if (($i+1)==count($menus)) {?>
+//					document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
+//				<?php } else if ($i==count($menus)) {?>
+//					document.getElementById("systemButton").innerHTML = "SYSTEMS";
+//				<?php }?>
+//				toggled=true;
+//			}
+//		<?php }?>
+//	if (toggled==false) {
+//		document.getElementById("menuSectorsPart1").classList.toggle("show");
+//		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
+//	}
+}
+
+function systemSearch() {
+    //var systemList = <?php echo json_encode($systems);?>;
+    //console.log(systemList);
+    var searchBar = document.getElementById("search-bar");
+    var input = searchBar.value;
+    console.log(input);
+    var buttonList = document.getElementsByClassName("systemButton");
+    try {
+        document.getElementById("gateNet").classList.remove("show");
+    } catch (e) {
+        console.log(e);
+    }
+    document.getElementById("system-menu").classList.add("show");
+    for (var i = 0; i < buttonList.length; i++) {
+        if (buttonList[i].innerHTML.toUpperCase().indexOf(input.toUpperCase()) !== -1) {
+            buttonList[i].classList.add("show");
+        } else if (input === "") {
+            buttonList[i].classList.add("show");
+        } else {
+            buttonList[i].classList.remove("show");
+        }
+    }
+    
+    
 }
 
 // Close the dropdown if the user clicks outside of it
@@ -319,12 +362,40 @@ window.onclick = function(event) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     var i;
     for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
+        dropdowns[i].classList.remove('show');
     }
+    
+    document.getElementById("system-menu").classList.remove("show");
+    try {
+        document.getElementById("gateNet").classList.add("show");
+    } catch (e) {
+        console.log(e.toString());
+    }
+    // make all buttons visible (but not the div containing them, so they aren't actually visible)
+    var buttons = document.getElementsByClassName("systemButton");
+    for (var i = 0; i < buttons.length; i++) {
+        console.log("showing");
+        buttons[i].classList.add("show");
+    }
+    // Return search parameter to placeholder text
+    document.getElementById("search-bar").value = "";
   }
+};
+
+function buttonClick(system) {
+    location.href = "index.php?sector=" + system;
+}
+
+function setupSystemMenu() {
+    var div = document.getElementById("system-menu");
+    var systemList = <?php echo json_encode($systems);?>;
+    for (var i = 0; i < systemList.length; i++) {
+        var but = document.createElement("button");
+        but.innerHTML = systemList[i];
+        but.className = "systemButton dropdown-entry show";
+        but.setAttribute("onClick", "buttonClick('" + systemList[i] + "')");
+        div.appendChild(but);
+    }
 }
 	</script>
 	<title>TSN Stellar Navigation Console</title>
@@ -332,6 +403,11 @@ window.onclick = function(event) {
 <body style="overflow: hidden;">
 	<?php
 		//menu?>
+    
+                <div id="navcon-title">
+                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.0
+                </div>
+                <span></span>
 		<div class="dropdown" style="z-index:1;">
 		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
 		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
@@ -358,7 +434,13 @@ window.onclick = function(event) {
 				<?php }?>
 			</div><?php
 			}?>
-		</div><?php
+                <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
+                <!--button class="dropbtn">Search</button-->
+		</div>
+                <div id="system-menu" class="system-menu">
+                                    <!--This is where the buttons will go-->
+                </div>        
+                <?php
 
 		if ($requestPassword) {?>
 			<br>Please enter ONI security clearance
@@ -452,13 +534,19 @@ window.onclick = function(event) {
 				<div>
 					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
 					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-					<img id="gateNet" onClick="systemClick(event)" style="height: 100%; width: 100%; object-fit: contain;  position: absolute; bottom: 0px; right: 0px;" src="<?=$gateImg?>"/>
+					<img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
 				</div>
-				<div style="position:absolute;top:10px;right:20px;">
-					Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 11.1
-				</div><?php
+				
+                                
+                                <span></span>
+                                <?php
 			}
 		}
 	?>
+                                <script>
+                                        window.onload = function(event) {
+                                            setupSystemMenu();
+                                        };
+                                </script>
 </body>
 </html>
