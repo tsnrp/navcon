@@ -241,7 +241,7 @@
 	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
 	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
 
-	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Upper";
+	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
 
 	$classified = isset($_GET['Classified']);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
