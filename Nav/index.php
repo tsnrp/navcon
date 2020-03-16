@@ -2,7 +2,7 @@
 	session_start();	
 	//---- RELEASE VERSION ----//
 
-	
+	//$update_type = "master";
         $redirect = false;
 	// Actually starts things
 	if (sessionUpdate()) {
@@ -23,6 +23,15 @@
 	    }
 	}
 
+        // Determine if this is master or TestNav branch based on directory.
+        try {
+            $u = dirname_r(__DIR__, 2);
+            $v = strripos($u, "\\") + 8;
+            $update_type = substr($u,$v);
+        } catch(Exception $e) {
+            echo $e->getMessage();
+        }
+        
 
 	function checkForUpdate() {
 
@@ -70,6 +79,7 @@
 	// Gets time of last commit to whichever branch
 	// Default is master of course
 	function getLatestCommit() {
+            global $update_type;
 	    $context = stream_context_create(
 		array(
 		    "http" => array(
@@ -77,7 +87,7 @@
 		    )
 		)
 	    );
-	    $url = "https://api.github.com/repos/tsnrp/navcon/commits/NavTest";
+	    $url = "https://api.github.com/repos/tsnrp/navcon/commits/".$update_type;
 	    $json = file_get_contents($url, false, $context);
 	    $arr = json_decode($json, true);
 	    $date = $arr["commit"]["committer"]["date"];
@@ -86,14 +96,15 @@
         
         // Redirects with the fancy extra stuff on the end of the url
 	function redirectWithQuery() {
+            global $update_type;
 	    //echo "trying";
 	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
 	    $t = parse_url($uri, PHP_URL_QUERY);
 	    //$dir1 = dirname(__DIR__,2);
 	    if (strlen($t)>0) {
-		$r = "./../../NavUpdate.php?".$t; // This may need changed someday
+		$r = "./../../NavUpdate.php?".$t."&update_type=".$update_type; // This may need changed someday
 	    } else {
-		$r = "./../../NavUpdate.php";
+		$r = "./../../NavUpdate.php?update_type=".$update_type;
 	    }
 	//    echo "Redirecting to...".$r;
 	//    exit();
@@ -405,7 +416,7 @@ function setupSystemMenu() {
 		//menu?>
     
                 <div id="navcon-title">
-                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.0
+                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.1
                 </div>
                 <span></span>
 		<div class="dropdown" style="z-index:1;">
