@@ -22,15 +22,17 @@
 	       return dirname($path);
 	    }
 	}
-
+        
         // Determine if this is master or TestNav branch based on directory.
         try {
-            $u = dirname_r(__DIR__, 2);
-            $v = strripos($u, "\\") + 8;
+            $u = dirname_r(__DIR__, 1);
+            $v = strripos($u, "/") + 8;
             $update_type = substr($u,$v);
         } catch(Exception $e) {
+            $update_type = "master";
             echo $e->getMessage();
         }
+        //echo $update_type; // NavTest or master
         
 
 	function checkForUpdate() {
@@ -416,7 +418,7 @@ function setupSystemMenu() {
 		//menu?>
     
                 <div id="navcon-title">
-                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.1
+                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.2
                 </div>
                 <span></span>
 		<div class="dropdown" style="z-index:1;">
