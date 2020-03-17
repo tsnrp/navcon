@@ -1,7 +1,18 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-
+        $version = 12.3;
+        // Determine if this is master or TestNav branch based on directory.
+        try {
+            $u = dirname_r(__DIR__, 1);
+            $v = strripos($u, "/") + 8;
+            $update_type = substr($u,$v);
+            //echo $update_type;
+        } catch(Exception $e) {
+            $update_type = "master";
+            echo $e->getMessage();
+        }
+        //echo $update_type; // NavTest or master
 	//$update_type = "master";
         $redirect = false;
 	// Actually starts things
@@ -23,18 +34,8 @@
 	    }
 	}
         
-        // Determine if this is master or TestNav branch based on directory.
-        try {
-            $u = dirname_r(__DIR__, 1);
-            $v = strripos($u, "/") + 8;
-            $update_type = substr($u,$v);
-        } catch(Exception $e) {
-            $update_type = "master";
-            echo $e->getMessage();
-        }
-        //echo $update_type; // NavTest or master
         
-
+        
 	function checkForUpdate() {
 
 	    $dir1 = dirname_r(__DIR__, 2);
@@ -99,7 +100,6 @@
         // Redirects with the fancy extra stuff on the end of the url
 	function redirectWithQuery() {
             global $update_type;
-	    //echo "trying";
 	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
 	    $t = parse_url($uri, PHP_URL_QUERY);
 	    //$dir1 = dirname(__DIR__,2);
@@ -418,7 +418,7 @@ function setupSystemMenu() {
 		//menu?>
     
                 <div id="navcon-title">
-                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> 12.2
+                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
                 </div>
                 <span></span>
 		<div class="dropdown" style="z-index:1;">
