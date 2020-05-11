@@ -1,10 +1,18 @@
 div.data {
-	position: absolute;
+	/*position: absolute;
 	top: 50px;
-	right: 30px;
-	width: 28%;
-	height: 90%;
-	overflow-x: hidden;
+	right: 30px;*/
+	width: 30vw;
+	max-height: 80vh;
+        /*min-width: 300px;*/
+        overflow: auto;
+        top: 0px;
+        bottom: 0px;
+        display: inline-block;
+        float: right;
+        /*margin-bottom: 160px;
+        padding-bottom: 150px;*/
+	/*overflow-x: hidden;*/
 }
 table.data {
 	color: white;
@@ -17,6 +25,7 @@ table.data {
 	padding-top: 10px;
 	border-spacing: 0px;
 	width: 100%;
+        max-height: 100%;
 	box-shadow: 0px 8px 16px 0px rgba(0,0.15,0.29,0.2);
 }
 table.data td.caption {
@@ -33,4 +42,7 @@ table.data tr.entity {
 }
 table.data tr.highlight {
 	background-color: #002240;
+}
+.system-data {
+    max-height: 80%;
 }

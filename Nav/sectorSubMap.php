@@ -1,4 +1,4 @@
-<div style="height:95%;">
+<div class="system" style="display: inline-block;">
 	<img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="height:100%;"/>
 </div>
 <?php 

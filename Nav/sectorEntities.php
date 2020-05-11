@@ -124,6 +124,11 @@
 		return "<button class=\"dropbtn disabled\">".strtoupper($target)."</button>";
 	}
 ?>
+<style>
+    .data {
+        display: inline-block;
+    }
+</style>
 <div class="data">
 	<table class="data">
 		<tr style="height: 50px;">

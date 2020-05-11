@@ -1,7 +1,38 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = 12.3;
+        $version = 12.4;
+        
+        //TODO: use filter_input() on these
+        $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
+	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
+
+	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
+
+	$classified = isset($_GET['Classified']);
+	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        
+        $systems = getAllSystems($classified);
+
+        // TODO: Looks like issue here....
+        
+        //$uri = filter_input($_SERVER["QUERY STRING"], FILTER_SANITIZE_URL); // Doesn't work rn
+        $t = parse_str($_SERVER["QUERY_STRING"], $params);
+        $newQuery = http_build_query($params);
+//        $fp = fopen("./../../log.txt",'a');
+//        fwrite($fp, "\nQuery_String: ".$_SERVER["QUERY_STRING"]);
+//        fwrite($fp, "\nNew Query index.php: ".$newQuery);
+//        fclose($fp);
+        
+
+        // This bit (hopefully) forces the client to refresh their cache
+        if (isset ($_GET["cc"])) {
+            if (filter_input(INPUT_GET, "cc", FILTER_SANITIZE_STRING)) {
+                session_cache_limiter('private');
+                session_cache_expire(0);
+            }
+        }
+        
         // Determine if this is master or TestNav branch based on directory.
         try {
             $u = dirname_r(__DIR__, 1);
@@ -37,14 +68,14 @@
         
         
 	function checkForUpdate() {
-
+            global $update_type;
 	    $dir1 = dirname_r(__DIR__, 2);
 	   
-	    if (!file_exists($dir1."./saved.txt")) {
+	    if (!file_exists($dir1."./".$update_type."saved.txt")) {
 		    return true;
 	    }
 	    // else, continue
-	    $saved = fopen($dir1."./saved.txt", "r") or die("Unable to open file");
+	    $saved = fopen($dir1."./".$update_type."saved.txt", "r") or die("Unable to open file");
 	    fgets($saved);// Passoword Unused here, function called so update date can be read
 	    $last_update = fgets($saved);
 	    fclose($saved);
@@ -59,7 +90,11 @@
 	// returns true if an update check is needed.
 	function sessionUpdate() {
 	    $d = date("U");
-	    $luc = $_SESSION["lastUpdateCheck"];
+            if(isset($_SESSION["lastUpdateCheck"])) {
+                $luc = $_SESSION["lastUpdateCheck"];
+            } else {
+                $luc = 0;
+            }
             
 //	    echo "<br>luc = ";
 //	    echo $luc;
@@ -83,6 +118,9 @@
 	// Default is master of course
 	function getLatestCommit() {
             global $update_type;
+            $fp = fopen('./../../log.txt','a');
+            fwrite($fp,"\nupdate type (getLatestCommit(): ".$update_type);
+            fclose($fp);
 	    $context = stream_context_create(
 		array(
 		    "http" => array(
@@ -100,11 +138,11 @@
         // Redirects with the fancy extra stuff on the end of the url
 	function redirectWithQuery() {
             global $update_type;
-	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
-	    $t = parse_url($uri, PHP_URL_QUERY);
+            $params;
+            global $newQuery;
 	    //$dir1 = dirname(__DIR__,2);
-	    if (strlen($t)>0) {
-		$r = "./../../NavUpdate.php?".$t."&update_type=".$update_type; // This may need changed someday
+	    if (strlen($newQuery)>0) {
+		$r = "./../../NavUpdate.php?".$newQuery."&update_type=".$update_type; // This may need changed someday
 	    } else {
 		$r = "./../../NavUpdate.php?update_type=".$update_type;
 	    }
@@ -251,15 +289,7 @@
 		return array();
 	}
 
-	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
-	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
-
-	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
-
-	$classified = isset($_GET['Classified']);
-	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
-        
-        $systems = getAllSystems($classified);
+	
 
 	//if passwords are stored on disc it can be tricky (as an understatement) to do them securely
 	//even if the password is unimportant (as it is in this case)
@@ -300,7 +330,7 @@
 	<link rel="stylesheet" type="text/css" href="sectorEntities.css">
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
-	<script>
+	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
     document.getElementById("system-menu").classList.toggle("show");
@@ -314,31 +344,6 @@ function toggleSystemView() {
         buttons[i].classList.add("show");
     }
     
-    
-    
-    
-//	var toggled=false;
-//		<?php	// the code here is ugly, and it generates ugly code
-			// if I knew more javascript there probably is a nice soultion
-			// however I dont and so you get ugly code
-		for ($i=count($menus);$i!=0;$i--) {?>//
-//			if (document.getElementById("menuSectorsPart<?php printf($i);?>").classList.contains("show")) {
-//				document.getElementById("menuSectorsPart<?php printf($i);?>").classList.toggle("show");
-//				<?php if ($i!=count($menus)) { ?>
-//				document.getElementById("menuSectorsPart<?php printf($i+1);?>").classList.toggle("show");
-//				<?php } ?>
-//				<?php if (($i+1)==count($menus)) {?>
-//					document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
-//				<?php } else if ($i==count($menus)) {?>
-//					document.getElementById("systemButton").innerHTML = "SYSTEMS";
-//				<?php }?>
-//				toggled=true;
-//			}
-//		<?php }?>
-//	if (toggled==false) {
-//		document.getElementById("menuSectorsPart1").classList.toggle("show");
-//		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
-//	}
 }
 
 function systemSearch() {
@@ -437,16 +442,8 @@ function setupSystemMenu() {
 			$getString=substr($getString,0,-1);
 		}
 		echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
+                ?>
 
-		for ($i=0; $i!=count($menus); $i++) {
-			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
-			<?php foreach ($menus[$i] as $name) {?>
-				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-					<a href="?<?=$classifiedHref?>sector=<?=$name?>"><?=strtoupper($name)?></a>
-				</div>
-				<?php }?>
-			</div><?php
-			}?>
                 <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
                 <!--button class="dropbtn">Search</button-->
 		</div>

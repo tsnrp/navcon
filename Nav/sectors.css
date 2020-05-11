@@ -1,8 +1,21 @@
+/*Wholse system*/
+div.system {
+    width: 67vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: auto;
+    float: left;
+    /*border-spacing: 0px;*/
+    /*border-collapse: collapse;*/
+}
+
+
+
 /* table with square cells */
 table.sectors {
-	width: 67%;
-	border-spacing: 0px;
-	border-collapse: collapse;
+	width: 100%;/*67%;*/
+	/*border-spacing: 0px;*/
+	/*border-collapse: collapse;*/
 }
 table.sectors td {
 	position: relative;
@@ -14,12 +27,12 @@ table.sectors td:after {
 }
 table.sectors td .content {
 	position: absolute;
-	top: 0;
+	top: -2;
 	bottom: 0;
 	left: 0;
-	right: 0;
+	right: -2;
 	background-size:100%;
-	padding:5px;
+	padding:0px;
 	color: #c5c6fd;
 	font-size:14;
 }
