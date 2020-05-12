@@ -1,0 +1,27 @@
+Eshi Directive,S,1
+Hagma Base,S,1
+Edi Edi Base,S,1
+Acantha Gate,G,1
+Defense Platform 1,DP,1
+Defense Platform 2,DP,1
+Defense Platform 3,DP,1
+Yk'Anu,P,2
+Arshira Base,S,2
+N'Taira Base,S,2
+Onshu Mining,M,2
+Defense Platform 4,DP,2
+Uxa Base,C,3
+P'Gel Metals,M,3
+Koth Ore Processor,M,3
+Turkeshi Mines,M,5
+O'o-Fada,H,5
+Ungswor Base,C,7
+Osca Base,R,7
+Zawpan Base,R,7
+Zol-Quen Base,M,7
+On-Ansi Base,C,8
+Erowis Gate,G,8
+Re'eya Base,C,9
+Ootath Base,S,9
+Yi-Pular'Me Base,S,9
+Kral-Ta Minerals,M,9

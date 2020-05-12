@@ -21,6 +21,8 @@
 			$entity['description'] = "Command Post";
 		} else if ($entity['type'] == "D") {
 			$entity['description'] = "Defence";
+                } else if ($entity['type'] == "DP") {
+                        $entity['description'] = "Defense Platform";
 		} else if ($entity['type'] == "V") {
 			$entity['description'] = "Civilan Station";
 		} else if ($entity['type'] == "X") {
