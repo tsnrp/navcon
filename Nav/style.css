@@ -1,4 +1,5 @@
-body, button, a, div {
+
+button, a, div {
 	color: white;
 	font-family: Calibri,Helvetica,Arial;
 	font-weight: bold;
@@ -8,6 +9,8 @@ body, button, a, div {
 
 body {
 	background-color: #000000;
+        display: flex;
+        flex-direction: column;
 }
 
 button {
@@ -16,4 +19,51 @@ button {
 
 a {
 	text-decoration: none;
+}
+
+
+element.style {
+}
+#entityPane {
+    scrollbar-color: linear-gradient(180deg,#ff8a00,#e52e71);
+    scrollbar-width: 10px;
+}
+
+#entityPane::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#entityPane::-webkit-scrollbar-thumb:vertical {
+    background: linear-gradient(180deg,#e52e71,#3A799B);
+    border-radius: 10px;
+    box-shadow: inset 2px 2px 2px hsla(0,0%,100%,.25), inset -2px -2px 2px rgba(0,0,0,.25);
+}
+#entityPane::-webkit-scrollbar-thumb:horizontal {
+    background: linear-gradient(90deg,#e52e71,#3A799B);
+    border-radius: 10px;
+    box-shadow: inset 2px 2px 2px hsla(0,0%,100%,.25), inset -2px -2px 2px rgba(0,0,0,.25);
+}
+#entityPane::-webkit-scrollbar-track {
+    background: linear-gradient(90deg,#201c29,#201c29 1px,#100e17 0,#100e17);
+}
+
+/*---------------MAP----------------------*/
+#map {
+    scrollbar-color: linear-gradient(180deg,#ff8a00,#e52e71);
+    scrollbar-width: 10px;
+}
+
+#map::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+#map::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg,#e52e71,#3A799B);
+    border-radius: 10px;
+    box-shadow: inset 2px 2px 2px hsla(0,0%,100%,.25), inset -2px -2px 2px rgba(0,0,0,.25);
+}
+#map::-webkit-scrollbar-track {
+    background: linear-gradient(90deg,#201c29,#201c29 1px,#100e17 0,#100e17);
 }

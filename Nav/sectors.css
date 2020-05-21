@@ -1,10 +1,11 @@
 /*Wholse system*/
 div.system {
-    width: 67vw;
-    max-height: 90vh;
+    /*width: 67vw;*/
+    max-height: 100%;
     overflow-y: auto;
-    overflow-x: auto;
-    float: left;
+    overflow-x: hidden;
+    margin-right: 360px;
+    /*float: left;*/
     /*border-spacing: 0px;*/
     /*border-collapse: collapse;*/
 }

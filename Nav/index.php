@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = 12.4;
+        $version = 13.0;
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -330,6 +330,10 @@
 	<link rel="stylesheet" type="text/css" href="sectorEntities.css">
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
@@ -415,6 +419,19 @@ function setupSystemMenu() {
         div.appendChild(but);
     }
 }
+// These set the height of #sys-dat, which contains the entities pane and map. It keeps them from covering the footer and accounts for wrapping of the buttons both on top and bototm.
+function setMapHeight() {
+    var h = window.innerHeight - 38 - $("#buttons").height() - $("#sector-menu").height();
+    $("#sys-dat").css("height",h);
+    console.log("Height: " + h);
+}
+$(function() {
+    setMapHeight();
+    $(window).on("resize", function() {
+        setMapHeight();
+    });
+});
+
 	</script>
 	<title>TSN Stellar Navigation Console</title>
 </head>
@@ -422,30 +439,28 @@ function setupSystemMenu() {
 	<?php
 		//menu?>
     
-                <div id="navcon-title">
-                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
-                </div>
+                
                 <span></span>
-		<div class="dropdown" style="z-index:1;">
-		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
-		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
-		<?php
-		$intelButtonActiveText=$classified ? " active" : "" ;
-		$getString= $classified ? "?" : "?Classified&";
-		$getString.=isset($_GET['gateNetwork']) ? "gateNetwork=".$_GET['gateNetwork']."&" : "";
-		$getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
-		$getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
-		$getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
-		if ($getString=="?") {
-			$getString="";
-		} else {
-			$getString=substr($getString,0,-1);
-		}
-		echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
-                ?>
+		<div id="sector-menu" class="dropdown" style="z-index:1;">
+                    <button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
+                    <button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
+                    <?php
+                    $intelButtonActiveText=$classified ? " active" : "" ;
+                    $getString= $classified ? "?" : "?Classified&";
+                    $getString.=isset($_GET['gateNetwork']) ? "gateNetwork=".$_GET['gateNetwork']."&" : "";
+                    $getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
+                    $getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
+                    $getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
+                    if ($getString=="?") {
+                            $getString="";
+                    } else {
+                            $getString=substr($getString,0,-1);
+                    }
+                    echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
+                    ?>
 
-                <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
-                <!--button class="dropbtn">Search</button-->
+                    <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
+                    <!--button class="dropbtn">Search</button-->
 		</div>
                 <div id="system-menu" class="system-menu">
                                     <!--This is where the buttons will go-->
@@ -459,7 +474,9 @@ function setupSystemMenu() {
 			<input type="submit" value="authenticate me">
 			</form>
 			<br><?php
-		} else {
+		} else {?>
+                    <!--<div id="system-data" style="margin-bottom: 10px; /*overflow: auto;*/ display: flex; justify-content: flex-end; flex-direction: row">-->
+                        <?php
 			if (!isEmpty($sector)) {
 				$sectorSize = getSectorInfo($classified,$sector);
 				$sectorWidth = $sectorSize['x'];
@@ -541,22 +558,114 @@ function setupSystemMenu() {
 					}
 				}
 				</script>
-				<div>
-					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
-					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-					<img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
-				</div>
-				
+                                    <div id="arc-map" style="display: inline-block">
+                                            <?php $gateImg="img/gateNetwork".$gateNetwork.".png";
+                                            $gateImg=lookupClassifiedFile($classified,$gateImg);?>
+                                            <img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
+                                            <div id="slider-vertical" style="height:200px;"></div>
+                                    </div>
+                                <script>
+                                        $( function() {
+                                            
+                                            $( "#slider-vertical" ).slider({
+                                                orientation: "vertical",
+                                                range: "min",
+                                                min: 0,
+                                                max: 300,
+                                                value: 100,
+                                                slide: function( event, ui ) {
+                                                    var margin = (100 - ui.value)/2;
+                                                  $( "#amount" ).val( ui.value );
+                                                  $("#gateNet").css("width",ui.value+"%");
+                                                  $("#gateNet").css("margin-left", margin + "%");
+                                                  $("#gateNet").css("margin-right", margin + "%");
+                                                  
+                                                  var diff = (window.innerHeight - $("gateNet").height())/window.innerHeight;
+                                                  $("#gateNet").css("margin-top", diff);
+                                                }
+                                            });
+                                            //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+                                            
+                                            
+                                            $( "#gateNet" ).draggable({
+                                                start: function() {
+                                                    $("#gateNet").css("cursor","grabbing");
+                                                },
+                                                stop: function() {
+                                                    $("#gateNet").css("cursor","grab");
+                                                }
+                                            });
+                                            $("#gateNet").scroll(function() {
+                                                
+                                            });
+                                        });
+                                </script>
                                 
                                 <span></span>
                                 <?php
 			}
-		}
+		?>
+                    <!--</div>-->
+                        <?php
+                        
+                }
 	?>
-                                <script>
-                                        window.onload = function(event) {
-                                            setupSystemMenu();
-                                        };
-                                </script>
+        
+        
+<?php
+	if (isEmpty($sub) && !isEmpty($sector)) { 
+		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
+		$onclickStations = $onclick."stations'\"";
+		$onclickGates = $onclick."gates'\"";
+		$onclickOther = $onclick."other'\"";
+		
+		if (empty($entStations)) {
+			$onclickStations = "";
+			$classStations = " disabled";
+		} else if ($entType == "stations") {
+			$classStations = " active";
+		} else {
+			$classStations = "";
+		}
+		
+		if (empty($entGates)) {
+			$onclickGates = "";
+			$classGates = " disabled";
+		} else if ($entType == "gates") {
+			$classGates = " active";
+		} else {
+			$classGates = "";
+		}
+		
+		if (empty($entOther)) {
+			$onclickOther = "";
+			$classOther = " disabled";
+		} else if ($entType == "other") {
+			$classOther = " active";
+		} else {
+			$classOther = "";
+		}?>
+  
+		<div id="buttons" style="/*position:absolute;bottom:0px;right:0px;*/flex: 0 0 50px;">
+                    <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
+			<button <?=$onclickStations?> class="dropbtn <?=$classStations?>">STATIONS</button>
+			<button <?=$onclickGates?> class="dropbtn <?=$classGates?>">GATES</button>
+			<button <?=$onclickOther?> class="dropbtn <?=$classOther?>">OTHER</button>
+		</div><?php
+	}
+        if (isEmpty($sub) && isEmpty($sector)) {
+            $versionStyle = "position: absolute; bottom: 0px; left: 0px; padding: 8px;";
+        } else {
+            $versionStyle = "flex: 0 0 20px";
+        }
+?>
+        <div id="navcon-title" style="<?=$versionStyle?>">
+            Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
+        </div>
+        <script>
+                window.onload = function(event) {
+                    setupSystemMenu();
+                };
+        </script>
 </body>
 </html>

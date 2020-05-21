@@ -19,7 +19,8 @@
 			$desc = isset($value['description']) ? $value['description'] : ""?>
 			<tr class="entity<?=$highlightRow ? " highlight" : ""?>">
 				<td class="caption" >
-					<?=str_replace(" ", "&nbsp;", $key)?>
+					<!--?=str_replace(" ", "&nbsp;", $key)?-->
+                                        <?=$key?>
 				</td>
 				<td class="sub">
 					<?=isEmpty($sub) ? toRoman($value['loc']) : "&nbsp;"?>

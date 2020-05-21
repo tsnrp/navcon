@@ -13,8 +13,11 @@
 		echo "<script type='text/javascript'>location.href='index.php?".$classifiedHref."sector=".$sector."&sub=1';</script>";
 	}
 ?>
-<div class="system-data">
-    <div id="map" class="system" ondragstart="ondragstart()" ondragend="ondragend()" style="display: inline-block">
+<div id="sys-dat" class="system-data">
+    
+    <?php include 'sectorEntities.php'; ?>
+    
+    <div id="map" class="system">
 <table class="sectors"><?php
 	$continue = true;
 	for ($row = 1; $row <= $sectorHeight; $row++) {?>
@@ -48,5 +51,5 @@
 	}?>
 </table>
 </div>
-<?php include 'sectorEntities.php'; ?>
+
 </div>
