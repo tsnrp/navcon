@@ -7,6 +7,7 @@ div.data {
 	max-height: 100%;
         /*min-width: 300px;*/
         overflow-y: auto;
+        overflow-x: hidden;
         top: 0px;
         bottom: 0px;
         display: inline-block;
@@ -51,6 +52,6 @@ table.data tr.highlight {
 }
 .system-data {
     /*max-height: 80%;*/
-    overflow: auto;
+    overflow: hidden;
     flex-grow: 2;
 }
