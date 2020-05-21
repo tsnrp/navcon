@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = 13.0;
+        $version = "13.0";
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -339,7 +339,7 @@ function toggleSystemView() {
     document.getElementById("search-bar").value = "";
     document.getElementById("system-menu").classList.toggle("show");
     try {
-        document.getElementById("gateNet").classList.toggle("show");
+        document.getElementById("arc-map").classList.toggle("show");
     } catch (e) {
         console.log(e.toString());
     }
@@ -396,7 +396,6 @@ window.onclick = function(event) {
     // make all buttons visible (but not the div containing them, so they aren't actually visible)
     var buttons = document.getElementsByClassName("systemButton");
     for (var i = 0; i < buttons.length; i++) {
-        console.log("showing");
         buttons[i].classList.add("show");
     }
     // Return search parameter to placeholder text
@@ -423,7 +422,6 @@ function setupSystemMenu() {
 function setMapHeight() {
     var h = window.innerHeight - 38 - $("#buttons").height() - $("#sector-menu").height();
     $("#sys-dat").css("height",h);
-    console.log("Height: " + h);
 }
 $(function() {
     setMapHeight();
@@ -558,7 +556,7 @@ $(function() {
 					}
 				}
 				</script>
-                                    <div id="arc-map" style="display: inline-block">
+                                    <div id="arc-map" class="show">
                                             <?php $gateImg="img/gateNetwork".$gateNetwork.".png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
                                             <img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
@@ -580,8 +578,8 @@ $(function() {
                                                   $("#gateNet").css("margin-left", margin + "%");
                                                   $("#gateNet").css("margin-right", margin + "%");
                                                   
-                                                  var diff = (window.innerHeight - $("gateNet").height())/window.innerHeight;
-                                                  $("#gateNet").css("margin-top", diff);
+                                                  var diff = (window.innerHeight - $("gateNet").height())/2;
+                                                  //$("#gateNet").css("margin-top", diff);
                                                 }
                                             });
                                             //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
@@ -593,10 +591,8 @@ $(function() {
                                                 },
                                                 stop: function() {
                                                     $("#gateNet").css("cursor","grab");
-                                                }
-                                            });
-                                            $("#gateNet").scroll(function() {
-                                                
+                                                },
+                                                scroll: false
                                             });
                                         });
                                 </script>

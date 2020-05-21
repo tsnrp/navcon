@@ -120,8 +120,15 @@
     display: block;
 }
 
+#arc-map {
+    display: none;
+}
+#arc-map.show {
+    display: block;
+}
+
 #slider-vertical {
-    margin-top: 25%;
+    margin-top: 20vh;
     background: #00368a;
     border: #3ef7ff;
 }
