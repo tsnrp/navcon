@@ -14,7 +14,7 @@
 	background-image: url('img/btnOnSmall.png');
 }
 
-.dropbtn:hover, .dropbtn:focus {
+.dropbtn:hover {/*}, .dropbtn:focus {*/
 	background-image: url('img/btnOnSmall.png');
 }
 
@@ -97,21 +97,48 @@
 
 .system-menu {
     display: none;
-    width: 70%;
+    /*width: 70%;*/
 }
 .system-menu.show {
     display: block;
+    overflow: auto;
+    max-height: 80vw;
 }
 
 #gateNet {
-    height: 95%;
+    /*height: 95%;*/
     width: 100%;
     object-fit: contain;
     position: absolute;
-    bottom: 0px;
+    cursor: grab;
+    margin-left: 30px;
+/*    bottom: 0px;
     right: 0px;
-    display: none;
+    display: none;*/
 }
 #gateNet.show {
     display: block;
+}
+
+#arc-map {
+    display: none;
+}
+#arc-map.show {
+    display: block;
+}
+
+#slider-vertical {
+    margin-top: 20vh;
+    background: #00368a;
+    border: #3ef7ff;
+}
+
+#slider-vertical span {
+    background: #005fff;
+    border: 1px solid #1a8eb6;
+}
+
+#slider-vertical div {
+    background: #00368a;
+    border: #3ef7ff;
 }

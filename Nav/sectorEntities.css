@@ -2,10 +2,12 @@ div.data {
 	/*position: absolute;
 	top: 50px;
 	right: 30px;*/
-	width: 30vw;
-	max-height: 80vh;
+	width: 360px;
+        max-width: 360px;
+	max-height: 100%;
         /*min-width: 300px;*/
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         top: 0px;
         bottom: 0px;
         display: inline-block;
@@ -13,6 +15,9 @@ div.data {
         /*margin-bottom: 160px;
         padding-bottom: 150px;*/
 	/*overflow-x: hidden;*/
+}
+div.data.hide {
+    display: none;
 }
 table.data {
 	color: white;
@@ -25,11 +30,13 @@ table.data {
 	padding-top: 10px;
 	border-spacing: 0px;
 	width: 100%;
-        max-height: 100%;
+
+/*        max-height: 100%;*/
 	box-shadow: 0px 8px 16px 0px rgba(0,0.15,0.29,0.2);
 }
 table.data td.caption {
-	width: 150px;
+/*	max-width: 150px;
+        width: 120px;*/
 }
 table.data td.sub {
 	width: 40px;
@@ -44,5 +51,7 @@ table.data tr.highlight {
 	background-color: #002240;
 }
 .system-data {
-    max-height: 80%;
+    /*max-height: 80%;*/
+    overflow: hidden;
+    flex-grow: 2;
 }

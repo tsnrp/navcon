@@ -5,6 +5,7 @@ table.navcross {
 /*	width: 24%;*/
 /*	width: 28%;*/
 	border-spacing:10px;
+        cursor: grab;
 }
 
 /* buttons */

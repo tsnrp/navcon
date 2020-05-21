@@ -126,12 +126,43 @@
 		return "<button class=\"dropbtn disabled\">".strtoupper($target)."</button>";
 	}
 ?>
-<style>
-    .data {
-        display: inline-block;
-    }
-</style>
-<div class="data">
+
+
+  <script>
+  $(function(){
+      //$('entityPane').on('ready',function() {
+          console.log("Loading");
+          var show = window.localStorage.getItem("showEntityPane");
+          console.log(show);
+          if (show === null) {
+              show = "true";
+              window.localStorage.setItem("showEntityPane",true);
+              console.log("Saved as " + show);
+          }
+          console.log(show.indexOf("true") !== -1);
+          if (show.indexOf("true") === -1) {
+              $('#entityPane').hide();
+              $('.system').css('margin-right','0px');
+          }
+      //});
+    $('#toggle-button').on('click', function(){
+        if( $('#entityPane').is(':visible') ) {
+            $('#entityPane').animate({ 'width': '0px' }, 'slow', function(){
+                $('#entityPane').hide();
+            });
+            $('.system').animate({ 'margin-right': '0px' }, 'slow');
+            window.localStorage.setItem("showEntityPane","false");
+        }
+        else {
+            $('#entityPane').show();
+            $('#entityPane').animate({ 'width': '360px' }, 'slow');
+            $('.system').animate({ 'margin-right': '360px' }, 'slow');
+            window.localStorage.setItem("showEntityPane","true");
+        }
+    });
+  });
+  </script>
+<div id="entityPane" class="data">
 	<table class="data">
 		<tr style="height: 50px;">
 			<td colspan="2" style="color:#fc5555;"><?php
@@ -159,44 +190,4 @@
 		include 'sectorEntitiesList.php';?>
 	</table>
 </div>
-<?php
-	if (isEmpty($sub)) {
-		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
-		$onclickStations = $onclick."stations'\"";
-		$onclickGates = $onclick."gates'\"";
-		$onclickOther = $onclick."other'\"";
-		
-		if (empty($entStations)) {
-			$onclickStations = "";
-			$classStations = " disabled";
-		} else if ($entType == "stations") {
-			$classStations = " active";
-		} else {
-			$classStations = "";
-		}
-		
-		if (empty($entGates)) {
-			$onclickGates = "";
-			$classGates = " disabled";
-		} else if ($entType == "gates") {
-			$classGates = " active";
-		} else {
-			$classGates = "";
-		}
-		
-		if (empty($entOther)) {
-			$onclickOther = "";
-			$classOther = " disabled";
-		} else if ($entType == "other") {
-			$classOther = " active";
-		} else {
-			$classOther = "";
-		}?>
-		
-		<div style="position:absolute;bottom:0px;right:0px;">
-			<button <?=$onclickStations?> class="dropbtn <?=$classStations?>">STATIONS</button>
-			<button <?=$onclickGates?> class="dropbtn <?=$classGates?>">GATES</button>
-			<button <?=$onclickOther?> class="dropbtn <?=$classOther?>">OTHER</button>
-		</div><?php
-	}
-?>
+
