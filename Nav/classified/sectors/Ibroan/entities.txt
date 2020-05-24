@@ -1,0 +1,28 @@
+Planet Ya'anu,P,1
+E'yikanu Control Base,C,1
+101100 Denabite,F,2
+Defense 1,DP,2
+Defense 2,DP,2
+Defense 3,DP,2
+Xanxix Smeltery,M,3
+Ximni WP 1,W,3
+Ximni WP 2,W,3
+Ximni WP 3,W,3
+Tu-il Research,R,5
+Setmari Gate,G,5
+Uvizmai Control,C,6
+Kralien CP-15,C,6
+Kralien WP-20,WP,6
+Kralien WP-21,WP,6
+Kralien SB-9,S,6
+Sumri Gate,G,8
+Intas,V,7
+Drenan Gate,G,7
+Ut'Att Command,C,8
+Aunea Fabricators,I,8
+Oorect Mining,M,8
+Kralien WP-16,WP,8
+Kralien WP-29,WP,8
+Kralien WP-33,WP,8
+Kralien WP-48,WP,8
+Kralien WP-52,WP,8
