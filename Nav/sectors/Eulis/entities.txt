@@ -1,0 +1,40 @@
+Trellis Confederacies,V,1
+LCR-4,CR,1
+Jhohara Gate,G,2
+Bratmech Cartographics,O,2
+Jartak Inspections,I,2
+Starway Systems,I,4
+Eulis-3,P,4
+LCR-1,CR,4
+Sumri Gate,G,5
+Sultan Customs,I,5
+Canton,V,5
+Eulis-1,P,5
+Marge Security,D,6
+Makerat Tours,V,6
+M-381,M,6
+LBY-1,B,6
+RS-703,R,6
+RS-329,R,7
+M-734,M,7
+LBY-2,B,7
+LCR-2,CR,7
+M-830,M,7
+RS-703,R,7
+Campton Industries,I,7
+Baratron Refineries,F,7
+Carilon Shipyards,Y,7
+SY-C1,Y,7
+SY-C2,Y,7
+Ketan Customs,I,8
+Khoros Gate,G,8
+Marge Security,D,8
+Reema Gate,G,9
+Reticle Inspections,I,9
+Veich,I,9
+Charity,V,11
+Faith,V,11
+Hope,V,11
+LCR-3,CR,11
+Madison Customs,I,12
+Mria Gate,G,12

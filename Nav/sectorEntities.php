@@ -31,6 +31,8 @@
 			$entity['description'] = "Refinery";
 		} else if ($entity['type'] == "B") {
 			$entity['description'] = "Sensor Buoy";
+                } else if ($entity['type'] == "CR") {
+                        $entity['description'] = "Comms Relay";
 		} else if ($entity['type'] == "H") {
 			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($entity['name'], "BH")) {
@@ -44,7 +46,7 @@
 			$checkExperimental = 1;
 		} else if (startsWith($entity['name'], "BY-")) {
 			$entity['description'] = "Sensor Buoy";
-		} else if (startsWith($entity['name'], "CR-")) {
+		} else if (startsWith($entity['name'], "CR-") || startsWith($entity['name'], "LCR-")) {
 			$entity['description'] = "Comms Relay";
 		} else if (startsWith($entity['name'], "RS-")) {
 			$entity['description'] = "Research Station";
