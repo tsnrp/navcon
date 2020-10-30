@@ -501,16 +501,16 @@ $(function() {
 					//see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
 					var x=0;
 					var y=0;
-
+                                        
 					while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
 						x += el.offsetLeft - el.scrollLeft;
 						y += el.offsetTop - el.scrollTop;
 						el = el.offsetParent;
 					}
-
+                                        
 					x = event.clientX - x;
 					y = event.clientY - y;
-
+                                        
 					//we compare the offset from the mid point of the image
 					//and scale it back to original units used to make the clickables array
 					var width=event.currentTarget.clientWidth;
@@ -559,27 +559,122 @@ $(function() {
                                     <div id="arc-map" class="show">
                                             <?php $gateImg="img/gateNetwork".$gateNetwork.".png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
-                                            <img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
+                                            <img id="gateNet" class="show" src="<?=$gateImg?>"/>
                                             <div id="slider-vertical" style="height:200px;"></div>
                                     </div>
                                 <script>
+                                        var lastSliderValue = window.localStorage.getItem("lastSliderValue");
+                                        if (lastSliderValue === null) {
+                                            lastSliderValue = 100;
+                                        }
                                         $( function() {
+                                            var mouseDown = false;
+                                            var mouseCanClick = true;
+                                            $("#gateNet").on("mousedown", function(event) {
+                                                mouseDown = true;
+                                            });
+                                            $("#gateNet").on("mouseup", function(event){
+                                                console.log(mouseCanClick);
+                                                if (mouseCanClick) {
+                                                    systemClick(event);
+                                                }
+                                                mouseCanClick = true;
+                                                mouseDown = false;
+                                            });
+                                            $("#gateNet").on("mousemove", function(event){
+                                                if (mouseDown) {
+                                                    mouseCanClick = false;
+                                                }
+                                            });
                                             
                                             $( "#slider-vertical" ).slider({
                                                 orientation: "vertical",
                                                 range: "min",
-                                                min: 0,
-                                                max: 300,
+                                                min: 20,
+                                                max: 200,
                                                 value: 100,
-                                                slide: function( event, ui ) {
-                                                    var margin = (100 - ui.value)/2;
-                                                  $( "#amount" ).val( ui.value );
-                                                  $("#gateNet").css("width",ui.value+"%");
-                                                  $("#gateNet").css("margin-left", margin + "%");
-                                                  $("#gateNet").css("margin-right", margin + "%");
-                                                  
-                                                  var diff = (window.innerHeight - $("gateNet").height())/2;
-                                                  //$("#gateNet").css("margin-top", diff);
+                                                change: function( event, ui ) {
+                                                    //console.log(ui.value);
+                                                    //
+                                                    //https://stackoverflow.com/questions/9519801/scaling-an-inline-image-from-the-absolute-center-of-its-parent
+                                                    
+                                                    var el=document.getElementById("gateNet");
+                                                    //we need to convert the information that we get in the event info how far into the image has been clicked
+                                                    //first up we are going to figure out how much the image has been scaled
+                                                    var imgOrigX=1654;
+                                                    var imgOrigY=1080;
+
+                                                    var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
+                                                    var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
+                                                    var imageScale=Math.min(scaleImgX,scaleImgY);
+
+                                                    //then we are going to calculate how far inside the window the image is
+                                                    //see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
+                                                    var x=0;
+                                                    var y=0;
+                                                    
+                                                    
+                                                    var scaleXConstOld = imgOrigX * lastSliderValue / 100;
+                                                    var scaleYConstOld = imgOrigY * lastSliderValue / 100;
+                                                    
+                                                    var scaleXConst = imgOrigX * ui.value / 100;
+                                                    var scaleYConst = imgOrigY * ui.value / 100;
+
+                                                    
+                                                    
+                                                    var vWidth = $(window).width()/2;
+                                                    var vHeight = $(window).height()/2;
+                                                    
+                                                    var oldX = $("#gateNet").offset().left;
+                                                    var oldY = $("#gateNet").offset().top;
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    var ILACOSx = (vWidth - oldX) ;// lastSliderValue;// * ui.value; // / scaleXConstOld * scaleXConst;
+                                                    var ILACOSy = (vHeight - oldY) ;// lastSliderValue;// * ui.value;// / scaleYConstOld * scaleYConst;
+                                                    
+                                                    var diffX = (scaleXConstOld - scaleXConst)/2;
+                                                    var diffY = (scaleYConstOld - scaleYConst)/2;
+                                                    
+                                                    //var scale = 1;
+                                                    
+                                                    var newLocX = ILACOSx + vWidth;
+                                                    var newLocY = ILACOSy + vHeight;
+                                                    
+                                                    
+                                                    $("#gateNet").offset({left: oldX + diffX, top: oldY + diffY});
+                                                    $("#gateNet").css("width", scaleXConst);
+                                                    $("#gateNet").css("height", scaleYConst);
+                                                    
+                                                    lastSliderValue = ui.value;
+                                                    window.localStorage.setItem("lastSliderValue",lastSliderValue);
+                                                    //var h = $("#gateNet").width()*value/100;
+                                                    
+                                                    
+                                                    
+                                                    
+//                                                    var margin = (100 - ui.value)/2;
+//                                                  //$( "#amount" ).val( ui.value );
+//                                                  $("#gateNet").css("width",ui.value+"%");
+//                                                  $("#gateNet").css("margin-left", margin + "%");
+//                                                  $("#gateNet").css("margin-right", margin + "%");
+//                                                  
+//                                                  var top = $("gateNet").offset().top;
+//                                                  var left = $("gateNet").offset().left;
+//                                                  
+//                                                  
+//                                                  
+//                                                  var diff = (window.innerHeight - $("gateNet").height())/2;
+//                                                  //$("#gateNet").css("margin-top", diff);
+//                                                  $("#gateNet").height();
+//                                                  $("#gateNet").css("height",ui.value+"%");
+//                                                  $("gateNet").css("margin-top",margin + "%");
+//                                                  $("gateNet").css("margin-bottom", margin+"%");
+
+
+
                                                 }
                                             });
                                             //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
@@ -593,6 +688,18 @@ $(function() {
                                                     $("#gateNet").css("cursor","grab");
                                                 },
                                                 scroll: false
+                                            });
+                                            
+                                            $("#gateNet").on('wheel', function(e) {
+
+                                                    var delta = e.originalEvent.deltaY/10 * -1;
+                                                    //console.log(delta);
+                                                    //console.log(e.originalEvent.deltaX);
+//                                                    if (delta > 0) $('body').text('down');
+//                                                    else $('body').text('up');
+                                                    
+                                                    $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
+                                                   // return false; // this line is only added so the whole page won't scroll in the demo
                                             });
                                         });
                                 </script>
@@ -659,7 +766,13 @@ $(function() {
             Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
         </div>
         <script>
+                var defaultMapOffset;
+                var defaultMapHeight;
+                var defaultMapWidth;
                 window.onload = function(event) {
+                    defaultMapHeight = $("gateNet").height();
+                    defaultMapWidth = $("gateNet").width();
+                    defaultMapOffset = $("gateNet").offset();
                     setupSystemMenu();
                 };
         </script>
