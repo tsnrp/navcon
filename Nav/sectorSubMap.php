@@ -21,6 +21,15 @@
         }
     });
   });
+  $(window).resize(function() {
+      // if window resized, returns navCross to original position
+      // otherwise zooming gets really screwy
+      $(".navCross").css({
+            'top': '',
+            'left': ''
+        });
+      
+  });
   </script>
 <?php 
 	//include 'sectorEntities.php'; 

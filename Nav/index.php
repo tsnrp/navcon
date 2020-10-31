@@ -331,7 +331,6 @@
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="/resources/demos/style.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script>    
@@ -563,13 +562,13 @@ $(function() {
                                             <div id="slider-vertical" style="height:200px;"></div>
                                     </div>
                                 <script>
-                                        var lastSliderValue = window.localStorage.getItem("lastSliderValue");
-                                        if (lastSliderValue === null) {
-                                            lastSliderValue = 100;
-                                        }
+                                        var lastSliderValue = 100; // Global value
                                         $( function() {
                                             var mouseDown = false;
                                             var mouseCanClick = true;
+                                            
+                                            // The mouse events are used to determine if the user is dragging the map.
+                                            // If so, it will not let the mouse "click" on a system when released.
                                             $("#gateNet").on("mousedown", function(event) {
                                                 mouseDown = true;
                                             });
@@ -594,92 +593,41 @@ $(function() {
                                                 max: 200,
                                                 value: 100,
                                                 change: function( event, ui ) {
-                                                    //console.log(ui.value);
-                                                    //
-                                                    //https://stackoverflow.com/questions/9519801/scaling-an-inline-image-from-the-absolute-center-of-its-parent
-                                                    
-                                                    var el=document.getElementById("gateNet");
-                                                    //we need to convert the information that we get in the event info how far into the image has been clicked
-                                                    //first up we are going to figure out how much the image has been scaled
+                                                    // image size - assumes the size of the image, which propably isn't the best
+                                                    // practice, but we're going with it for now.
                                                     var imgOrigX=1654;
                                                     var imgOrigY=1080;
-
-                                                    var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
-                                                    var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
-                                                    var imageScale=Math.min(scaleImgX,scaleImgY);
-
-                                                    //then we are going to calculate how far inside the window the image is
-                                                    //see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
-                                                    var x=0;
-                                                    var y=0;
                                                     
-                                                    
+                                                    // Old scale values
                                                     var scaleXConstOld = imgOrigX * lastSliderValue / 100;
                                                     var scaleYConstOld = imgOrigY * lastSliderValue / 100;
-                                                    
+                                                    // New scale values
                                                     var scaleXConst = imgOrigX * ui.value / 100;
                                                     var scaleYConst = imgOrigY * ui.value / 100;
-
                                                     
-                                                    
-                                                    var vWidth = $(window).width()/2;
-                                                    var vHeight = $(window).height()/2;
-                                                    
+                                                    // Get position of the image relative to the window (top left)
                                                     var oldX = $("#gateNet").offset().left;
                                                     var oldY = $("#gateNet").offset().top;
                                                     
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    var ILACOSx = (vWidth - oldX) ;// lastSliderValue;// * ui.value; // / scaleXConstOld * scaleXConst;
-                                                    var ILACOSy = (vHeight - oldY) ;// lastSliderValue;// * ui.value;// / scaleYConstOld * scaleYConst;
-                                                    
+                                                    // Calculate how much the image moves, assuming the center of the image
+                                                    // is the point of zoom.
+                                                    // TODO: Determine how to calculate movement assuming the point of zoom
+                                                    // is at the center of the veiwport or at the location of the mouse.
+                                                    // Due to the slider, location of the mouse isn't the ideal option imo.
                                                     var diffX = (scaleXConstOld - scaleXConst)/2;
                                                     var diffY = (scaleYConstOld - scaleYConst)/2;
-                                                    
-                                                    //var scale = 1;
-                                                    
-                                                    var newLocX = ILACOSx + vWidth;
-                                                    var newLocY = ILACOSy + vHeight;
-                                                    
-                                                    
+
+                                                    // Effect changes based on above calculations
                                                     $("#gateNet").offset({left: oldX + diffX, top: oldY + diffY});
                                                     $("#gateNet").css("width", scaleXConst);
                                                     $("#gateNet").css("height", scaleYConst);
                                                     
+                                                    // Set last value of ui.value for use later
                                                     lastSliderValue = ui.value;
-                                                    window.localStorage.setItem("lastSliderValue",lastSliderValue);
-                                                    //var h = $("#gateNet").width()*value/100;
-                                                    
-                                                    
-                                                    
-                                                    
-//                                                    var margin = (100 - ui.value)/2;
-//                                                  //$( "#amount" ).val( ui.value );
-//                                                  $("#gateNet").css("width",ui.value+"%");
-//                                                  $("#gateNet").css("margin-left", margin + "%");
-//                                                  $("#gateNet").css("margin-right", margin + "%");
-//                                                  
-//                                                  var top = $("gateNet").offset().top;
-//                                                  var left = $("gateNet").offset().left;
-//                                                  
-//                                                  
-//                                                  
-//                                                  var diff = (window.innerHeight - $("gateNet").height())/2;
-//                                                  //$("#gateNet").css("margin-top", diff);
-//                                                  $("#gateNet").height();
-//                                                  $("#gateNet").css("height",ui.value+"%");
-//                                                  $("gateNet").css("margin-top",margin + "%");
-//                                                  $("gateNet").css("margin-bottom", margin+"%");
-
-
-
                                                 }
                                             });
-                                            //$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
                                             
-                                            
+                                            // Makes the map draggable using JQuery UI
                                             $( "#gateNet" ).draggable({
                                                 start: function() {
                                                     $("#gateNet").css("cursor","grabbing");
@@ -690,16 +638,10 @@ $(function() {
                                                 scroll: false
                                             });
                                             
+                                            // Checks for wheel events. If detected, adjusts slider as necessary, which triggers the map to zoom.
                                             $("#gateNet").on('wheel', function(e) {
-
                                                     var delta = e.originalEvent.deltaY/10 * -1;
-                                                    //console.log(delta);
-                                                    //console.log(e.originalEvent.deltaX);
-//                                                    if (delta > 0) $('body').text('down');
-//                                                    else $('body').text('up');
-                                                    
                                                     $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
-                                                   // return false; // this line is only added so the whole page won't scroll in the demo
                                             });
                                         });
                                 </script>
