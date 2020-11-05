@@ -331,6 +331,17 @@
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            /*
+            At some point should move this to sectorEntities.css, but I don't want people to have to deal with cache clearing atm.
+            */
+            table.data tr.entity:hover {
+                background-color: #0033cc;
+            }
+            table.data tr.highlight:hover {
+                background-color: #0033cc;
+            }
+        </style>
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script>    

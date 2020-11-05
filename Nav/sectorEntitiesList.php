@@ -17,7 +17,7 @@
 		$highlightRow = false;
 		foreach ($workingArray as $key => $value) {
 			$desc = isset($value['description']) ? $value['description'] : ""?>
-			<tr class="entity<?=$highlightRow ? " highlight" : ""?>">
+			<tr class="entity<?=$highlightRow ? " highlight" : ""?>" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$value['loc']?>'">
 				<td class="caption" >
 					<!--?=str_replace(" ", "&nbsp;", $key)?-->
                                         <?=$key?>
