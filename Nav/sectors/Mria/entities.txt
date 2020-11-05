@@ -1,4 +1,64 @@
+Ela Industries,I,2
+Jeketa Ores,M,2
+Precious Mining,M,2
+Ufaqi Mining,M,2
+Capara Processors,R,2
+Customs & Immigration,D,2
+Mria Shipyards,Y,2
+DS-701,,2
+DS-662,,2
 Eulis Gate,G,2
+Oophedran,V,3
+Premoler,V,3
+Kazu,I,6
+Tergi,V,7
+Paragusan,V,7
+DS-459,,7
 Loria Gate,G,7
+Finaro,V,8
+Massimon,I,8
+Oppia,O,8
+Elite Refining,R,8
+Imidri Mining,M,8
+Cholander Ores,M,8
+Capitol City,V,9
+Planet Mria,P,9
+Elson,I,9
+Elson Shipyards,Y,9
+Shachat Denabite,M,9
+Sheol Ore Processing,R,9
+Ayala Tradinag Post,O,9
+DS-311,,11
+DS-448,,11
+DS-900,,12
+Zildi Systems,I,12
+Alkanillion,V,12
+Tossey Fabricants,I,12
+Crescent Denabite,M,12
+Redeymo Ores,M,12
+Opal Ores,M,12
+Mria Command,C,13
+DS-201,,13
+DS-256,,13
+Jetel,I,13
+SY-110,Y,13
+SY-198,Y,13
+WP-62A,W,13
+WP-87-B,W,13
+Pretara,V,14
+Axitymy,V,14
+DS-506,,14
+DS-795,,14
+DS-441,,15
+Inidabi Institute,R,15
+Majarki,V,15
+Goldstone industries,I,15
 Tibur Gate,G,15
+Hooke Labs,R,17
+Djakinti,V,17
 Khoros Gate,G,18
+DS-521,,18
+Mrir Authority,V,18
+Roshtic Market,I,18
+Sandinal,V,19
+DS-881,,19

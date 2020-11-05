@@ -1,8 +1,38 @@
-<div style="height:95%;">
-	<img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="height:100%;"/>
+<div id="sys-dat" class="system-data">
+    <?php include 'sectorEntities.php' ?>
+
+    <div class="system">
+            <img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="width:100%;"/>
+    </div>
 </div>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+      
+      // http://jsfiddle.net/gFcuU/ for using keys to traverse systems
+      
+  $( function() {
+    $( ".navCross" ).draggable({
+        start: function() {
+            $(".navCross").css("cursor","grabbing");
+        },
+        stop: function() {
+            $(".navCross").css("cursor","grab");
+        }
+    });
+  });
+  $(window).resize(function() {
+      // if window resized, returns navCross to original position
+      // otherwise zooming gets really screwy
+      $(".navCross").css({
+            'top': '',
+            'left': ''
+        });
+      
+  });
+  </script>
 <?php 
-	include 'sectorEntities.php'; 
+	//include 'sectorEntities.php'; 
 	
 	$subRow = ceil($sub / $sectorWidth);
 	$subCol = $sub % $sectorWidth;
@@ -86,6 +116,12 @@
 					&nbsp;
 				</td>
 			</tr>
-		</table><?php
+		</table>
+                    <div  style="position: absolute; bottom: 0px; right: 0px;">
+                        <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
+                        <button onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button>
+                        
+                    </div>
+                    <?php
 	}
 ?>

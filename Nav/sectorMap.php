@@ -2,7 +2,7 @@
 	$tdClass = "width".$sectorWidth;
 	
 	// simulate at least $minWidth columns
-	$minWidth = $sectorHeight + 1;
+	$minWidth = $sectorHeight;// + 1;
 	$addColsNeeded = $sectorWidth < $minWidth;
 	if ($addColsNeeded) {
 		$tdClass = "width".$minWidth;
@@ -13,6 +13,11 @@
 		echo "<script type='text/javascript'>location.href='index.php?".$classifiedHref."sector=".$sector."&sub=1';</script>";
 	}
 ?>
+<div id="sys-dat" class="system-data">
+    
+    <?php include 'sectorEntities.php'; ?>
+    
+    <div id="map" class="system">
 <table class="sectors"><?php
 	$continue = true;
 	for ($row = 1; $row <= $sectorHeight; $row++) {?>
@@ -45,5 +50,6 @@
 		</tr><?php
 	}?>
 </table>
+</div>
 
-<?php include 'sectorEntities.php'; ?>
+</div>

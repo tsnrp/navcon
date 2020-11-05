@@ -1,7 +1,38 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = 12.3;
+        $version = "13.0";
+        
+        //TODO: use filter_input() on these
+        $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
+	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
+
+	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
+
+	$classified = isset($_GET['Classified']);
+	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        
+        $systems = getAllSystems($classified);
+
+        // TODO: Looks like issue here....
+        
+        //$uri = filter_input($_SERVER["QUERY STRING"], FILTER_SANITIZE_URL); // Doesn't work rn
+        $t = parse_str($_SERVER["QUERY_STRING"], $params);
+        $newQuery = http_build_query($params);
+//        $fp = fopen("./../../log.txt",'a');
+//        fwrite($fp, "\nQuery_String: ".$_SERVER["QUERY_STRING"]);
+//        fwrite($fp, "\nNew Query index.php: ".$newQuery);
+//        fclose($fp);
+        
+
+        // This bit (hopefully) forces the client to refresh their cache
+        if (isset ($_GET["cc"])) {
+            if (filter_input(INPUT_GET, "cc", FILTER_SANITIZE_STRING)) {
+                session_cache_limiter('private');
+                session_cache_expire(0);
+            }
+        }
+        
         // Determine if this is master or TestNav branch based on directory.
         try {
             $u = dirname_r(__DIR__, 1);
@@ -37,14 +68,14 @@
         
         
 	function checkForUpdate() {
-
+            global $update_type;
 	    $dir1 = dirname_r(__DIR__, 2);
 	   
-	    if (!file_exists($dir1."./saved.txt")) {
+	    if (!file_exists($dir1."./".$update_type."saved.txt")) {
 		    return true;
 	    }
 	    // else, continue
-	    $saved = fopen($dir1."./saved.txt", "r") or die("Unable to open file");
+	    $saved = fopen($dir1."./".$update_type."saved.txt", "r") or die("Unable to open file");
 	    fgets($saved);// Passoword Unused here, function called so update date can be read
 	    $last_update = fgets($saved);
 	    fclose($saved);
@@ -59,7 +90,11 @@
 	// returns true if an update check is needed.
 	function sessionUpdate() {
 	    $d = date("U");
-	    $luc = $_SESSION["lastUpdateCheck"];
+            if(isset($_SESSION["lastUpdateCheck"])) {
+                $luc = $_SESSION["lastUpdateCheck"];
+            } else {
+                $luc = 0;
+            }
             
 //	    echo "<br>luc = ";
 //	    echo $luc;
@@ -83,6 +118,9 @@
 	// Default is master of course
 	function getLatestCommit() {
             global $update_type;
+            $fp = fopen('./../../log.txt','a');
+            fwrite($fp,"\nupdate type (getLatestCommit(): ".$update_type);
+            fclose($fp);
 	    $context = stream_context_create(
 		array(
 		    "http" => array(
@@ -100,11 +138,11 @@
         // Redirects with the fancy extra stuff on the end of the url
 	function redirectWithQuery() {
             global $update_type;
-	    $uri = filter_input(INPUT_SERVER, "REQUEST_URI", FILTER_SANITIZE_URL);
-	    $t = parse_url($uri, PHP_URL_QUERY);
+            $params;
+            global $newQuery;
 	    //$dir1 = dirname(__DIR__,2);
-	    if (strlen($t)>0) {
-		$r = "./../../NavUpdate.php?".$t."&update_type=".$update_type; // This may need changed someday
+	    if (strlen($newQuery)>0) {
+		$r = "./../../NavUpdate.php?".$newQuery."&update_type=".$update_type; // This may need changed someday
 	    } else {
 		$r = "./../../NavUpdate.php?update_type=".$update_type;
 	    }
@@ -251,15 +289,7 @@
 		return array();
 	}
 
-	$sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
-	$entType = isset($_GET['entType']) ? trim($_GET['entType']) : "";
-
-	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
-
-	$classified = isset($_GET['Classified']);
-	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
-        
-        $systems = getAllSystems($classified);
+	
 
 	//if passwords are stored on disc it can be tricky (as an understatement) to do them securely
 	//even if the password is unimportant (as it is in this case)
@@ -300,12 +330,26 @@
 	<link rel="stylesheet" type="text/css" href="sectorEntities.css">
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
-	<script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <style>
+            /*
+            At some point should move this to sectorEntities.css, but I don't want people to have to deal with cache clearing atm.
+            */
+            table.data tr.entity:hover {
+                background-color: #0033cc;
+            }
+            table.data tr.highlight:hover {
+                background-color: #0033cc;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
     document.getElementById("system-menu").classList.toggle("show");
     try {
-        document.getElementById("gateNet").classList.toggle("show");
+        document.getElementById("arc-map").classList.toggle("show");
     } catch (e) {
         console.log(e.toString());
     }
@@ -314,31 +358,6 @@ function toggleSystemView() {
         buttons[i].classList.add("show");
     }
     
-    
-    
-    
-//	var toggled=false;
-//		<?php	// the code here is ugly, and it generates ugly code
-			// if I knew more javascript there probably is a nice soultion
-			// however I dont and so you get ugly code
-		for ($i=count($menus);$i!=0;$i--) {?>//
-//			if (document.getElementById("menuSectorsPart<?php printf($i);?>").classList.contains("show")) {
-//				document.getElementById("menuSectorsPart<?php printf($i);?>").classList.toggle("show");
-//				<?php if ($i!=count($menus)) { ?>
-//				document.getElementById("menuSectorsPart<?php printf($i+1);?>").classList.toggle("show");
-//				<?php } ?>
-//				<?php if (($i+1)==count($menus)) {?>
-//					document.getElementById("systemButton").innerHTML = "CANCEL SYSTEMS";
-//				<?php } else if ($i==count($menus)) {?>
-//					document.getElementById("systemButton").innerHTML = "SYSTEMS";
-//				<?php }?>
-//				toggled=true;
-//			}
-//		<?php }?>
-//	if (toggled==false) {
-//		document.getElementById("menuSectorsPart1").classList.toggle("show");
-//		document.getElementById("systemButton").innerHTML = "MORE SYSTEMS";
-//	}
 }
 
 function systemSearch() {
@@ -387,7 +406,6 @@ window.onclick = function(event) {
     // make all buttons visible (but not the div containing them, so they aren't actually visible)
     var buttons = document.getElementsByClassName("systemButton");
     for (var i = 0; i < buttons.length; i++) {
-        console.log("showing");
         buttons[i].classList.add("show");
     }
     // Return search parameter to placeholder text
@@ -410,6 +428,18 @@ function setupSystemMenu() {
         div.appendChild(but);
     }
 }
+// These set the height of #sys-dat, which contains the entities pane and map. It keeps them from covering the footer and accounts for wrapping of the buttons both on top and bototm.
+function setMapHeight() {
+    var h = window.innerHeight - 38 - $("#buttons").height() - $("#sector-menu").height();
+    $("#sys-dat").css("height",h);
+}
+$(function() {
+    setMapHeight();
+    $(window).on("resize", function() {
+        setMapHeight();
+    });
+});
+
 	</script>
 	<title>TSN Stellar Navigation Console</title>
 </head>
@@ -417,38 +447,28 @@ function setupSystemMenu() {
 	<?php
 		//menu?>
     
-                <div id="navcon-title">
-                    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
-                </div>
+                
                 <span></span>
-		<div class="dropdown" style="z-index:1;">
-		<button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
-		<button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
-		<?php
-		$intelButtonActiveText=$classified ? " active" : "" ;
-		$getString= $classified ? "?" : "?Classified&";
-		$getString.=isset($_GET['gateNetwork']) ? "gateNetwork=".$_GET['gateNetwork']."&" : "";
-		$getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
-		$getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
-		$getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
-		if ($getString=="?") {
-			$getString="";
-		} else {
-			$getString=substr($getString,0,-1);
-		}
-		echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
+		<div id="sector-menu" class="dropdown" style="z-index:1;">
+                    <button onclick="toggleSystemView()" id="systemButton" class="dropbtn">SYSTEMS</button>
+                    <button onclick="location.href='index.php?<?=$classifiedHref?>gateNetwork=<?php printf($gateButtonDest) ?>'" class="dropbtn<?=isEmpty($sector) ? " active" : ""?>"><?php printf($gateNetText);?></button>
+                    <?php
+                    $intelButtonActiveText=$classified ? " active" : "" ;
+                    $getString= $classified ? "?" : "?Classified&";
+                    $getString.=isset($_GET['gateNetwork']) ? "gateNetwork=".$_GET['gateNetwork']."&" : "";
+                    $getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
+                    $getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
+                    $getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
+                    if ($getString=="?") {
+                            $getString="";
+                    } else {
+                            $getString=substr($getString,0,-1);
+                    }
+                    echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
+                    ?>
 
-		for ($i=0; $i!=count($menus); $i++) {
-			?><div id="menuSectorsPart<?php printf($i+1)?>" class="dropdown-content opaque">
-			<?php foreach ($menus[$i] as $name) {?>
-				<div class="dropdown-entry<?=(!isEmpty($sector) && $name == $sector) ? " selected" : ""?>">
-					<a href="?<?=$classifiedHref?>sector=<?=$name?>"><?=strtoupper($name)?></a>
-				</div>
-				<?php }?>
-			</div><?php
-			}?>
-                <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
-                <!--button class="dropbtn">Search</button-->
+                    <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
+                    <!--button class="dropbtn">Search</button-->
 		</div>
                 <div id="system-menu" class="system-menu">
                                     <!--This is where the buttons will go-->
@@ -462,7 +482,9 @@ function setupSystemMenu() {
 			<input type="submit" value="authenticate me">
 			</form>
 			<br><?php
-		} else {
+		} else {?>
+                    <!--<div id="system-data" style="margin-bottom: 10px; /*overflow: auto;*/ display: flex; justify-content: flex-end; flex-direction: row">-->
+                        <?php
 			if (!isEmpty($sector)) {
 				$sectorSize = getSectorInfo($classified,$sector);
 				$sectorWidth = $sectorSize['x'];
@@ -489,16 +511,16 @@ function setupSystemMenu() {
 					//see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
 					var x=0;
 					var y=0;
-
+                                        
 					while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
 						x += el.offsetLeft - el.scrollLeft;
 						y += el.offsetTop - el.scrollTop;
 						el = el.offsetParent;
 					}
-
+                                        
 					x = event.clientX - x;
 					y = event.clientY - y;
-
+                                        
 					//we compare the offset from the mid point of the image
 					//and scale it back to original units used to make the clickables array
 					var width=event.currentTarget.clientWidth;
@@ -544,22 +566,168 @@ function setupSystemMenu() {
 					}
 				}
 				</script>
-				<div>
-					<?php $gateImg="img/gateNetwork".$gateNetwork.".png";
-					$gateImg=lookupClassifiedFile($classified,$gateImg);?>
-					<img id="gateNet" class="show" onClick="systemClick(event)" src="<?=$gateImg?>"/>
-				</div>
-				
+                                    <div id="arc-map" class="show">
+                                            <?php $gateImg="img/gateNetwork".$gateNetwork.".png";
+                                            $gateImg=lookupClassifiedFile($classified,$gateImg);?>
+                                            <img id="gateNet" class="show" src="<?=$gateImg?>"/>
+                                            <div id="slider-vertical" style="height:200px;"></div>
+                                    </div>
+                                <script>
+                                        var lastSliderValue = 100; // Global value
+                                        $( function() {
+                                            var mouseDown = false;
+                                            var mouseCanClick = true;
+                                            
+                                            // The mouse events are used to determine if the user is dragging the map.
+                                            // If so, it will not let the mouse "click" on a system when released.
+                                            $("#gateNet").on("mousedown", function(event) {
+                                                mouseDown = true;
+                                            });
+                                            $("#gateNet").on("mouseup", function(event){
+                                                console.log(mouseCanClick);
+                                                if (mouseCanClick) {
+                                                    systemClick(event);
+                                                }
+                                                mouseCanClick = true;
+                                                mouseDown = false;
+                                            });
+                                            $("#gateNet").on("mousemove", function(event){
+                                                if (mouseDown) {
+                                                    mouseCanClick = false;
+                                                }
+                                            });
+                                            
+                                            $( "#slider-vertical" ).slider({
+                                                orientation: "vertical",
+                                                range: "min",
+                                                min: 20,
+                                                max: 200,
+                                                value: 100,
+                                                change: function( event, ui ) {
+                                                    // image size - assumes the size of the image, which propably isn't the best
+                                                    // practice, but we're going with it for now.
+                                                    var imgOrigX=1654;
+                                                    var imgOrigY=1080;
+                                                    
+                                                    // Old scale values
+                                                    var scaleXConstOld = imgOrigX * lastSliderValue / 100;
+                                                    var scaleYConstOld = imgOrigY * lastSliderValue / 100;
+                                                    // New scale values
+                                                    var scaleXConst = imgOrigX * ui.value / 100;
+                                                    var scaleYConst = imgOrigY * ui.value / 100;
+                                                    
+                                                    // Get position of the image relative to the window (top left)
+                                                    var oldX = $("#gateNet").offset().left;
+                                                    var oldY = $("#gateNet").offset().top;
+                                                    
+                                                    // Calculate how much the image moves, assuming the center of the image
+                                                    // is the point of zoom.
+                                                    // TODO: Determine how to calculate movement assuming the point of zoom
+                                                    // is at the center of the veiwport or at the location of the mouse.
+                                                    // Due to the slider, location of the mouse isn't the ideal option imo.
+                                                    var diffX = (scaleXConstOld - scaleXConst)/2;
+                                                    var diffY = (scaleYConstOld - scaleYConst)/2;
+
+                                                    // Effect changes based on above calculations
+                                                    $("#gateNet").offset({left: oldX + diffX, top: oldY + diffY});
+                                                    $("#gateNet").css("width", scaleXConst);
+                                                    $("#gateNet").css("height", scaleYConst);
+                                                    
+                                                    // Set last value of ui.value for use later
+                                                    lastSliderValue = ui.value;
+                                                }
+                                            });
+                                            
+                                            // Makes the map draggable using JQuery UI
+                                            $( "#gateNet" ).draggable({
+                                                start: function() {
+                                                    $("#gateNet").css("cursor","grabbing");
+                                                },
+                                                stop: function() {
+                                                    $("#gateNet").css("cursor","grab");
+                                                },
+                                                scroll: false
+                                            });
+                                            
+                                            // Checks for wheel events. If detected, adjusts slider as necessary, which triggers the map to zoom.
+                                            $("#gateNet").on('wheel', function(e) {
+                                                    var delta = e.originalEvent.deltaY/10 * -1;
+                                                    $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
+                                            });
+                                        });
+                                </script>
                                 
                                 <span></span>
                                 <?php
 			}
-		}
+		?>
+                    <!--</div>-->
+                        <?php
+                        
+                }
 	?>
-                                <script>
-                                        window.onload = function(event) {
-                                            setupSystemMenu();
-                                        };
-                                </script>
+        
+        
+<?php
+	if (isEmpty($sub) && !isEmpty($sector)) { 
+		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
+		$onclickStations = $onclick."stations'\"";
+		$onclickGates = $onclick."gates'\"";
+		$onclickOther = $onclick."other'\"";
+		
+		if (empty($entStations)) {
+			$onclickStations = "";
+			$classStations = " disabled";
+		} else if ($entType == "stations") {
+			$classStations = " active";
+		} else {
+			$classStations = "";
+		}
+		
+		if (empty($entGates)) {
+			$onclickGates = "";
+			$classGates = " disabled";
+		} else if ($entType == "gates") {
+			$classGates = " active";
+		} else {
+			$classGates = "";
+		}
+		
+		if (empty($entOther)) {
+			$onclickOther = "";
+			$classOther = " disabled";
+		} else if ($entType == "other") {
+			$classOther = " active";
+		} else {
+			$classOther = "";
+		}?>
+  
+		<div id="buttons" style="/*position:absolute;bottom:0px;right:0px;*/flex: 0 0 50px;">
+                    <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
+			<button <?=$onclickStations?> class="dropbtn <?=$classStations?>">STATIONS</button>
+			<button <?=$onclickGates?> class="dropbtn <?=$classGates?>">GATES</button>
+			<button <?=$onclickOther?> class="dropbtn <?=$classOther?>">OTHER</button>
+		</div><?php
+	}
+        if (isEmpty($sub) && isEmpty($sector)) {
+            $versionStyle = "position: absolute; bottom: 0px; left: 0px; padding: 8px;";
+        } else {
+            $versionStyle = "flex: 0 0 20px";
+        }
+?>
+        <div id="navcon-title" style="<?=$versionStyle?>">
+            Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
+        </div>
+        <script>
+                var defaultMapOffset;
+                var defaultMapHeight;
+                var defaultMapWidth;
+                window.onload = function(event) {
+                    defaultMapHeight = $("gateNet").height();
+                    defaultMapWidth = $("gateNet").width();
+                    defaultMapOffset = $("gateNet").offset();
+                    setupSystemMenu();
+                };
+        </script>
 </body>
 </html>
