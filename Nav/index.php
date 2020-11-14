@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.0";
+        $version = "13.1";
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -469,6 +469,11 @@ $(function() {
 
                     <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
                     <!--button class="dropbtn">Search</button-->
+                    <?php
+                    if (!isset($_GET['sector']) && !isset($_GET['sub']) && $gateNetwork === "Lower") {
+                        ?><button id="publicIntelButton" class="dropbtn">BATTLE LINES</button><?php
+                    }
+                    ?>
 		</div>
                 <div id="system-menu" class="system-menu">
                                     <!--This is where the buttons will go-->
@@ -496,6 +501,23 @@ $(function() {
 				}
 			} else {?>
 				<script>
+                                    
+                                    var isDefaultImage = true;
+                                    
+                                    $("#publicIntelButton").on("click", function(event){
+                                        console.log("Trying to toggle..." + isDefaultImage);
+                                        if (isDefaultImage) {
+                                            console.log("trying to change to temp...");
+                                            $("#gateNet").attr("src","https://cdn.discordapp.com/attachments/339526811102740480/776615648594886716/gateNetworkLower_Lines_1a.png");
+                                        } else {
+                                            <?php $gateImg="\img/gateNetwork".$gateNetwork.".png";
+                                            $gateImg=lookupClassifiedFile($classified,$gateImg);?>
+                                            $("#gateNet").attr("src","<?=$gateImg?>");
+                                        }
+                                        isDefaultImage = !isDefaultImage;
+                                        event.preventDefault();
+                                    });
+                                    
 				function systemClick(event) {
 					var el=document.getElementById("gateNet");
 					//we need to convert the information that we get in the event info how far into the image has been clicked
