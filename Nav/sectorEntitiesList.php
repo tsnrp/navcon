@@ -16,8 +16,15 @@
 		</tr><?php
 		$highlightRow = false;
 		foreach ($workingArray as $key => $value) {
-			$desc = isset($value['description']) ? $value['description'] : ""?>
-			<tr class="entity<?=$highlightRow ? " highlight" : ""?>" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$value['loc']?>'">
+			$desc = isset($value['description']) ? $value['description'] : "";
+                        if (!isset($sub)) {?>
+                            <tr class="entity<?=$highlightRow ? " highlight" : ""?>" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$value['loc']?>'">
+                        <?php    
+                        } else {?>
+                            <tr class="entity<?=$highlightRow ? " highlight" : ""?>">
+                        <?php
+                        }
+                        ?>
 				<td class="caption" >
 					<!--?=str_replace(" ", "&nbsp;", $key)?-->
                                         <?=$key?>
