@@ -15,9 +15,10 @@
 			<td colspan="3" style="color:<?=$workingColor?>"><br/><?=strtoupper($workingEntType)?></td>
 		</tr><?php
 		$highlightRow = false;
+                $link = $sub == "";
 		foreach ($workingArray as $key => $value) {
 			$desc = isset($value['description']) ? $value['description'] : "";
-                        if (!isset($sub)) {?>
+                        if ($link) {?>
                             <tr class="entity<?=$highlightRow ? " highlight" : ""?>" onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>&sub=<?=$value['loc']?>'">
                         <?php    
                         } else {?>
