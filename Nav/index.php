@@ -1,7 +1,9 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.1";
+        $version = "13.2";
+        
+        $battleNet = "https://cdn.discordapp.com/attachments/741744298072211537/782226715266383872/gateNetworkLowerBattleCurrent.png";
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -508,7 +510,7 @@ $(function() {
                                         console.log("Trying to toggle..." + isDefaultImage);
                                         if (isDefaultImage) {
                                             console.log("trying to change to temp...");
-                                            $("#gateNet").attr("src","https://cdn.discordapp.com/attachments/339526811102740480/776615648594886716/gateNetworkLower_Lines_1a.png");
+                                            $("#gateNet").attr("src","<?=$battleNet?>");
                                         } else {
                                             <?php $gateImg="\img/gateNetwork".$gateNetwork.".png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
@@ -517,6 +519,32 @@ $(function() {
                                         isDefaultImage = !isDefaultImage;
                                         event.preventDefault();
                                     });
+                                    
+                                var clickables=[<?php
+                                    //build the clickables array
+                                    //there probably is a nice way to do this with JSON
+                                    //however I do not know it
+                                    //logic is simliar to menu.php - if that needs duplication again
+                                    //it probably should be moved into a function
+                                    $files=getAllSystems($classified);
+                                    foreach ($files as $name) {
+                                            if ($name != "." && $name != "..") {
+                                                    $mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
+                                                    if (file_exists($mapPos)) {
+                                                            $handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
+                                                            if ($handle) {
+                                                                    if (getSectorInfo($classified,$name)['network']==$gateNetwork){
+                                                                            $xy=explode(",",fgets($handle));
+                                                                            if (count($xy)==2) {
+                                                                                    printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
+                                                                            }
+                                                                    }
+                                                                    fclose($handle);
+                                                            }
+                                                    }
+                                            }
+                                    }
+                                ?>];
                                     
 				function systemClick(event) {
 					var el=document.getElementById("gateNet");
@@ -553,38 +581,13 @@ $(function() {
 					var clickFromMidY=y-(height/2);
 					var clickY=(clickFromMidY*(1/imageScale))+(imgOrigY/2);
 
-					var clickables=[<?php
-						//build the clickables array
-						//there probably is a nice way to do this with JSON
-						//however I do not know it
-						//logic is simliar to menu.php - if that needs duplication again
-						//it probably should be moved into a function
-						$files=getAllSystems($classified);
-						foreach ($files as $name) {
-							if ($name != "." && $name != "..") {
-								$mapPos = lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt");
-								if (file_exists($mapPos)) {
-									$handle = fopen(lookupClassifiedFile($classified,"sectors/".$name."/mainMapPos.txt"), "r");
-									if ($handle) {
-										if (getSectorInfo($classified,$name)['network']==$gateNetwork){
-											$xy=explode(",",fgets($handle));
-											if (count($xy)==2) {
-												printf("{x:%d, y:%d, url:\"?%ssector=%s\"},",$xy[0],$xy[1],$classifiedHref,$name);
-											}
-										}
-										fclose($handle);
-									}
-								}
-							}
-						}
-						?>];
-						for (i=0; i<clickables.length; i++) {
-						var deltaX=clickX-clickables[i].x;
-						var deltaY=clickY-clickables[i].y;
-						var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-						if (delta<50) {
-							window.open(clickables[i].url,"_self");
-						}
+                                        for (i=0; i<clickables.length; i++) {
+                                            var deltaX=clickX-clickables[i].x;
+                                            var deltaY=clickY-clickables[i].y;
+                                            var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+                                            if (delta<50) {
+                                                    window.open(clickables[i].url,"_self");
+                                            }
 					}
 				}
 				</script>
@@ -617,6 +620,49 @@ $(function() {
                                                 if (mouseDown) {
                                                     mouseCanClick = false;
                                                 }
+                                                // This can be used later to show the system map over top of the 
+                                                // arc map when hovering over a system's location.
+//                                                var el=document.getElementById("gateNet");
+//                                                //we need to convert the information that we get in the event info how far into the image has been clicked
+//                                                //first up we are going to figure out how much the image has been scaled
+//                                                var imgOrigX=1654;
+//                                                var imgOrigY=1080;
+//
+//                                                var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
+//                                                var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
+//                                                var imageScale=Math.min(scaleImgX,scaleImgY);
+//
+//                                                //then we are going to calculate how far inside the window the image is
+//                                                //see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
+//                                                var x=0;
+//                                                var y=0;
+//
+//                                                while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+//                                                        x += el.offsetLeft - el.scrollLeft;
+//                                                        y += el.offsetTop - el.scrollTop;
+//                                                        el = el.offsetParent;
+//                                                }
+//
+//                                                x = event.clientX - x;
+//                                                y = event.clientY - y;
+//
+//                                                //we compare the offset from the mid point of the image
+//                                                //and scale it back to original units used to make the clickables array
+//                                                var width=event.currentTarget.clientWidth;
+//                                                var clickFromMidX=x-(width/2);
+//                                                var clickX=(clickFromMidX*(1/imageScale))+(imgOrigX/2);
+//
+//                                                var height=event.currentTarget.clientHeight;
+//                                                var clickFromMidY=y-(height/2);
+//                                                var clickY=(clickFromMidY*(1/imageScale))+(imgOrigY/2);
+//                                                for (i=0; i<clickables.length; i++) {
+//                                                    var deltaX=clickX-clickables[i].x;
+//                                                    var deltaY=clickY-clickables[i].y;
+//                                                    var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+//                                                    if (delta<50) {
+//                                                            //window.open(clickables[i].url,"_self");
+//                                                    }
+//                                                }
                                             });
                                             
                                             $( "#slider-vertical" ).slider({
