@@ -3,7 +3,11 @@
 	//---- RELEASE VERSION ----//
         $version = "13.2";
         
+<<<<<<< HEAD
         $battleNet = "https://cdn.discordapp.com/attachments/354025103471673346/787400593886806026/gateNetworkLowerBattleCurrent.png";
+=======
+        $battleNet = "http://www.1sws.com/Intel/navcon-master/Nav/img/BattleLines/gateNetworkLowerBattleCurrent.png";
+>>>>>>> f04a7bb15200c30a55e4b452e46d8145b6016022
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
