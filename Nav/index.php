@@ -3,7 +3,7 @@
 	//---- RELEASE VERSION ----//
         $version = "13.2";
         
-        $battleNet = "http://www.1sws.com/Intel/navcon-master/Nav/img/BattleLines/gateNetworkLowerBattleCurrent.png";
+        $battleNet = "https://cdn.discordapp.com/attachments/354025103471673346/787400593886806026/gateNetworkLowerBattleCurrent.png";
         
         //TODO: use filter_input() on these
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -13,6 +13,7 @@
 
 	$classified = isset($_GET['Classified']);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        $intelDoc = false;
         
         $systems = getAllSystems($classified);
 
@@ -277,6 +278,15 @@
 		}
 		return array();
 	}
+        
+        function readIntelFile($classified,$sector) {
+            $file=lookupClassifiedFile($classified,"sectors/".$sector."/intel.txt");
+            if (file_exists($file)) {
+                $intelDoc = file_get_contents($file);
+            }
+            return $intelDoc;
+        }
+        
 
 	function getSectorInfo($classified,$sector) {
 		$file=lookupClassifiedFile($classified,"sectors/".$sector."/sector.txt");

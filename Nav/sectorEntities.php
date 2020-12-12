@@ -191,5 +191,12 @@
 		$workingEntType = "other";
 		include 'sectorEntitiesList.php';?>
 	</table>
+    <?php
+        $dat = readIntelFile($classified, $sector);
+        if ($classified && $intelDoc) {?>
+            <button onclick="<?=$dat?>" class=\"dropbtn\">"Intel Doc"</button>
+        <?php
+        }
+    ?>
 </div>
 
