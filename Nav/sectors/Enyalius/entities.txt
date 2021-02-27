@@ -1,0 +1,22 @@
+Kashawn Trading,V,1
+Tibur Gate,G,1
+Kalnath Research,R,3
+ESN Yuroman,SHIP,3
+Idrissa Idyl,V,4
+SY-852,SY,4
+Vanir Gate,G,4
+Enyalius Command,C,5
+Rysdak Markets,V,5
+WP-82W,WP,5
+WP-33J,WP,5
+Enyalius Prime,P,6
+Capitol Base,V,6
+Toray Gate,G,6
+Hulca Smelters,I,7
+Wronkin,M,7
+Adrath,M,7
+Simnex,M,7
+ESN St James,SHIP,7
+Yknik Spas,V,8
+Drazma Mining,M,8
+Loria Gate,G,8

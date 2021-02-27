@@ -1,0 +1,33 @@
+Ar Akbat Market,V,1
+Enyalius Gate,G,1
+Vanir Ari Prime,P,2
+Ara Filis Administration,V,2
+Ara Jad Senate,V,2
+Vanir SY,SY,2
+Ara Tiffa Industries,I,3
+Loria Gate,G,3
+Ara Tiffa Shipyard,SY,3
+Ar Alia Mining,M,3
+Ara Sabli Denabite,M,3
+Ar Atutu Gemstones,M,3
+Vanir WP 1,WP,3
+Vanir WP 2,WP,3
+Vanir WP 3,WP,3
+Ara Niti Research,R,4
+SB 366,SB,4
+SB 575,SB,4
+SB 421,SB,4
+Ara Gilad Industry,I,5
+Ar Utani Merchants,V,5
+Ara Zele Refining,F,5
+Ar Ayalia Ores,M,5
+Ar Efrat Denabite,M,5
+Ara Fatu Denabite,M,5
+Vilnara Gate,G,5
+Vilnara Command,C,6
+DS-88,DS,6
+SY-231,SY,6
+SY-117,SY,6
+TSN Industries,I,6
+WP-52J,WP,6
+WP-14Y,WP,6

@@ -1,0 +1,25 @@
+Gena,V,1
+Korti,V,1
+Phinmor Gate,G,1
+Luek,V,2
+Anning Research,R,2
+Keshanti,I,4
+Keshanti Ores,M,4
+Tyr Prime,P,5
+Tyr Administration,V,5
+I-264,I,5
+Edo,V,5
+Sam's Junkyard,V,5
+SY-287,SY,5
+M-184,M,5
+Kive,V,6
+Jukuru,V,6
+Vilnara Gate,G,6
+M-844,M,7
+M-845,M,7
+M-846,M,7
+Guardic,V,8
+Leesh,V,8
+LCS Himae,SHIP,8
+Ashia Gate,G,8
+Luro,DS,9

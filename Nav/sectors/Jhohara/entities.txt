@@ -1,0 +1,18 @@
+Mintou,M,1
+Minara,D,2
+Molokore Farbricators,V,2
+Molokore Mining Facility,M,2
+Manori,V,3
+Iliagram Mining,M,3
+Randomi Mining,M,3
+Rhonkar Mining,M,3
+Menapi Research Laboratory,R,5
+Vrae Gate,G,6
+Malla Palla,D,7
+Mastigophorous,DS,9
+E-DP-1,DS,10
+E-DP-3,DS,10
+E-DP-2,DS,10
+Eulis Gate,G,10
+Melintari,D,11
+Rintas,SKN-B,12
