@@ -20,7 +20,7 @@
 		} else if ($entity['type'] == "C") {
 			$entity['description'] = "Command Post";
 		} else if ($entity['type'] == "D") {
-			$entity['description'] = "Defence";
+			$entity['description'] = "Defense";
                 } else if ($entity['type'] == "DP") {
                         $entity['description'] = "Defense Platform";
 		} else if ($entity['type'] == "V") {
@@ -29,17 +29,21 @@
 			$entity['description'] = "Science Station Post";
 		} else if ($entity['type'] == "F") {
 			$entity['description'] = "Refinery";
-		} else if ($entity['type'] == "B") {
+		} else if ($entity['type'] == "B" || $entity['type'] == "SB") {
 			$entity['description'] = "Sensor Buoy";
                 } else if ($entity['type'] == "CR") {
                         $entity['description'] = "Comms Relay";
 		} else if ($entity['type'] == "H") {
 			$entity['description'] = "Gravitational Singularity";
+                } else if ($entity['type'] == "SKN-B") {
+                        $entity["description"] = "Skaraan Base";
+                } else if ($entity['type'] == "SHIP") {
+                        $entity['description'] = "Ship";
 		} else if (startsWith($entity['name'], "BH")) {
 			$entity['description'] = "Gravitational Singularity";
 		} else if (startsWith($entity['name'], "WP")) {
 			$entity['description'] = "Weapon Platform";
-		} else if (startsWith($entity['name'], "DS-")) {
+		} else if (startsWith($entity['name'], "DS-") || $entity['type'] == "DS") {
 			$entity['description'] = "Deep Space Station";
 		} else if (startsWith($entity['name'], "SY-")) {
 			$entity['description'] = "Ship Yard";
@@ -71,12 +75,29 @@
 			$entity['description'] = "Sector Command";
 		}
 
-
+                $stationTypes = array(
+                    "S",
+                    "R",
+                    "I",
+                    "M",
+                    "D",
+                    "V",
+                    "C",
+                    "DS"
+                );
 		$entity['loc'] = trim($entity['loc']);
 		if (isEmpty($sub) || $entity['loc'] == $sub) {
-			if ($entity['type'] == "S" || $entity['type'] == "R" || $entity['type'] == "I" || $entity['type'] == "M" || $entity['type'] == "D" || $entity['type'] == "V" || $entity['type'] == "C") {
-				$entStations[$entity['name']] = $entity;
-			} else if ($entity['type'] == "G") {
+                        $found = false;
+                        foreach ($stationTypes as $ent) {
+                            if ($entity['type'] == $ent) {
+                                $entStations[$entity['name']] = $entity;
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if ($found) {
+                            // do nothing
+                        } else if ($entity['type'] == "G") {
 				$entGates[$entity['name']] = $entity;
 			} else {
 				$entOther[$entity['name']] = $entity;

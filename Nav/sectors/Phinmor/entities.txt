@@ -1,0 +1,11 @@
+DS-111,DS,1
+Phinmor Oasis,V,1
+Tyr Gate,G,1
+DS-133,DS,2
+Modei Shipping,I,2
+Master Miners,M,2
+Golden Foundry,F,2
+Sela Smeltery,F,2
+Loags Denabite,M,3
+DS-188,DS,4
+Agros Cantina,V,4

@@ -1,0 +1,21 @@
+DS-1126,DS,2
+WP-92Q,WP,2
+WP-48T,WP,2
+Athorn Gate,G,2
+Procanthi,I,3
+Procanthi Shipyard,SY,3
+Tibur Gate,G,3
+Polydeukes Market,V,4
+Castor Gate,G,4
+Planet Helios,P,5
+Helios Administration,V,5
+Helios Habitation,V,5
+Helios Command,C,6
+WP-81K,WP,6
+WP-52A,WP,6
+Semelei Processors,I,7
+Brontes Ores,M,7
+Nyx Denabite,M,7
+Leda Denabite,M,7
+Zarkov Labs,R,8
+Atilia Gate,G,8

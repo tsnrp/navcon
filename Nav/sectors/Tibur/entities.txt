@@ -1,0 +1,24 @@
+DS-903,DS,1
+Mria Gate,G,1
+WP-123J,WP,1
+WP-67U,WP,1
+Tibur Prime,P,2
+Alders Counsel,V,2
+Tibur Mall,V,2
+Astral Agora,V,3
+Enyalius Gate,G,3
+Tibur Command,C,4
+DS-59,DS,4
+SY-42,SY,4
+WP-99T,WP,4
+WP-101E,WP,4
+Grand Emporium,V,5
+Keltor Gate,G,5
+CR-66,CR,6
+SB-87,SB,6
+Interstellar Spas,V,7
+Atilia Gate,G,7
+DS-777,DS,8
+Helios Gate,G,8
+WP-89W,WP,8
+WP-104Z,WP,8
