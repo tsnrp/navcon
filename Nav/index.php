@@ -821,7 +821,7 @@ $(function() {
         //if (isset())
         ?>
         <!--<div id="galactic-compass" class="show" style="position: absolute; top: 0px; right: 0px; z-index: 0; width: 80vh;">-->
-            <img src="../../galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
+            <img src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
         <!--</div>-->
         <!--<div id="legend" style="position: absolute; bottom: 0px; right: 0px; z-index: 0; width: 10vh;">-->
             <img src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
