@@ -344,6 +344,7 @@
 	<link rel="stylesheet" type="text/css" href="sectorSubCross.css">
 	<link rel="stylesheet" type="text/css" href="menu.css">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" type="text/css" href="Utilities/spinner.css">
         <style>
             /*
             At some point should move this to sectorEntities.css, but I don't want people to have to deal with cache clearing atm.
@@ -357,6 +358,7 @@
         </style>
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
@@ -620,8 +622,10 @@ $(function() {
 					}
 				}
 				</script>
-                                    
-                                    <div id="arc-map" class="show">
+                                    <?php
+                                    include "Utilities/spinner.php";
+                                    ?>
+                                    <div id="arc-map" class="">
                                             <?php $gateImg= ($gateNetwork=="Upper") ? "img/gateNetwork".$gateNetwork.".png" : "img/gateNetworkLowerTransparent.png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
                                             <img id="gateNet" class="show" src="<?=$gateImg?>"/>
@@ -630,6 +634,13 @@ $(function() {
                                 <script>
                                         var lastSliderValue = 100; // Global value
                                         $( function() {
+                                            /// Show spinner while map loads (mostly for mobile, but...)
+                                            $("#gateNet").imagesLoaded(function() {
+                                                $("#arc-map").addClass("show");
+                                                $("#loading").addClass("hidden");
+                                            });
+                                            
+                                            /// Following code is for moving the map.
                                             var mouseDown = false;
                                             var mouseCanClick = true;
                                             
