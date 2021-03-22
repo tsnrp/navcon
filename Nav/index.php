@@ -637,7 +637,8 @@ $(function() {
                                             /// Show spinner while map loads (mostly for mobile, but...)
                                             $("#gateNet").imagesLoaded(function() {
                                                 $("#arc-map").addClass("show");
-                                                $("#loading").addClass("hidden");
+                                                document.getElementById("loading").style = "display: none;";
+                                                //$("#loading").addClass("hidden");
                                             });
                                             
                                             /// Following code is for moving the map.
