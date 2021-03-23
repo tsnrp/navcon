@@ -174,12 +174,14 @@
                 $('#entityPane').hide();
             });
             $('.system').animate({ 'margin-right': '0px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn');
             window.localStorage.setItem("showEntityPane","false");
         }
         else {
             $('#entityPane').show();
             $('#entityPane').animate({ 'width': '360px' }, 'slow');
             $('.system').animate({ 'margin-right': '360px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn active');
             window.localStorage.setItem("showEntityPane","true");
         }
     });
