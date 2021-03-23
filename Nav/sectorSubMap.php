@@ -1,8 +1,10 @@
 <div id="sys-dat" class="system-data">
-    <?php include 'sectorEntities.php' ?>
-
+    <?php include 'sectorEntities.php';
+        $sys = lookupClassifiedFile($classified,"sectors/$sector/$sub.png");
+    ?>
+    
     <div class="system">
-            <img src="<?=lookupClassifiedFile($classified,"sectors/$sector/$sub.png");?>" style="width:100%;"/>
+            <img src="<?=$sys?>" style="width:100%;"/>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -12,6 +14,7 @@
       // http://jsfiddle.net/gFcuU/ for using keys to traverse systems
       
   $( function() {
+      $(window).
     $( ".navCross" ).draggable({
         start: function() {
             $(".navCross").css("cursor","grabbing");
@@ -31,6 +34,27 @@
       
   });
   </script>
+    <script>
+        //TODO: Someday implement this - arrowkeys to move between sectors in a given system
+//    document.onkeydown = function(e) {
+//      switch(e.which) {
+//          case 37: // left
+//          break;
+//
+//          case 38: // up
+//          break;
+//
+//          case 39: // right
+//          break;
+//
+//          case 40: // down
+//          break;
+//
+//          default: return; // exit this handler for other keys
+//      }
+//      e.preventDefault(); // prevent the default action (scroll / move caret)
+//    };
+    </script>
 <?php 
 	//include 'sectorEntities.php'; 
 	
