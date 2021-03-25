@@ -630,7 +630,7 @@ $(function() {
                                     if ($mobile) {
                                         include "Utilities/spinner.php";
                                     }?>
-                                    <div id="arc-map" class="">
+                                    <div id="arc-map" class="" style="height: 100%;">
                                             <?php $gateImg= ($gateNetwork=="Upper") ? "img/gateNetwork".$gateNetwork.".png" : "img/gateNetworkLowerTransparent.png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
                                             <img id="gateNet" class="show" src="<?=$gateImg?>"/>
@@ -846,10 +846,10 @@ $(function() {
             Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
         </div>
         <?php 
-        if ($sector == false && $gateNetwrok === "Lower") {
+        if ($sector == false && $gateNetwork === "Lower") {
         ?>
         <!--<div id="galactic-compass" class="show" style="position: absolute; top: 0px; right: 0px; z-index: 0; width: 80vh;">-->
-            <img src="img/galactic-compass.png" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
+            <img src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
         <!--</div>-->
         <!--<div id="legend" style="position: absolute; bottom: 0px; right: 0px; z-index: 0; width: 10vh;">-->
             <img src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
