@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.3b2";
+        $version = "13.3b3";
         
         $battleNet = "https://cdn.discordapp.com/attachments/354025103471673346/787400593886806026/gateNetworkLowerBattleCurrent.png";
         
@@ -634,41 +634,61 @@ $(function() {
                                             <?php $gateImg= ($gateNetwork=="Upper") ? "img/gateNetwork".$gateNetwork.".png" : "img/gateNetworkLowerTransparent.png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
                                             <img id="gateNet" class="show" src="<?=$gateImg?>"/>
-                                            <?php
-                                            // Hide slider on mobile. Doesn't work and is unnecessary anyhow.
-                                                if (!$mobile) {?>
-                                                    <div id="slider-vertical" style="height:200px;"></div>
-                                            <?php
-                                                }?>
+                                            <div id="handle" style="position: fixed; width: 100vw; height: 100vh; top: 0px; left: 0px; /*z-index: 5;*/"></div>
                                     </div>
                                 <script>
                                         var lastSliderValue = 100; // Global value
+                                        var map = "#arc-map";
                                         $( function() {
                                             /// Show spinner while map loads (mostly for mobile, but...)
                                             $("#gateNet").imagesLoaded(function() {
                                                 $("#arc-map").addClass("show");
+                                                <?php if ($mobile) {?>
                                                 document.getElementById("loading").style = "display: none;";
                                                 //$("#loading").addClass("hidden");
+                                                <?php
+                                                    }?>
                                             });
                                             
                                             /// Following code is for moving the map.
                                             var mouseDown = false;
                                             var mouseCanClick = true;
                                             
+                                            var locX;
+                                            var locY;
+                                            locX = $("#arc-map").position().left;
+                                            locY = $("#arc-map").position().top;
+                                            
                                             // The mouse events are used to determine if the user is dragging the map.
                                             // If so, it will not let the mouse "click" on a system when released.
-                                            $("#gateNet").on("mousedown", function(event) {
+                                            //$("#handle").on("mousedown", function(event) {
+                                            $(map).on("mousedown", function(event) {
                                                 mouseDown = true;
+                                                //locX = $("#arc-map").position().left;
+                                                //locY = $("#arc-map").position().top;
                                             });
-                                            $("#gateNet").on("mouseup", function(event){
+                                            //$("#handle").on("mouseup", function(event) {
+                                            $(map).on("mouseup", function(event) { 
                                                 console.log(mouseCanClick);
                                                 if (mouseCanClick) {
                                                     systemClick(event);
                                                 }
                                                 mouseCanClick = true;
                                                 mouseDown = false;
+                                                
+                                                
+//                                                console.log("locX = " + locY);
+//                                                $("#gateNet").css("top", $("#arc-map").position().top);
+//                                                $("#gateNet").css("left", $("#arc-map").position().left);
+//                                                $("#arc-map").css("top", locY);
+//                                                $("#arc-map").css("left", locX);
+//                                                console.log($("#arc-map").position().top);
+                                                //offset({left: 0, top: 0});//
+                                                $("handle").css("top", 0);
+                                                $("handle").css("left", 0);
                                             });
-                                            $("#gateNet").on("mousemove", function(event){
+                                            $(map).on("mousemove", function(event){
+                                            //$("#handle").on("mousemove", function(event){
                                                 if (mouseDown) {
                                                     mouseCanClick = false;
                                                 }
@@ -740,8 +760,8 @@ $(function() {
                                                     var scaleYConst = imgOrigY * ui.value / 100;
                                                     
                                                     // Get position of the image relative to the window (top left)
-                                                    var oldX = $("#gateNet").offset().left;
-                                                    var oldY = $("#gateNet").offset().top;
+                                                    var oldX = $("#arc-map").offset().left;
+                                                    var oldY = $("#arc-map").offset().top;
                                                     
                                                     // Calculate how much the image moves, assuming the center of the image
                                                     // is the point of zoom.
@@ -752,9 +772,9 @@ $(function() {
                                                     var diffY = (scaleYConstOld - scaleYConst)/2;
 
                                                     // Effect changes based on above calculations
-                                                    $("#gateNet").offset({left: oldX + diffX, top: oldY + diffY});
-                                                    $("#gateNet").css("width", scaleXConst);
-                                                    $("#gateNet").css("height", scaleYConst);
+                                                    $("#arc-map").offset({left: oldX + diffX, top: oldY + diffY});
+                                                    $("#arc-map").css("width", scaleXConst);
+                                                    $("#arc-map").css("height", scaleYConst);
                                                     
                                                     // Set last value of ui.value for use later
                                                     lastSliderValue = ui.value;
@@ -764,18 +784,24 @@ $(function() {
                                             // only make draggable and zoomable on non mobile, since mobile has built-in things usually
                                             //if (!$mobile) {?>
                                             // Makes the map draggable using JQuery UI
-                                            $( "#gateNet" ).draggable({
+                                            $(map).draggable({
+                                            //$( "#arc-map" ).draggable({
                                                 start: function() {
-                                                    $("#gateNet").css("cursor","grabbing");
+                                                    //$("#handle").css("cursor","grabbing");
+                                                    $(map).css("cursor","grabbing");
                                                 },
                                                 stop: function() {
-                                                    $("#gateNet").css("cursor","grab");
+                                                    //$("#handle").css("cursor","grab");
+                                                    $(map).css("cursor","grab");
+                                                    
                                                 },
-                                                scroll: false
+                                                scroll: false,
+                                                //cancel: "#legend",//,#system-menu,#slider-vertical,#navcon-title,#compass,#legend",
+                                                handle: "#handle"
                                             });
                                             
                                             // Checks for wheel events. If detected, adjusts slider as necessary, which triggers the map to zoom.
-                                            $("#gateNet").on('wheel', function(e) {
+                                            $(document).on('wheel', function(e) {
                                                     var delta = e.originalEvent.deltaY/10 * -1;
                                                     $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
                                             });
@@ -842,18 +868,22 @@ $(function() {
             $versionStyle = "flex: 0 0 20px";
         }
 ?>
+            <?php
+                // Hide slider on mobile. Doesn't work and is unnecessary anyhow.
+                    if (!$mobile) {?>
+                        <div id="slider-vertical" style="position: absolute; height:200px; left: 20px;"></div>
+            <?php
+            }?>
+        
         <div id="navcon-title" style="<?=$versionStyle?>">
             Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
         </div>
         <?php 
         if ($sector == false && $gateNetwork === "Lower") {
         ?>
-        <!--<div id="galactic-compass" class="show" style="position: absolute; top: 0px; right: 0px; z-index: 0; width: 80vh;">-->
-            <img src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
-        <!--</div>-->
-        <!--<div id="legend" style="position: absolute; bottom: 0px; right: 0px; z-index: 0; width: 10vh;">-->
-            <img src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
-        <!--</div>-->
+            <img id="compass" src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
+            <img id="legend" src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
+
         <?php
         }?>
         <img id="battle-lines-legend" src ="img/BattleLinesLegend.png" style="display: none;"/>
