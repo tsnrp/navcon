@@ -634,7 +634,10 @@ $(function() {
                                             <?php $gateImg= ($gateNetwork=="Upper") ? "img/gateNetwork".$gateNetwork.".png" : "img/gateNetworkLowerTransparent.png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
                                             <img id="gateNet" class="show" src="<?=$gateImg?>"/>
+                                            <?php if (!$mobile) {?>
                                             <div id="handle" style="position: fixed; width: 100vw; height: 100vh; top: 0px; left: 0px; /*z-index: 5;*/"></div>
+                                            <?php
+                                            }?>
                                     </div>
                                 <script>
                                         var lastSliderValue = 100; // Global value
