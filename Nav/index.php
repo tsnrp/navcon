@@ -3,7 +3,7 @@
 	//---- RELEASE VERSION ----//
         $version = "13.4";
         
-        $battleNet = "http://www.1sws.com/Intel/navcon-master/Nav/img/BattleLines/gateNetworkLowerBattleCurrent.png";
+        $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
         
         //TODO: use filter_input() on these
         $mobile = isset($_GET['mobile']);
@@ -585,13 +585,10 @@ $(function() {
 					var el=document.getElementById("gateNet");
 					//we need to convert the information that we get in the event info how far into the image has been clicked
 					//first up we are going to figure out how much the image has been scaled
-					
-                                        console.log(document.getElementById("gateNet").width);
-                                        console.log(document.getElementById("gateNet").height);
+
 					var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
 					var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
 					var imageScale=Math.min(scaleImgX,scaleImgY);
-                                        console.log("Scale: " + imageScale);
 
 					//then we are going to calculate how far inside the window the image is
 					//see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
@@ -606,9 +603,6 @@ $(function() {
                                         
 					x = event.clientX - x;
 					y = event.clientY - y;
-                                        console.log("Click: ");
-                                        console.log(x);
-                                        console.log(y);
                                         
 					//we compare the offset from the mid point of the image
 					//and scale it back to original units used to make the clickables array
@@ -624,10 +618,6 @@ $(function() {
                                             var deltaX=clickX-clickables[i].x;
                                             var deltaY=clickY-clickables[i].y;
                                             var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-                                            if (clickables[i].url.indexOf("Reema") !== -1) {
-                                                console.log("Reema Delta: " + delta);
-                                            }
-                                            //console.log(delta);
                                             if (delta<50) {
                                                     window.open(clickables[i].url,"_self");
                                             }
@@ -658,7 +648,6 @@ $(function() {
                                                 rescale(document.getElementById("gateNet").width/imgOrigX*100, false);
                                                 <?php if ($mobile) {?>
                                                 document.getElementById("loading").style = "display: none;";
-                                                //$("#loading").addClass("hidden");
                                                 <?php
                                                     }?>
                                             });
