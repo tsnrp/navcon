@@ -1,9 +1,9 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.3b3";
+        $version = "13.4";
         
-        $battleNet = "https://cdn.discordapp.com/attachments/354025103471673346/787400593886806026/gateNetworkLowerBattleCurrent.png";
+        $battleNet = "http://www.1sws.com/Intel/navcon-master/Nav/img/BattleLines/gateNetworkLowerBattleCurrent.png";
         
         //TODO: use filter_input() on these
         $mobile = isset($_GET['mobile']);
