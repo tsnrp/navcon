@@ -14,7 +14,7 @@
       // http://jsfiddle.net/gFcuU/ for using keys to traverse systems
       
   $( function() {
-      $(window).
+      //$(window).
     $( ".navCross" ).draggable({
         start: function() {
             $(".navCross").css("cursor","grabbing");

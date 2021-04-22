@@ -579,17 +579,19 @@ $(function() {
                                             }
                                     }
                                 ?>];
-                                    
+                                var imgOrigX=1654;
+                                var imgOrigY=1080;    
 				function systemClick(event) {
 					var el=document.getElementById("gateNet");
 					//we need to convert the information that we get in the event info how far into the image has been clicked
 					//first up we are going to figure out how much the image has been scaled
-					var imgOrigX=1654;
-					var imgOrigY=1080;
-
+					
+                                        console.log(document.getElementById("gateNet").width);
+                                        console.log(document.getElementById("gateNet").height);
 					var scaleImgX=document.getElementById("gateNet").width/imgOrigX;
 					var scaleImgY=document.getElementById("gateNet").height/imgOrigY;
 					var imageScale=Math.min(scaleImgX,scaleImgY);
+                                        console.log("Scale: " + imageScale);
 
 					//then we are going to calculate how far inside the window the image is
 					//see https://stackoverflow.com/questions/8389156/what-substitute-should-we-use-for-layerx-layery-since-they-are-deprecated-in-web
@@ -604,6 +606,9 @@ $(function() {
                                         
 					x = event.clientX - x;
 					y = event.clientY - y;
+                                        console.log("Click: ");
+                                        console.log(x);
+                                        console.log(y);
                                         
 					//we compare the offset from the mid point of the image
 					//and scale it back to original units used to make the clickables array
@@ -619,6 +624,10 @@ $(function() {
                                             var deltaX=clickX-clickables[i].x;
                                             var deltaY=clickY-clickables[i].y;
                                             var delta=Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+                                            if (clickables[i].url.indexOf("Reema") !== -1) {
+                                                console.log("Reema Delta: " + delta);
+                                            }
+                                            //console.log(delta);
                                             if (delta<50) {
                                                     window.open(clickables[i].url,"_self");
                                             }
@@ -646,6 +655,7 @@ $(function() {
                                             /// Show spinner while map loads (mostly for mobile, but...)
                                             $("#gateNet").imagesLoaded(function() {
                                                 $("#arc-map").addClass("show");
+                                                rescale(document.getElementById("gateNet").width/imgOrigX*100, false);
                                                 <?php if ($mobile) {?>
                                                 document.getElementById("loading").style = "display: none;";
                                                 //$("#loading").addClass("hidden");
@@ -690,6 +700,7 @@ $(function() {
                                                 $("handle").css("top", 0);
                                                 $("handle").css("left", 0);
                                             });
+                                            <?php if (!$mobile) {?>
                                             $(map).on("mousemove", function(event){
                                             //$("#handle").on("mousemove", function(event){
                                                 if (mouseDown) {
@@ -740,7 +751,7 @@ $(function() {
 //                                                }
                                             });
                                             <?php
-                                            
+                                            }
                                             // Again, slider is hidden for mobile.
                                             if (!$mobile) {?>
                                             $( "#slider-vertical" ).slider({
@@ -750,6 +761,41 @@ $(function() {
                                                 max: 200,
                                                 value: 100,
                                                 change: function( event, ui ) {
+                                                    rescale(ui.value);
+                                                }
+                                            });
+                                            
+                                            
+                                            //<?php 
+                                            // only make draggable and zoomable on non mobile, since mobile has built-in things usually
+                                            //if (!$mobile) {?>
+                                            // Makes the map draggable using JQuery UI
+                                            $(map).draggable({
+                                            //$( "#arc-map" ).draggable({
+                                                start: function() {
+                                                    $("#handle").css("cursor","grabbing");
+                                                    $(map).css("cursor","grabbing");
+                                                },
+                                                stop: function() {
+                                                    $("#handle").css("cursor","grab");
+                                                    $(map).css("cursor","grab");
+                                                    
+                                                },
+                                                scroll: false,
+                                                //cancel: "#legend",//,#system-menu,#slider-vertical,#navcon-title,#compass,#legend",
+                                                handle: "#handle"
+                                            }).css("cursor","grab");
+                                            
+                                            // Checks for wheel events. If detected, adjusts slider as necessary, which triggers the map to zoom.
+                                            $(document).on('wheel', function(e) {
+                                                    var delta = e.originalEvent.deltaY/10 * -1;
+                                                    $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
+                                            });
+                                            <?php
+                                            }?>
+                                        });
+                                        
+                                        function rescale( uiValue = 100 , reposition = true) {
                                                     // image size - assumes the size of the image, which propably isn't the best
                                                     // practice, but we're going with it for now.
                                                     var imgOrigX=1654;
@@ -759,8 +805,8 @@ $(function() {
                                                     var scaleXConstOld = imgOrigX * lastSliderValue / 100;
                                                     var scaleYConstOld = imgOrigY * lastSliderValue / 100;
                                                     // New scale values
-                                                    var scaleXConst = imgOrigX * ui.value / 100;
-                                                    var scaleYConst = imgOrigY * ui.value / 100;
+                                                    var scaleXConst = imgOrigX * uiValue / 100;
+                                                    var scaleYConst = imgOrigY * uiValue / 100;
                                                     
                                                     // Get position of the image relative to the window (top left)
                                                     var oldX = $("#arc-map").offset().left;
@@ -775,42 +821,15 @@ $(function() {
                                                     var diffY = (scaleYConstOld - scaleYConst)/2;
 
                                                     // Effect changes based on above calculations
-                                                    $("#arc-map").offset({left: oldX + diffX, top: oldY + diffY});
+                                                    if (reposition) {
+                                                        $("#arc-map").offset({left: oldX + diffX, top: oldY + diffY});
+                                                    }
                                                     $("#arc-map").css("width", scaleXConst);
                                                     $("#arc-map").css("height", scaleYConst);
                                                     
                                                     // Set last value of ui.value for use later
-                                                    lastSliderValue = ui.value;
-                                                }
-                                            });
-                                            //<?php 
-                                            // only make draggable and zoomable on non mobile, since mobile has built-in things usually
-                                            //if (!$mobile) {?>
-                                            // Makes the map draggable using JQuery UI
-                                            $(map).draggable({
-                                            //$( "#arc-map" ).draggable({
-                                                start: function() {
-                                                    //$("#handle").css("cursor","grabbing");
-                                                    $(map).css("cursor","grabbing");
-                                                },
-                                                stop: function() {
-                                                    //$("#handle").css("cursor","grab");
-                                                    $(map).css("cursor","grab");
-                                                    
-                                                },
-                                                scroll: false,
-                                                //cancel: "#legend",//,#system-menu,#slider-vertical,#navcon-title,#compass,#legend",
-                                                handle: "#handle"
-                                            });
-                                            
-                                            // Checks for wheel events. If detected, adjusts slider as necessary, which triggers the map to zoom.
-                                            $(document).on('wheel', function(e) {
-                                                    var delta = e.originalEvent.deltaY/10 * -1;
-                                                    $("#slider-vertical").slider("value", $("#slider-vertical").slider("value") + delta);
-                                            });
-                                            <?php
-                                            }?>
-                                        });
+                                                    lastSliderValue = uiValue;
+                                        }
                                 </script>
                                 
                                 <span></span>

@@ -1,0 +1,12 @@
+K'za,SKN-B,1
+Li-andra Mining,M,3
+Ya-er Military Base,C,3
+Anza Markets,V,3
+Planet Onwia,P,5
+Drenan Gate,G,5
+Naki Mining,M,5
+Onwia Ship Yards,SY,5
+Grand Terminal,V,5
+Ximni Factories,I,5
+Gzhr,,8
+Ishka Gasses,I,8
