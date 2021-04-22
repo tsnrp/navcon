@@ -22,7 +22,7 @@
 	color:#808080;
 }
 
-.dropbtn.disabled:hover, .dropbtn.disabled:focus {
+.dropbtn.disabled:hover{/*, .dropbtn.disabled:focus {*/
 	background-image: url('img/btnOffSmall.png');
 }
 
