@@ -892,7 +892,8 @@ $(function() {
         <?php 
         if ($sector == false && $gateNetwork === "Lower") {
         ?>
-            <img id="compass" src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>
+            <!--<img id="compass" src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>-->
+            <img id="compass" src="img/CompassSimple.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 25vw;"/>
             <img id="legend" src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
 
         <?php
