@@ -67,7 +67,11 @@
 			$entity['description'] = "Independent Enterprise";
 		} else if ($entity['type'] == "P") {
 			$entity['description'] = "Planet";
-		}
+                } else if ($entity['type'] == "S") {
+                        $entity['description'] = "Station";
+		} else if ($entity['type'] == "MK") {
+                        $entity['description'] = "Marker Buoy";
+                }
 		if ($checkExperimental == 1 && endsWith($entity['name'], "X")) {
 			$entity['description'] = $entity['description'].", experimental";
 		}

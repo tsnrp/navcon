@@ -1,3 +1,47 @@
+Okka Mining,M,1
+Planet Drenan Prime,P,2
+Drenan Station,S,2
+Security Pod 22,DP,2
+Drenan Shipyards,SY,2
+Ronn Factories,I,2
+Ixaqa Mining,M,3
+Hunting Comms,CR,4
+Whale Sensors,SB,4
+Marker Buoy 1,MK,4
+Marker Buoy 2,MK,4
+Marker Buoy 3,MK,4
+Marker Buoy 4,MK,4
+Marker Buoy 5,MK,4
+Marker Buoy 6,MK,4
+Marker Buoy 7,MK,4
+Erowis Gate,G,5
+Anta Market,V,5
+Security Pod 16,DP,5
 Torgoth Command,C,6
-Agnia,P,11
+Torg News Network,CR,6
+Security Pod 33,DP,6
+Security Pod 34,DP,6
+Security Pod 35,DP,6
+Security Pod 36,DP,6
+Security Pod 37,DP,6
+Security Pod 38,DP,6
+WP Alpha,W,6
+WP Beta,W,6
+WP Charlie,W,6
+WP Delta,W,6
+WP Echo,W,6
+WP Foxtrot,W,6
+Onwia Gate,G,8
+Onwia Guard,C,8
+Planet Agnia,P,11
 U'o Directorate,C,11
+Dred Falsu,C,12
+Ekka Shipyards,SY,12
+Danil Denabite,F,12
+Sensor Array 1,SB,12
+Sensor Array 3,SB,12
+Sensor Array 2,SB,12
+Ibroan Gate,G,14
+Ibroan Trading,V,14
+No-Ma Gate,G,16
+No-Ma Transit,V,16
