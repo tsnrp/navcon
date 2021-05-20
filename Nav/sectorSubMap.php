@@ -1,12 +1,12 @@
-<div id="sys-dat" class="system-data">
-    <?php include 'sectorEntities.php';
+<!--<div id="sys-dat" class="system-data">-->
+    <?php include 'entitiesPanel.php';
         $sys = lookupClassifiedFile($classified,"sectors/$sector/$sub.png");
     ?>
     
     <div class="system">
             <img src="<?=$sys?>" style="width:100%;"/>
     </div>
-</div>
+<!--</div>-->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script>
@@ -142,8 +142,8 @@
 			</tr>
 		</table>
                     <div  style="position: absolute; bottom: 0px; right: 0px;">
-                        <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
-                        <button onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button>
+                        <!--<button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>-->
+                        
                         
                     </div>
                     <?php

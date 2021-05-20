@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.4";
+        $version = "13.6 Beta";
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
         
@@ -17,7 +17,18 @@
         $intelDoc = false;
         
         $systems = getAllSystems($classified);
-
+        
+        $sector ="";
+	if (isset($_GET['sector'])) {
+		$sector=$_GET['sector'];
+		$gateNetwork=getSectorInfo($classified,$sector)['network'];
+		$gateButtonDest=$gateNetwork;
+		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
+	} else {
+		$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
+		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
+	}
+        
         // TODO: Looks like issue here....
         
         //$uri = filter_input($_SERVER["QUERY STRING"], FILTER_SANITIZE_URL); // Doesn't work rn
@@ -28,7 +39,27 @@
 //        fwrite($fp, "\nNew Query index.php: ".$newQuery);
 //        fclose($fp);
         
+        $edit = isset($_GET['edit']) ? trim($_GET['edit']) : false;
+            
+                // Handle updates to data here.
 
+        if (isset($_POST['intel'])) {
+            //$intel_update = $_POST['intel'];
+            //lookupIntelFile($file)
+            updateIntelFile($sector,$sub,filter_input(INPUT_POST,'intel'));
+        }
+
+        
+        
+
+
+//        location.reload(); 
+//        //refreshes from cache 
+//        //or 
+//        location.reload(true); 
+//        //to force a network request 
+
+        
         // This bit (hopefully) forces the client to refresh their cache
         if (isset ($_GET["cc"])) {
             if (filter_input(INPUT_GET, "cc", FILTER_SANITIZE_STRING)) {
@@ -227,8 +258,18 @@
 	}
 
 	//returns an array of arrays where each array is a menu to be shown
+        // Now instead returns a list of buttons. This replaces the setupSystemMenu() function in the javascript. - Vaj
 	function getSystemsMenus($classified) {
 		$sectorList=getAllSystems($classified);
+                $sysList = array();
+                foreach ($sectorList as $system) {
+                    array_push($sysList,"<button class=\"systemButton dropdown-entry show\" onclick=\"buttonClick('$system')\">$system</button>");
+                    
+                }
+                return $sysList;
+                
+                // Old comments follow. 
+                // 
 		// 12 is roughly right for a 768 height screen
 		// however this was tested on a machine that had a signifcantly different display
 		// (27 inch) 2560x1440, resized
@@ -257,6 +298,32 @@
 			return $file;
 		}
 	}
+        /**
+         * get the File specified by system and sector (sector and sub, respectively - dammmit whoever first made this!
+         * @param type $sector
+         * @param type $sub
+         * @return string
+         */
+        function lookupIntelFile($sector,$sub) {
+            $f = "./../../Intelligence Files/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            $f.= "systems/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            $f.= $sector."/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            if ($sub != "") {
+                $myFile = $f.$sub.".txt";
+            } else {
+                $myFile = $f.$sector.".txt";
+            }
+            return $myFile;
+        }
 
 	function readEntitesFile($classified,$sector) {
 		$file=lookupClassifiedFile($classified,"sectors/".$sector."/entities.txt");
@@ -280,12 +347,20 @@
 		return array();
 	}
         
-        function readIntelFile($classified,$sector) {
-            $file=lookupClassifiedFile($classified,"sectors/".$sector."/intel.txt");
+        function readIntelFile($sector,$sub) {
+            $file = lookupIntelFile($sector,$sub);
             if (file_exists($file)) {
                 $intelDoc = file_get_contents($file);
+            } else { 
+                return false;
             }
             return $intelDoc;
+        }
+        
+        function updateIntelFile($sector,$sub,$data) {
+            $file = lookupIntelFile($sector,$sub);
+            echo($file);
+            file_put_contents($file,$data);
         }
         
 
@@ -322,17 +397,8 @@
 			$classifiedHref="";
 		}
 	}
-
-	$sector ="";
-	if (isset($_GET['sector'])) {
-		$sector=$_GET['sector'];
-		$gateNetwork=getSectorInfo($classified,$sector)['network'];
-		$gateButtonDest=$gateNetwork;
-		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
-	} else {
-		$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
-		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
-	}
+        
+	
 
 	$menus=getSystemsMenus($classified);
 ?>
@@ -433,9 +499,15 @@ function buttonClick(system) {
 }
 
 function setupSystemMenu() {
+    console.log("Trying to setupSystemMenu");
     var div = document.getElementById("system-menu");
+    console.log(div === 'undefined' || div === null);
+    console.log(div.id);
     var systemList = <?php echo json_encode($systems);?>;
+    console.log("Got list");
+    console.log(systemList[0]);
     for (var i = 0; i < systemList.length; i++) {
+        console.log(systemList[i]);
         var but = document.createElement("button");
         but.innerHTML = systemList[i];
         but.className = "systemButton dropdown-entry show";
@@ -448,16 +520,30 @@ function setMapHeight() {
     var h = window.innerHeight - 38 - $("#buttons").height() - $("#sector-menu").height();
     $("#sys-dat").css("height",h);
 }
-$(function() {
-    setMapHeight();
-    $(window).on("resize", function() {
-        setMapHeight();
-    });
-});
+//$(function() {
+//    setMapHeight();
+//    $(window).on("resize", function() {
+//        setMapHeight();
+//    });
+//});
 
 
 // Check if mobile
 $(function() {
+//    $(".edit-button").on('click',function(event) {
+//        console.log('clicking');
+//        event.stopPropagation();
+//        event.preventDefault();
+//        <?php
+            if ($edit) {?>//
+//        //window.location.replace("index.php?<?=$newQuery?>");
+//        <?php
+            } else {?>//
+//        //window.location.replace("index.php?<?=$newQuery?>&edit=true");
+//        <?php
+            }?>//
+//        return false;
+//    });
     <?php
         $mobileQuery = "index.php?mobile=true";
         if (strlen($newQuery)>0) {
@@ -474,12 +560,25 @@ $(function() {
 });
 
 	</script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 	<title>TSN Stellar Navigation Console</title>
+        
 </head>
-<body style="overflow: hidden;">
+<?php
+
+    if (isEmpty($sub) && isEmpty($sector)) {
+        $style = "overflow: hidden;";
+    } else {
+        $style = "overflow: hidden; max-height: 100vh;";
+    }
+
+?>
+<body style="<?=$style?>">
 	<?php
+            if ($edit) {
+                include 'intelEditForm.php';
+            }
 		//menu?>
-    
                 
                 <span></span>
 		<div id="sector-menu" class="dropdown" style="z-index:1;">
@@ -510,7 +609,13 @@ $(function() {
 		</div>
                 <div id="system-menu" class="system-menu" style="z-index: 1">
                                     <!--This is where the buttons will go-->
-                </div>      
+                    <?php
+                        $buttons = getSystemsMenus($classified);
+                        foreach ($buttons as $b) {
+                            echo($b);
+                        }
+                    ?>
+                </div>
                 <?php
 
 		if ($requestPassword) {?>
@@ -524,14 +629,68 @@ $(function() {
                     <!--<div id="system-data" style="margin-bottom: 10px; /*overflow: auto;*/ display: flex; justify-content: flex-end; flex-direction: row">-->
                         <?php
 			if (!isEmpty($sector)) {
+                            ?>
+                                <div id="sys-dat" class="system-data" style="flex-basis: 100000px; flex-grow: 10;">
+                            <?php
 				$sectorSize = getSectorInfo($classified,$sector);
 				$sectorWidth = $sectorSize['x'];
 				$sectorHeight = $sectorSize['y'];
 				if (isEmpty($sub)) {
-					include 'sectorMap.php';
+                                    
+                                            $onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
+                                            $onclickStations = $onclick."stations'\"";
+                                            $onclickGates = $onclick."gates'\"";
+                                            $onclickOther = $onclick."other'\"";
+                                            $color = "yellow";
+                                            if (empty($entStations)) {
+                                                    $onclickStations = "";
+                                                    $classStations = " disabled";
+                                            } else if ($entType == "stations") {
+                                                    $classStations = " active";
+                                                    $color = "yellow";
+                                            } else {
+                                                    $classStations = "";
+                                            }
+
+                                            if (empty($entGates)) {
+                                                    $onclickGates = "";
+                                                    $classGates = " disabled";
+                                            } else if ($entType == "gates") {
+                                                    $classGates = " active";
+                                                    $color = "#ff8000";
+                                            } else {
+                                                    $classGates = "";
+                                            }
+
+                                            if (empty($entOther)) {
+                                                    $onclickOther = "";
+                                                    $classOther = " disabled";
+                                            } else if ($entType == "other") {
+                                                    $classOther = " active";
+                                                    $color = "cyan";
+                                            } else {
+                                                    $classOther = "";
+                                            }
+                                            
+                                            if (empty($entIntel)) {
+                                                    $onclickIntel = "";
+                                                    $classIntel = " disabled";
+                                            } else if ($entType == "other") {
+                                                    $classIntel = " active";
+                                                    $color = "blue";
+                                            } else {
+                                                    $classIntel = "";
+                                            }
+
+                                            include 'entitiesPanel.php';
+                                            include 'sectorMap.php';
+                                                
 				} else {
 					include 'sectorSubMap.php';
 				}
+                                ?>
+                                            </div>
+                                            <?php
 			} else {?>
 				<script>
                                     
@@ -553,6 +712,7 @@ $(function() {
                                         isDefaultImage = !isDefaultImage;
                                         event.preventDefault();
                                     });
+                                    
                                     
                                 var clickables=[<?php
                                     //build the clickables array
@@ -832,82 +992,17 @@ $(function() {
 	?>
         
         
-<?php
-	if (isEmpty($sub) && !isEmpty($sector)) { 
-		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
-		$onclickStations = $onclick."stations'\"";
-		$onclickGates = $onclick."gates'\"";
-		$onclickOther = $onclick."other'\"";
-		
-		if (empty($entStations)) {
-			$onclickStations = "";
-			$classStations = " disabled";
-		} else if ($entType == "stations") {
-			$classStations = " active";
-		} else {
-			$classStations = "";
-		}
-		
-		if (empty($entGates)) {
-			$onclickGates = "";
-			$classGates = " disabled";
-		} else if ($entType == "gates") {
-			$classGates = " active";
-		} else {
-			$classGates = "";
-		}
-		
-		if (empty($entOther)) {
-			$onclickOther = "";
-			$classOther = " disabled";
-		} else if ($entType == "other") {
-			$classOther = " active";
-		} else {
-			$classOther = "";
-		}?>
-  
-		<div id="buttons" style="/*position:absolute;bottom:0px;right:0px;*/flex: 0 0 50px;">
-                    <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
-			<button <?=$onclickStations?> class="dropbtn <?=$classStations?>">STATIONS</button>
-			<button <?=$onclickGates?> class="dropbtn <?=$classGates?>">GATES</button>
-			<button <?=$onclickOther?> class="dropbtn <?=$classOther?>">OTHER</button>
-		</div><?php
-	}
-        if (isEmpty($sub) && isEmpty($sector)) {
-            $versionStyle = "position: absolute; bottom: 0px; left: 0px; padding: 8px;";
-        } else {
-            $versionStyle = "flex: 0 0 20px";
-        }
-?>
+
             <?php
                 // Hide slider on mobile. Doesn't work and is unnecessary anyhow.
                     if (!$mobile) {?>
                         <div id="slider-vertical" style="position: absolute; height:200px; left: 20px;"></div>
             <?php
-            }?>
-        
-        <div id="navcon-title" style="<?=$versionStyle?>">
-            Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
-        </div>
-        <?php 
-        if ($sector == false && $gateNetwork === "Lower") {
-        ?>
-            <!--<img id="compass" src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>-->
-            <img id="compass" src="img/CompassSimple.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 25vw;"/>
-            <img id="legend" src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
-
-        <?php
-        }?>
-        <img id="battle-lines-legend" src ="img/BattleLinesLegend.png" style="display: none;"/>
-        <style>
-            #battle-lines-legend {
-                    position: absolute; 
-                    bottom: 30px; 
-                    left: 0px; 
-                    z-index: 0; 
-                    width: 35vh;
             }
-        </style>
+            include 'footer.php';
+            ?>
+        
+
         <script>
                 var defaultMapOffset;
                 var defaultMapHeight;
@@ -916,7 +1011,8 @@ $(function() {
                     defaultMapHeight = $("gateNet").height();
                     defaultMapWidth = $("gateNet").width();
                     defaultMapOffset = $("gateNet").offset();
-                    setupSystemMenu();
+        // No longer necessary due to using php to generate the buttons.            
+        //setupSystemMenu();
                 };
         </script>
 </body>

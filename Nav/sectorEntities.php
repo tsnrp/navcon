@@ -150,7 +150,7 @@
 				}
 			}
 		}
-		return "<button class=\"dropbtn disabled\">".strtoupper($target)."</button>";
+		return "<button class=\"dropbtn disabled\" style=\"margin-left: 25px;\">".strtoupper($target)."</button>";
 	}
 ?>
 
@@ -193,33 +193,18 @@
     });
   });
   </script>
-<div id="entityPane" class="data">
-	<table class="data">
-		<tr style="height: 50px;">
-			<td colspan="2" style="color:#fc5555;"><?php
-				echo strtoupper($sector);
-				if (!isEmpty($sub) && ($sectorWidth * $sectorHeight > 1)) {
-					echo " - ".toRoman($sub);
-				}?>
-			</td>
-			<td style="text-align:right;"><?php
-				if (!isEmpty($sub) && ($sectorWidth * $sectorHeight > 1)) {?>
-					<button onclick="location.href='index.php?<?=$classifiedHref?>sector=<?=$sector?>'" class="dropbtn">TO SYSTEM</button><?php
-				} else {
-					echo " ";
-				}?>
-			</td>
-		</tr><?php
-		
-		$workingEntType = "stations";
-		include 'sectorEntitiesList.php';
-		
-		$workingEntType = "gates";
-		include 'sectorEntitiesList.php';
-		
-		$workingEntType = "other";
-		include 'sectorEntitiesList.php';?>
-	</table>
+
+    <table class="data" style="white-space: nowrap;">
+    <?php
+        $workingEntType = "stations";
+        include 'sectorEntitiesList.php';
+
+        $workingEntType = "gates";
+        include 'sectorEntitiesList.php';
+
+        $workingEntType = "other";
+        include 'sectorEntitiesList.php';?>
+    </table>
     <?php
         $dat = readIntelFile($classified, $sector);
         if ($classified && $intelDoc) {?>
@@ -227,5 +212,5 @@
         <?php
         }
     ?>
-</div>
 
+            
