@@ -17,7 +17,20 @@
 <!--<div id="buttons" style="<?=$versionStyle?>/*position:absolute;bottom:0px;right:0px;flex: 0 0 50px;*/">-->
 <div id="footer" style="<?=$versionStyle?>">
     <p style="margin: 0px; padding: 0px; margin-top: auto; padding-right: 10px;" class="noShrink">
-    Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
+        Stellar Cartography 
+        <?php 
+        if ($classified) 
+            {printf("ONI");
+        } else {
+            printf("TSN");
+        }
+        
+        ?> <?=$version?>
+        <?php
+        if ($update_type != 'master') {
+            printf(" (Beta)");
+        }
+        ?>
     </p>
     <p style="flex-grow: 1;"></p>
     <div class="" style="display: flex; flex-wrap: wrap-reverse; justify-content: flex-end;">

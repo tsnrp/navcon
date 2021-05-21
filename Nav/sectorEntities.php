@@ -155,44 +155,7 @@
 ?>
 
 
-  <script>
-  $(function(){
-      //$('entityPane').on('ready',function() {
-          console.log("Loading");
-          var show = window.localStorage.getItem("showEntityPane");
-          console.log(show);
-          if (show === null) {
-              show = "true";
-              $("#toggle-button").attr('class','dropbtn active');
-              window.localStorage.setItem("showEntityPane",true);
-              console.log("Saved as " + show);
-          }
-          console.log(show.indexOf("true") !== -1);
-          if (show.indexOf("true") === -1) {
-              $('#entityPane').hide();
-              $("#toggle-button").attr('class','dropbtn');
-              $('.system').css('margin-right','0px');
-          }
-      //});
-    $('#toggle-button').on('click', function(){
-        if( $('#entityPane').is(':visible') ) {
-            $('#entityPane').animate({ 'width': '0px' }, 'slow', function(){
-                $('#entityPane').hide();
-            });
-            $('.system').animate({ 'margin-right': '0px' }, 'slow');
-            $("#toggle-button").attr('class','dropbtn');
-            window.localStorage.setItem("showEntityPane","false");
-        }
-        else {
-            $('#entityPane').show();
-            $('#entityPane').animate({ 'width': '360px' }, 'slow');
-            $('.system').animate({ 'margin-right': '360px' }, 'slow');
-            $("#toggle-button").attr('class','dropbtn active');
-            window.localStorage.setItem("showEntityPane","true");
-        }
-    });
-  });
-  </script>
+
 
     <table class="data" style="white-space: nowrap;">
     <?php

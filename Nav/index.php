@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.6 Beta";
+        $version = "13.6";
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
         
@@ -13,7 +13,12 @@
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
 
 	$classified = isset($_GET['Classified']);
+        echo($classified);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        
+        $showIntel = isset($_GET['Intel']) ? true : false;
+        $intelHref = $showIntel ? "Intel&" : "";
+        
         $intelDoc = false;
         
         $systems = getAllSystems($classified);
@@ -39,16 +44,21 @@
 //        fwrite($fp, "\nNew Query index.php: ".$newQuery);
 //        fclose($fp);
         
-        $edit = isset($_GET['edit']) ? trim($_GET['edit']) : false;
+        $edit = isset($_GET['edit']) ? true : false;
+        if ($edit) {
+            $showIntel = true;
+        }
             
                 // Handle updates to data here.
-
-        if (isset($_POST['intel'])) {
+        $intel_post_data = "NOTHING";
+        if (isset($_POST['intel-data'])) {
             //$intel_update = $_POST['intel'];
             //lookupIntelFile($file)
-            updateIntelFile($sector,$sub,filter_input(INPUT_POST,'intel'));
+            $intel_post_data = filter_input(INPUT_POST,'intel-data');
+            
+            updateIntelFile($sector,$sub,$intel_post_data);
         }
-
+        //echo($intel_post_data);
         
         
 
@@ -186,6 +196,35 @@
 	    header("Location: ".$r, TRUE, 303);
 	    exit();
 	}
+        
+        function getUrlParams() {
+            global $classified;
+            $url = "index.php";
+            //echo($classified);
+            if ($classified) {
+                $url .= "?Classified&";
+            } else {
+                $url .= "?";
+            }
+            $url .= getNormalUrlParams();
+            return $url;
+        }
+        function getNormalUrlParams() {
+            global $sector,$sub,$mobile,$showIntel;
+            if ($sector != "") {
+                $edit_url .= "sector=$sector&";
+                if ($sub != "") {
+                    $edit_url .= "sub=$sub&";
+                }
+            }
+            if ($mobile) {
+                $edit_url .= "mobile=true&";
+            }
+            if (!$showIntel) {
+                $edit_url .= "Intel";
+            }
+            return $edit_url;
+        }
 
 
 
@@ -425,6 +464,44 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+          <script>
+  $(function(){
+      //$('entityPane').on('ready',function() {
+          console.log("Loading");
+          var show = window.localStorage.getItem("showEntityPane");
+          console.log(show);
+          if (show === null) {
+              show = "true";
+              $("#toggle-button").attr('class','dropbtn active');
+              window.localStorage.setItem("showEntityPane",true);
+              console.log("Saved as " + show);
+          }
+          console.log(show.indexOf("true") !== -1);
+          if (show.indexOf("true") === -1) {
+              $('#entityPane').hide();
+              $("#toggle-button").attr('class','dropbtn');
+              $('.system').css('margin-right','0px');
+          }
+      //});
+    $('#toggle-button').on('click', function(){
+        if( $('#entityPane').is(':visible') ) {
+            $('#entityPane').animate({ 'width': '0px' }, 'slow', function(){
+                $('#entityPane').hide();
+            });
+            $('.system').animate({ 'margin-right': '0px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn');
+            window.localStorage.setItem("showEntityPane","false");
+        }
+        else {
+            $('#entityPane').show();
+            $('#entityPane').animate({ 'width': '360px' }, 'slow');
+            $('.system').animate({ 'margin-right': '360px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn active');
+            window.localStorage.setItem("showEntityPane","true");
+        }
+    });
+  });
+  </script>
 	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
@@ -575,8 +652,10 @@ $(function() {
 ?>
 <body style="<?=$style?>">
 	<?php
+        //echo($showIntel);
+        //include 'intelDataPane.php';
             if ($edit) {
-                include 'intelEditForm.php';
+                //include 'intelEditForm.php';
             }
 		//menu?>
                 
@@ -591,11 +670,13 @@ $(function() {
                     $getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
                     $getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
                     $getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
-                    if ($getString=="?") {
+                    
+                    if ($getString=="?" || $getString=="&") {
                             $getString="";
                     } else {
-                            $getString=substr($getString,0,-1);
+                            //$getString=substr($getString,0,-1);
                     }
+                    $getString.= $showIntel ? "&Intel" : "";
                     echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
                     ?>
 
@@ -695,7 +776,7 @@ $(function() {
 				<script>
                                     
                                     var isDefaultImage = true;
-                                    
+                                    //console.log("<?=$intel_post_date?>");
                                     $("#publicIntelButton").on("click", function(event){
                                         console.log("Trying to toggle..." + isDefaultImage);
                                         if (isDefaultImage) {

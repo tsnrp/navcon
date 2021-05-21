@@ -5,23 +5,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-    $edit_url = "index.php?Classified";
-    if ($sector != "") {
-        $edit_url .= "&sector=$sector";
-        if ($sub != "") {
-            $edit_url .= "&sub=$sub";
-        }
-    }
-    if ($mobile) {
-        $edit_url .= "&mobile=true";
-    }
-    $data = readIntelFile($sector, $sub);
 
+
+    $data = readIntelFile($sector, $sub);
+    $readonly = $edit ? "" : "readonly";
+    $edit_url = getUrlParams();
+    if (!$intel){
+        $edit_url .= "&Intel";
+    }
+    if ($edit) {
+        $edit_url .= "&edit";
+    }
+    str_replace("&&", "&", $$edit_url);
+    str_replace("&&", "&", $$edit_url);
 ?>
-<br style="color: blue; font-size: 20;">Please enter ONI security clearance
-<form action=<?=$edit_url?> method="post">
+<br style="color: blue; font-size: 20px;">
+<form id="intel-form" action=<?=$edit_url?> method="post">
     <!--<input type="textarea" name="intel"><br>-->
-    <textarea name="intel" style="width: 80vh; height: 30vh; background-color: black; color: white;"><?=$data?></textarea>
-    <input type="submit" value="Submit Updates" style=" background-color: black; color: white;">
+    <textarea <?=$readonly?> form="intel-form" name="intel-data" style="width: 90%; height: auto; background-color: black; color: white; margin-left: 5%; max-width: 90%;"><?=$data?></textarea>
+    <?php
+    //echo($edit);
+        if ($edit) {?>
+        <!--<input type="submit" value="Submit Updates" style=" background-color: black; color: white; margin-left: 5%; margin-top: 10px;">-->
+        <button type="submit" class="dropbtn" style="margin-top: 15px;">Submit Updates</button>
+    <?php 
+        }?>
 </form>
 <br>
