@@ -5,6 +5,15 @@
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
         
+        // This will be used for better UX for toggling between classified and regular mode. Assuming it works properly. 
+        // TODO: Also should be adapted at some point for other uses.
+        $_SESSION["previousPage"] = $_SESSION["currentPage"];
+        $host = filter_input(INPUT_SERVER, "HTTP_HOST");
+        $uri = filter_input(INPUT_SERVER, "REQUEST_URI");
+        $_SESSION["currentPage"] =  "http://$host$uri";
+        
+        
+        
         //TODO: use filter_input() on these
         $mobile = isset($_GET['mobile']);
         $sub = isset($_GET['sub']) ? trim($_GET['sub']) : "";
@@ -13,7 +22,8 @@
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
 
 	$classified = isset($_GET['Classified']);
-        echo($classified);
+        //$classified = $_SESSION['classified'];
+        //echo($classified);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
         
         $showIntel = isset($_GET['Intel']) ? true : false;
@@ -426,15 +436,26 @@
 	$requestPassword=false;
 	if ($classified) {
 		$requestPassword=true;
-		if (isset($_COOKIE['passwordOK'])) {
-			$requestPassword=false;
-		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
-			setcookie('passwordOK',"true",time()+60*60*24*365*10);//expires 10 years into the future
-			$requestPassword=false;
-		} else {
-			$classified=false;
-			$classifiedHref="";
-		}
+//		if (isset($_COOKIE['passwordOK'])) {
+//			$requestPassword=false;
+//		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
+//			setcookie('passwordOK',"true",time()+60*60*24*365*10);//expires 10 years into the future
+//			$requestPassword=false;
+//		} else {
+//			$classified=false;
+//			$classifiedHref="";
+//		}
+                
+                // Change to use session info instead of a cookie.
+                if (isset($_SESSION['passwordOK'])) {
+                    $requestPassword = false;
+                } else if (isset($_POST['pass']) && filter_input(INPUT_POST,'pass') == "ONI-2F4L") {
+                    $_SESSION['passwordOK'] = true;
+                    $requestPassword = false;
+                } else {
+                    $classified = false;
+                    $classifiedHref = "";
+                }
 	}
         
 	
@@ -698,10 +719,10 @@ $(function() {
                     ?>
                 </div>
                 <?php
-
+//"index.php?Classified"
 		if ($requestPassword) {?>
 			<br>Please enter ONI security clearance
-			<form action="index.php?Classified" method="post">
+			<form action=<?=$_SESSION["previousPage"]?> method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>

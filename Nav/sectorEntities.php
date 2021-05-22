@@ -150,7 +150,7 @@
 				}
 			}
 		}
-		return "<button class=\"dropbtn disabled\" style=\"margin-left: 25px;\">".strtoupper($target)."</button>";
+                return "<button class=\"dropbtn disabled\" style=\"\">".strtoupper($target)."</button>";
 	}
 ?>
 
