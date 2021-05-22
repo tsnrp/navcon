@@ -11,6 +11,7 @@
         $host = filter_input(INPUT_SERVER, "HTTP_HOST");
         $uri = filter_input(INPUT_SERVER, "REQUEST_URI");
         $_SESSION["currentPage"] =  "http://$host$uri";
+        //echo($_SESSION['currentPage']);
         
         
         
@@ -720,10 +721,11 @@ $(function() {
                 </div>
                 <?php
 //"index.php?Classified"<?=$_SESSION["previousPage"]
-                $testUrl = $_SESSION['previousPage'];
+                $testUrl = str_replace("\n","",$uri);
+                //echo($testUrl);
 		if ($requestPassword) {?>
 			<br>Please enter ONI security clearance
-			<form action=\"<?=$testUrl?>\" method="post">
+			<form action=<?=$testUrl?> method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>
