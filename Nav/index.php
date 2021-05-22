@@ -725,7 +725,7 @@ $(function() {
                 //echo($testUrl);
 		if ($requestPassword) {?>
 			<br>Please enter ONI security clearance
-			<form action=<?=$testUrl?> method="post">
+			<form action="index.php?Classified" method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>
