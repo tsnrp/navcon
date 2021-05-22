@@ -719,10 +719,11 @@ $(function() {
                     ?>
                 </div>
                 <?php
-//"index.php?Classified"
+//"index.php?Classified"<?=$_SESSION["previousPage"]
+                $testUrl = $_SESSION['previousPage'];
 		if ($requestPassword) {?>
 			<br>Please enter ONI security clearance
-			<form action=<?=$_SESSION["previousPage"]?> method="post">
+			<form action=\"<?=$testUrl?>\" method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>
