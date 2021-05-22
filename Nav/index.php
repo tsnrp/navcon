@@ -721,11 +721,13 @@ $(function() {
                 </div>
                 <?php
 //"index.php?Classified"<?=$_SESSION["previousPage"]
-                $testUrl = str_replace("\n","",$uri);
+                
                 //echo($testUrl);
-		if ($requestPassword) {?>
+		if ($requestPassword) {
+                    $testUrl = "index.php?Classified&". getNormalUrlParams();
+                    ?>
 			<br>Please enter ONI security clearance
-			<form action="index.php?Classified" method="post">
+			<form action="<?=$testUrl?>" method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>
