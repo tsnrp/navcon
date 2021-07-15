@@ -40,7 +40,7 @@ Scylla,BH,7
 CR-007,S,7
 CR-640,S,7
 Enyalius,G,8
-DS-88,G,8
+DS-88,S,8
 DS-92,S,8
 Phineas,I,8
 DS-44,S,8

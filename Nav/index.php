@@ -1,9 +1,19 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.4";
+        $version = "13.7";
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
+        
+        // This will be used for better UX for toggling between classified and regular mode. Assuming it works properly. 
+        // TODO: Also should be adapted at some point for other uses.
+        $_SESSION["previousPage"] = $_SESSION["currentPage"];
+        $host = filter_input(INPUT_SERVER, "HTTP_HOST");
+        $uri = filter_input(INPUT_SERVER, "REQUEST_URI");
+        $_SESSION["currentPage"] =  "http://$host$uri";
+        //echo($_SESSION['currentPage']);
+        
+        
         
         //TODO: use filter_input() on these
         $mobile = isset($_GET['mobile']);
@@ -13,11 +23,28 @@
 	$gateNetwork= isset($_GET['gateNetwork']) ? trim($_GET['gateNetwork']) : "Lower";
 
 	$classified = isset($_GET['Classified']);
+        //$classified = $_SESSION['classified'];
+        //echo($classified);
 	$classifiedHref = isset($_GET['Classified'])? "Classified&" : "" ;
+        
+        $showIntel = isset($_GET['Intel']) ? true : false;
+        $intelHref = $showIntel ? "Intel&" : "";
+        
         $intelDoc = false;
         
         $systems = getAllSystems($classified);
-
+        
+        $sector ="";
+	if (isset($_GET['sector'])) {
+		$sector=$_GET['sector'];
+		$gateNetwork=getSectorInfo($classified,$sector)['network'];
+		$gateButtonDest=$gateNetwork;
+		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
+	} else {
+		$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
+		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
+	}
+        
         // TODO: Looks like issue here....
         
         //$uri = filter_input($_SERVER["QUERY STRING"], FILTER_SANITIZE_URL); // Doesn't work rn
@@ -28,7 +55,32 @@
 //        fwrite($fp, "\nNew Query index.php: ".$newQuery);
 //        fclose($fp);
         
+        $edit = isset($_GET['edit']) ? true : false;
+        if ($edit) {
+            $showIntel = true;
+        }
+            
+                // Handle updates to data here.
+        $intel_post_data = "NOTHING";
+        if (isset($_POST['intel-data'])) {
+            //$intel_update = $_POST['intel'];
+            //lookupIntelFile($file)
+            $intel_post_data = filter_input(INPUT_POST,'intel-data');
+            
+            updateIntelFile($sector,$sub,$intel_post_data);
+        }
+        //echo($intel_post_data);
+        
+        
 
+
+//        location.reload(); 
+//        //refreshes from cache 
+//        //or 
+//        location.reload(true); 
+//        //to force a network request 
+
+        
         // This bit (hopefully) forces the client to refresh their cache
         if (isset ($_GET["cc"])) {
             if (filter_input(INPUT_GET, "cc", FILTER_SANITIZE_STRING)) {
@@ -155,6 +207,35 @@
 	    header("Location: ".$r, TRUE, 303);
 	    exit();
 	}
+        
+        function getUrlParams() {
+            global $classified;
+            $url = "index.php";
+            //echo($classified);
+            if ($classified) {
+                $url .= "?Classified&";
+            } else {
+                $url .= "?";
+            }
+            $url .= getNormalUrlParams();
+            return $url;
+        }
+        function getNormalUrlParams() {
+            global $sector,$sub,$mobile,$showIntel;
+            if ($sector != "") {
+                $edit_url .= "sector=$sector&";
+                if ($sub != "") {
+                    $edit_url .= "sub=$sub&";
+                }
+            }
+            if ($mobile) {
+                $edit_url .= "mobile=true&";
+            }
+            if (!$showIntel) {
+                $edit_url .= "Intel";
+            }
+            return $edit_url;
+        }
 
 
 
@@ -227,8 +308,18 @@
 	}
 
 	//returns an array of arrays where each array is a menu to be shown
+        // Now instead returns a list of buttons. This replaces the setupSystemMenu() function in the javascript. - Vaj
 	function getSystemsMenus($classified) {
 		$sectorList=getAllSystems($classified);
+                $sysList = array();
+                foreach ($sectorList as $system) {
+                    array_push($sysList,"<button class=\"systemButton dropdown-entry show\" onclick=\"buttonClick('$system')\">$system</button>");
+                    
+                }
+                return $sysList;
+                
+                // Old comments follow. 
+                // 
 		// 12 is roughly right for a 768 height screen
 		// however this was tested on a machine that had a signifcantly different display
 		// (27 inch) 2560x1440, resized
@@ -257,6 +348,32 @@
 			return $file;
 		}
 	}
+        /**
+         * get the File specified by system and sector (sector and sub, respectively - dammmit whoever first made this!
+         * @param type $sector
+         * @param type $sub
+         * @return string
+         */
+        function lookupIntelFile($sector,$sub) {
+            $f = "./../../Intelligence Files/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            $f.= "systems/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            $f.= $sector."/";
+            if (!file_exists($f)) {
+                mkdir($f);
+            }
+            if ($sub != "") {
+                $myFile = $f.$sub.".txt";
+            } else {
+                $myFile = $f.$sector.".txt";
+            }
+            return $myFile;
+        }
 
 	function readEntitesFile($classified,$sector) {
 		$file=lookupClassifiedFile($classified,"sectors/".$sector."/entities.txt");
@@ -280,12 +397,20 @@
 		return array();
 	}
         
-        function readIntelFile($classified,$sector) {
-            $file=lookupClassifiedFile($classified,"sectors/".$sector."/intel.txt");
+        function readIntelFile($sector,$sub) {
+            $file = lookupIntelFile($sector,$sub);
             if (file_exists($file)) {
                 $intelDoc = file_get_contents($file);
+            } else { 
+                return false;
             }
             return $intelDoc;
+        }
+        
+        function updateIntelFile($sector,$sub,$data) {
+            $file = lookupIntelFile($sector,$sub);
+            echo($file);
+            file_put_contents($file,$data);
         }
         
 
@@ -312,27 +437,29 @@
 	$requestPassword=false;
 	if ($classified) {
 		$requestPassword=true;
-		if (isset($_COOKIE['passwordOK'])) {
-			$requestPassword=false;
-		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
-			setcookie('passwordOK',"true",time()+60*60*24*365*10);//expires 10 years into the future
-			$requestPassword=false;
-		} else {
-			$classified=false;
-			$classifiedHref="";
-		}
+//		if (isset($_COOKIE['passwordOK'])) {
+//			$requestPassword=false;
+//		} else if (isset($_POST['pass']) && $_POST['pass']=="ONI-2F4L") {
+//			setcookie('passwordOK',"true",time()+60*60*24*365*10);//expires 10 years into the future
+//			$requestPassword=false;
+//		} else {
+//			$classified=false;
+//			$classifiedHref="";
+//		}
+                
+                // Change to use session info instead of a cookie.
+                if (isset($_SESSION['passwordOK'])) {
+                    $requestPassword = false;
+                } else if (isset($_POST['pass']) && filter_input(INPUT_POST,'pass') == "ONI-2F4L") {
+                    $_SESSION['passwordOK'] = true;
+                    $requestPassword = false;
+                } else {
+                    $classified = false;
+                    $classifiedHref = "";
+                }
 	}
-
-	$sector ="";
-	if (isset($_GET['sector'])) {
-		$sector=$_GET['sector'];
-		$gateNetwork=getSectorInfo($classified,$sector)['network'];
-		$gateButtonDest=$gateNetwork;
-		$gateNetText = ($gateNetwork=='Upper') ? "VIEW UPPER ARC" : "VIEW LOWER ARC";
-	} else {
-		$gateButtonDest = $gateNetwork=="Upper" ? "Lower" : "Upper";
-		$gateNetText = $gateNetwork=="Upper" ? "VIEW LOWER ARC" : "VIEW UPPER ARC";
-	}
+        
+	
 
 	$menus=getSystemsMenus($classified);
 ?>
@@ -359,6 +486,44 @@
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+          <script>
+  $(function(){
+      //$('entityPane').on('ready',function() {
+          console.log("Loading");
+          var show = window.localStorage.getItem("showEntityPane");
+          console.log(show);
+          if (show === null) {
+              show = "true";
+              $("#toggle-button").attr('class','dropbtn active');
+              window.localStorage.setItem("showEntityPane",true);
+              console.log("Saved as " + show);
+          }
+          console.log(show.indexOf("true") !== -1);
+          if (show.indexOf("true") === -1) {
+              $('#entityPane').hide();
+              $("#toggle-button").attr('class','dropbtn');
+              $('.system').css('margin-right','0px');
+          }
+      //});
+    $('#toggle-button').on('click', function(){
+        if( $('#entityPane').is(':visible') ) {
+            $('#entityPane').animate({ 'width': '0px' }, 'slow', function(){
+                $('#entityPane').hide();
+            });
+            $('.system').animate({ 'margin-right': '0px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn');
+            window.localStorage.setItem("showEntityPane","false");
+        }
+        else {
+            $('#entityPane').show();
+            $('#entityPane').animate({ 'width': '360px' }, 'slow');
+            $('.system').animate({ 'margin-right': '360px' }, 'slow');
+            $("#toggle-button").attr('class','dropbtn active');
+            window.localStorage.setItem("showEntityPane","true");
+        }
+    });
+  });
+  </script>
 	<script>    
 function toggleSystemView() {
     document.getElementById("search-bar").value = "";
@@ -433,9 +598,15 @@ function buttonClick(system) {
 }
 
 function setupSystemMenu() {
+    console.log("Trying to setupSystemMenu");
     var div = document.getElementById("system-menu");
+    console.log(div === 'undefined' || div === null);
+    console.log(div.id);
     var systemList = <?php echo json_encode($systems);?>;
+    console.log("Got list");
+    console.log(systemList[0]);
     for (var i = 0; i < systemList.length; i++) {
+        console.log(systemList[i]);
         var but = document.createElement("button");
         but.innerHTML = systemList[i];
         but.className = "systemButton dropdown-entry show";
@@ -448,16 +619,30 @@ function setMapHeight() {
     var h = window.innerHeight - 38 - $("#buttons").height() - $("#sector-menu").height();
     $("#sys-dat").css("height",h);
 }
-$(function() {
-    setMapHeight();
-    $(window).on("resize", function() {
-        setMapHeight();
-    });
-});
+//$(function() {
+//    setMapHeight();
+//    $(window).on("resize", function() {
+//        setMapHeight();
+//    });
+//});
 
 
 // Check if mobile
 $(function() {
+//    $(".edit-button").on('click',function(event) {
+//        console.log('clicking');
+//        event.stopPropagation();
+//        event.preventDefault();
+//        <?php
+            if ($edit) {?>//
+//        //window.location.replace("index.php?<?=$newQuery?>");
+//        <?php
+            } else {?>//
+//        //window.location.replace("index.php?<?=$newQuery?>&edit=true");
+//        <?php
+            }?>//
+//        return false;
+//    });
     <?php
         $mobileQuery = "index.php?mobile=true";
         if (strlen($newQuery)>0) {
@@ -474,12 +659,27 @@ $(function() {
 });
 
 	</script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 	<title>TSN Stellar Navigation Console</title>
+        
 </head>
-<body style="overflow: hidden;">
+<?php
+
+    if (isEmpty($sub) && isEmpty($sector)) {
+        $style = "overflow: hidden;";
+    } else {
+        $style = "overflow: hidden; max-height: 100vh;";
+    }
+
+?>
+<body style="<?=$style?>">
 	<?php
+        //echo($showIntel);
+        //include 'intelDataPane.php';
+            if ($edit) {
+                //include 'intelEditForm.php';
+            }
 		//menu?>
-    
                 
                 <span></span>
 		<div id="sector-menu" class="dropdown" style="z-index:1;">
@@ -492,11 +692,13 @@ $(function() {
                     $getString.=isset($_GET['sector']) ? "sector=".$_GET['sector']."&" : "";
                     $getString.=isset($_GET['sub']) ? "sub=".$_GET['sub']."&" : "";
                     $getString.=isset($_GET['entType']) ? "entType=".$_GET['entType']."&" : "";
-                    if ($getString=="?") {
+                    
+                    if ($getString=="?" || $getString=="&") {
                             $getString="";
                     } else {
-                            $getString=substr($getString,0,-1);
+                            //$getString=substr($getString,0,-1);
                     }
+                    $getString.= $showIntel ? "&Intel" : "";
                     echo("<button onclick=\"location.href='index.php$getString'\" class=\"dropbtn$intelButtonActiveText\">INTEL</button>");
                     ?>
 
@@ -510,12 +712,22 @@ $(function() {
 		</div>
                 <div id="system-menu" class="system-menu" style="z-index: 1">
                                     <!--This is where the buttons will go-->
-                </div>      
+                    <?php
+                        $buttons = getSystemsMenus($classified);
+                        foreach ($buttons as $b) {
+                            echo($b);
+                        }
+                    ?>
+                </div>
                 <?php
-
-		if ($requestPassword) {?>
+//"index.php?Classified"<?=$_SESSION["previousPage"]
+                
+                //echo($testUrl);
+		if ($requestPassword) {
+                    $testUrl = "index.php?Classified&". getNormalUrlParams();
+                    ?>
 			<br>Please enter ONI security clearance
-			<form action="index.php?Classified" method="post">
+			<form action="<?=$testUrl?>" method="post">
 			<input type="text" name="pass"><br>
 			<input type="submit" value="authenticate me">
 			</form>
@@ -524,19 +736,73 @@ $(function() {
                     <!--<div id="system-data" style="margin-bottom: 10px; /*overflow: auto;*/ display: flex; justify-content: flex-end; flex-direction: row">-->
                         <?php
 			if (!isEmpty($sector)) {
+                            ?>
+                                <div id="sys-dat" class="system-data" style="flex-basis: 100000px; flex-grow: 10;">
+                            <?php
 				$sectorSize = getSectorInfo($classified,$sector);
 				$sectorWidth = $sectorSize['x'];
 				$sectorHeight = $sectorSize['y'];
 				if (isEmpty($sub)) {
-					include 'sectorMap.php';
+                                    
+                                            $onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
+                                            $onclickStations = $onclick."stations'\"";
+                                            $onclickGates = $onclick."gates'\"";
+                                            $onclickOther = $onclick."other'\"";
+                                            $color = "yellow";
+                                            if (empty($entStations)) {
+                                                    $onclickStations = "";
+                                                    $classStations = " disabled";
+                                            } else if ($entType == "stations") {
+                                                    $classStations = " active";
+                                                    $color = "yellow";
+                                            } else {
+                                                    $classStations = "";
+                                            }
+
+                                            if (empty($entGates)) {
+                                                    $onclickGates = "";
+                                                    $classGates = " disabled";
+                                            } else if ($entType == "gates") {
+                                                    $classGates = " active";
+                                                    $color = "#ff8000";
+                                            } else {
+                                                    $classGates = "";
+                                            }
+
+                                            if (empty($entOther)) {
+                                                    $onclickOther = "";
+                                                    $classOther = " disabled";
+                                            } else if ($entType == "other") {
+                                                    $classOther = " active";
+                                                    $color = "cyan";
+                                            } else {
+                                                    $classOther = "";
+                                            }
+                                            
+                                            if (empty($entIntel)) {
+                                                    $onclickIntel = "";
+                                                    $classIntel = " disabled";
+                                            } else if ($entType == "other") {
+                                                    $classIntel = " active";
+                                                    $color = "blue";
+                                            } else {
+                                                    $classIntel = "";
+                                            }
+
+                                            include 'entitiesPanel.php';
+                                            include 'sectorMap.php';
+                                                
 				} else {
 					include 'sectorSubMap.php';
 				}
+                                ?>
+                                            </div>
+                                            <?php
 			} else {?>
 				<script>
                                     
                                     var isDefaultImage = true;
-                                    
+                                    //console.log("<?=$intel_post_date?>");
                                     $("#publicIntelButton").on("click", function(event){
                                         console.log("Trying to toggle..." + isDefaultImage);
                                         if (isDefaultImage) {
@@ -553,6 +819,7 @@ $(function() {
                                         isDefaultImage = !isDefaultImage;
                                         event.preventDefault();
                                     });
+                                    
                                     
                                 var clickables=[<?php
                                     //build the clickables array
@@ -832,82 +1099,17 @@ $(function() {
 	?>
         
         
-<?php
-	if (isEmpty($sub) && !isEmpty($sector)) { 
-		$onclick = "onclick=\"location.href='index.php?".$classifiedHref."sector=".$sector."&entType=";
-		$onclickStations = $onclick."stations'\"";
-		$onclickGates = $onclick."gates'\"";
-		$onclickOther = $onclick."other'\"";
-		
-		if (empty($entStations)) {
-			$onclickStations = "";
-			$classStations = " disabled";
-		} else if ($entType == "stations") {
-			$classStations = " active";
-		} else {
-			$classStations = "";
-		}
-		
-		if (empty($entGates)) {
-			$onclickGates = "";
-			$classGates = " disabled";
-		} else if ($entType == "gates") {
-			$classGates = " active";
-		} else {
-			$classGates = "";
-		}
-		
-		if (empty($entOther)) {
-			$onclickOther = "";
-			$classOther = " disabled";
-		} else if ($entType == "other") {
-			$classOther = " active";
-		} else {
-			$classOther = "";
-		}?>
-  
-		<div id="buttons" style="/*position:absolute;bottom:0px;right:0px;*/flex: 0 0 50px;">
-                    <button id="toggle-button" class="dropbtn active">TOGGLE DATA</button>
-			<button <?=$onclickStations?> class="dropbtn <?=$classStations?>">STATIONS</button>
-			<button <?=$onclickGates?> class="dropbtn <?=$classGates?>">GATES</button>
-			<button <?=$onclickOther?> class="dropbtn <?=$classOther?>">OTHER</button>
-		</div><?php
-	}
-        if (isEmpty($sub) && isEmpty($sector)) {
-            $versionStyle = "position: absolute; bottom: 0px; left: 0px; padding: 8px;";
-        } else {
-            $versionStyle = "flex: 0 0 20px";
-        }
-?>
+
             <?php
                 // Hide slider on mobile. Doesn't work and is unnecessary anyhow.
                     if (!$mobile) {?>
                         <div id="slider-vertical" style="position: absolute; height:200px; left: 20px;"></div>
             <?php
-            }?>
-        
-        <div id="navcon-title" style="<?=$versionStyle?>">
-            Stellar Cartography <?php if ($classified) {printf("ONI");} else {printf("TSN");}?> <?=$version?>
-        </div>
-        <?php 
-        if ($sector == false && $gateNetwork === "Lower") {
-        ?>
-            <!--<img id="compass" src="img/galactic-compass.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 30vw;"/>-->
-            <img id="compass" src="img/CompassSimple.png" class="show" style="position: absolute; top: 0px; right: 0px; z-index: -1; width: 25vw;"/>
-            <img id="legend" src="img/legend.png" style="position: absolute; bottom: 0px; right: 0px; z-index: 0;/**Definitely leave this on top**/ width: 20vh;"/>
-
-        <?php
-        }?>
-        <img id="battle-lines-legend" src ="img/BattleLinesLegend.png" style="display: none;"/>
-        <style>
-            #battle-lines-legend {
-                    position: absolute; 
-                    bottom: 30px; 
-                    left: 0px; 
-                    z-index: 0; 
-                    width: 35vh;
             }
-        </style>
+            include 'footer.php';
+            ?>
+        
+
         <script>
                 var defaultMapOffset;
                 var defaultMapHeight;
@@ -916,7 +1118,8 @@ $(function() {
                     defaultMapHeight = $("gateNet").height();
                     defaultMapWidth = $("gateNet").width();
                     defaultMapOffset = $("gateNet").offset();
-                    setupSystemMenu();
+        // No longer necessary due to using php to generate the buttons.            
+        //setupSystemMenu();
                 };
         </script>
 </body>
