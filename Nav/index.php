@@ -1,7 +1,7 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.6";
+        $version = "13.7";
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
         

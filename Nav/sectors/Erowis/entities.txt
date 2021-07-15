@@ -1,0 +1,8 @@
+Drenan Gate,G,1
+Drenan Gatekeeper,S,1
+Ashtarra Dry Dock,SY,1
+Erowis Master,C,5
+Op Refinery,R,5
+Thith Denabite,M,5
+Krellis Gatekeeper,S,6
+Krellis Gate,G,6
