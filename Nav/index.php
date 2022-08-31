@@ -1,9 +1,17 @@
 <?php
 	session_start();	
 	//---- RELEASE VERSION ----//
-        $version = "13.7";
+        $version = "13.8";
         
         $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
+        $battleNetUpper = "img/BattleLines/gateNetworkUpperCurrent.png";
+        
+        if (!file_exists($battleNetUpper)) {
+            $battleNetUpper = "img/gateNetworkUpper.png";
+        }
+        if (!file_exists($battleNet)) {
+            $battleNet = "img/BattleLines/gateNetworkLowerCurrent.png";
+        }
         
         // This will be used for better UX for toggling between classified and regular mode. Assuming it works properly. 
         // TODO: Also should be adapted at some point for other uses.
@@ -705,7 +713,7 @@ $(function() {
                     <input type="text" name="search" id="search-bar" onkeyup="systemSearch()" placeholder="Search for system...">
                     <!--button class="dropbtn">Search</button-->
                     <?php
-                    if (!isset($_GET['sector']) && !isset($_GET['sub']) && $gateNetwork === "Lower") {
+                    if (!isset($_GET['sector']) && !isset($_GET['sub'])) {
                         ?><button id="publicIntelButton" class="dropbtn">BATTLE LINES</button><?php
                     }
                     ?>
@@ -807,7 +815,9 @@ $(function() {
                                         console.log("Trying to toggle..." + isDefaultImage);
                                         if (isDefaultImage) {
                                             console.log("trying to change to temp...");
-                                            $("#gateNet").attr("src","<?=$battleNet?>");
+                                            <?php $gateImg= ($gateNetwork=="Upper") ? "$battleNetUpper" : "$battleNet";
+                                            $gateImg=lookupClassifiedFile($classified,$gateImg);?>
+                                            $("#gateNet").attr("src","<?=$gateImg?>");
                                         } else {
                                             <?php $gateImg= ($gateNetwork=="Upper") ? "img/gateNetwork".$gateNetwork.".png" : "img/gateNetworkLowerTransparent.png";
                                             $gateImg=lookupClassifiedFile($classified,$gateImg);?>
